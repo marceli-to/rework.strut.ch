@@ -93,8 +93,29 @@ async function addRow(area, layout) {
 	if (response) rows.value.push(response.data.data)
 }
 
+// items the new layout can't hold (same rule as UpdateRowAction)
+function droppedBy(row, layout) {
+	const spec = layouts.value[layout]
+	if (spec.slots === null) return []
+	const cells = spec.columns.flatMap(c => c.cells).filter(c => c.size !== 'spacer')
+	return row.items.filter(item => {
+		const cell = cells.find(c => c.position === item.position)
+		return !cell || (item.type === 'news' && !cell.news)
+	})
+}
+
 async function changeLayout(row, layout) {
 	if (layout === row.layout) return
+	const dropped = droppedBy(row, layout).length
+	if (dropped) {
+		const ok = await confirm({
+			title: 'Layout ändern',
+			message: `Das neue Layout hat keinen Platz für ${dropped === 1 ? '1 Inhalt' : `${dropped} Inhalte`} dieser Zeile. ${dropped === 1 ? 'Er wird' : 'Sie werden'} aus der Zeile entfernt.`,
+			confirmLabel: 'Layout ändern',
+			destructive: true,
+		})
+		if (!ok) return
+	}
 	const response = await run(() => api.updateRow(row.uuid, { layout }))
 	if (response) replaceRow(response.data.data)
 }

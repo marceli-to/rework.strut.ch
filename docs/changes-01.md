@@ -42,7 +42,8 @@ Source: `changes.txt` + 4 annotated screenshots. Status per item: ☐ open · �
   - left side shows only the drag handle, plus the image previews when the row is collapsed;
   - the chevron moves to the right, after the eye and trash icons;
   - a pencil icon replaces the layout dropdown and opens the layout drawer, with the current layout highlighted;
-  - more space between the area header and the first row.
+  - more space between the area header and the first row;
+  - changing to a layout that has no room for some items asks for confirmation first.
 
 ## Questions / decisions
 Recorded below once answered.
