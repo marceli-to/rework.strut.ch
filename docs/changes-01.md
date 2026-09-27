@@ -35,9 +35,9 @@ Source: `changes.txt` + 4 annotated screenshots. Status per item: ☐ open · �
   Startseite is added as the first entry (Q4).
 
 ## F. Grid (Raster), projects and homepage
-- ☐ **F1** Rows are collapsible, which makes sorting easier (both contexts).
-- ☐ **F2** "Neue Zeile": instead of the list of layout buttons below the grid, a button at the top opens a sidebar (drawer) with the layouts.
-- ☐ **F3** Project form: hide the form sidebar while the "Raster" tab is active.
+- ☑ **F1** Rows are collapsible, which makes sorting easier (both contexts).
+- ☑ **F2** "Neue Zeile": instead of the list of layout buttons below the grid, a button at the top opens a sidebar (drawer) with the layouts.
+- ☑ **F3** Project form: hide the form sidebar while the "Raster" tab is active.
 
 ## Questions / decisions
 Recorded below once answered.

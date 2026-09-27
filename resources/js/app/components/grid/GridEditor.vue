@@ -6,7 +6,7 @@ import { useToast } from '@/composables/useToast'
 import { useConfirm } from '@/composables/useConfirm'
 import GridRow from '@/components/grid/GridRow.vue'
 import GridPicker from '@/components/grid/GridPicker.vue'
-import LayoutIcon from '@/components/grid/LayoutIcon.vue'
+import LayoutPicker from '@/components/grid/LayoutPicker.vue'
 
 /**
  * The one grid editor for every grid context (project grid, homepage).
@@ -27,6 +27,8 @@ const rows = ref([])
 const options = ref({ media: [], news: [] })
 const picker = ref(null) // { row, position, acceptsNews }
 const dragItem = ref(null) // { row, position }
+const collapsed = ref(new Set()) // row uuids
+const layoutPicker = ref(null) // area
 
 const layouts = computed(() => Object.fromEntries((config.value?.layouts ?? []).map(l => [l.key, l])))
 const rowsIn = (area) => rows.value.filter(r => r.area === area)
@@ -59,7 +61,29 @@ function replaceRow(row) {
 	rows.value = rows.value.map(r => (r.uuid === row.uuid ? row : r))
 }
 
+function toggleCollapse(row) {
+	const set = new Set(collapsed.value)
+	set.has(row.uuid) ? set.delete(row.uuid) : set.add(row.uuid)
+	collapsed.value = set
+}
+
+const allCollapsed = (area) => rowsIn(area.key).length > 0 && rowsIn(area.key).every(r => collapsed.value.has(r.uuid))
+
+function toggleAll(area) {
+	const set = new Set(collapsed.value)
+	const collapse = !allCollapsed(area)
+	rowsIn(area.key).forEach(r => (collapse ? set.add(r.uuid) : set.delete(r.uuid)))
+	collapsed.value = set
+}
+
+// one layout (slideshow): add directly, otherwise choose in the drawer
+function newRow(area) {
+	const layouts = layoutsIn(area)
+	layouts.length === 1 ? addRow(area, layouts[0].key) : (layoutPicker.value = area)
+}
+
 async function addRow(area, layout) {
+	layoutPicker.value = null
 	const response = await run(() => api.storeRow({ area: area.key, layout }))
 	if (response) rows.value.push(response.data.data)
 }
@@ -122,7 +146,22 @@ onMounted(load)
 <template>
 	<div v-if="config" class="flex flex-col gap-40" @dragend="dragItem = null">
 		<section v-for="area in config.areas" :key="area.key">
-			<h2 v-if="config.areas.length > 1" class="text-sm font-medium text-gray-500 dark:text-warm-400 mb-12">{{ area.label }}</h2>
+			<div class="flex items-center gap-16 mb-12">
+				<h2 v-if="config.areas.length > 1" class="text-sm font-medium text-gray-500 dark:text-warm-400">{{ area.label }}</h2>
+				<span class="flex-1" />
+				<button v-if="rowsIn(area.key).length > 1" type="button" class="text-xs text-gray-500 dark:text-warm-400 hover:text-gray-900 dark:hover:text-warm-100 cursor-pointer" @click="toggleAll(area)">
+					{{ allCollapsed(area) ? 'Alle ausklappen' : 'Alle einklappen' }}
+				</button>
+				<button
+					v-if="!area.max_rows || rowsIn(area.key).length < area.max_rows"
+					type="button"
+					class="text-sm px-12 py-6 rounded-md border border-gray-200 dark:border-warm-700 text-gray-700 dark:text-warm-300 hover:border-gray-400 cursor-pointer"
+					@click="newRow(area)"
+				>
+					+ {{ area.max_rows === 1 ? 'Bereich anlegen' : 'Zeile hinzufügen' }}
+				</button>
+			</div>
+			<p v-if="!rowsIn(area.key).length" class="text-sm text-gray-400 dark:text-warm-500">Noch keine Zeilen.</p>
 
 			<draggable
 				:modelValue="rowsIn(area.key)"
@@ -139,6 +178,7 @@ onMounted(load)
 						:layout="layouts[row.layout]"
 						:layouts="layoutsIn(area)"
 						:dragItem="dragItem"
+						:collapsed="collapsed.has(row.uuid)"
 						@add="(position, acceptsNews) => openPicker(row, position, acceptsNews)"
 						@remove="position => removeItem(row, position)"
 						@dragstart="(item, event) => startDrag(row, item, event)"
@@ -146,27 +186,19 @@ onMounted(load)
 						@layout="layout => changeLayout(row, layout)"
 						@toggle="toggleRow(row)"
 						@delete="deleteRow(row)"
+						@collapse="toggleCollapse(row)"
 					/>
 				</template>
 			</draggable>
 
-			<div v-if="!area.max_rows || rowsIn(area.key).length < area.max_rows" class="mt-16">
-				<p class="text-xs text-gray-400 dark:text-warm-500 mb-8">{{ area.max_rows === 1 ? 'Bereich anlegen' : 'Neue Zeile' }}</p>
-				<div class="flex flex-wrap gap-8">
-					<button
-						v-for="layout in layoutsIn(area)"
-						:key="layout.key"
-						type="button"
-						class="flex items-center gap-8 px-10 py-8 rounded-md border border-gray-200 dark:border-warm-700 text-gray-400 dark:text-warm-500 hover:text-gray-900 dark:hover:text-warm-100 hover:border-gray-400 cursor-pointer"
-						:title="layout.label"
-						@click="addRow(area, layout.key)"
-					>
-						<LayoutIcon :layout="layout" />
-						<span class="text-xs">{{ layout.label }}</span>
-					</button>
-				</div>
-			</div>
 		</section>
+
+		<LayoutPicker
+			:open="!!layoutPicker"
+			:layouts="layoutPicker ? layoutsIn(layoutPicker) : []"
+			@close="layoutPicker = null"
+			@select="layout => addRow(layoutPicker, layout)"
+		/>
 
 		<GridPicker
 			:open="!!picker"

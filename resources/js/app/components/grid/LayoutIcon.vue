@@ -21,7 +21,7 @@ const rects = computed(() => {
 	const total = columns.reduce((sum, c) => sum + c.fr, 0)
 	const inner = props.width - gap * (columns.length - 1)
 	const unit = inner / total
-	const height = 24
+	const height = props.width * 2 / 3
 	const out = []
 	let x = 0
 
@@ -45,7 +45,7 @@ const rects = computed(() => {
 </script>
 
 <template>
-	<svg :width="width" height="24" :viewBox="`0 0 ${width} 24`" class="shrink-0" aria-hidden="true">
+	<svg :width="width" :height="width * 2 / 3" :viewBox="`0 0 ${width} ${width * 2 / 3}`" class="shrink-0" aria-hidden="true">
 		<rect
 			v-for="(r, i) in rects"
 			:key="i"

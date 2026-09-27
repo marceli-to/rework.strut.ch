@@ -34,7 +34,7 @@ const tabs = computed(() => [
 </script>
 
 <template>
-	<ResourceForm :title="isEdit ? 'Projekt bearbeiten' : 'Neues Projekt'" :isEdit="isEdit" :loading="loading" @submit="submit" @cancel="cancel">
+	<ResourceForm :title="isEdit ? 'Projekt bearbeiten' : 'Neues Projekt'" :isEdit="isEdit" :loading="loading" :sidebar="tab !== 'grid'" @submit="submit" @cancel="cancel">
 		<Tabs v-model="tab" :tabs="tabs">
 			<Tab name="data">
 				<div class="flex flex-col gap-24">

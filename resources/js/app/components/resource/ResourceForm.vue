@@ -11,6 +11,7 @@ defineProps({
 	title: { type: String, required: true },
 	loading: { type: Boolean, default: false },
 	isEdit: { type: Boolean, default: false },
+	sidebar: { type: Boolean, default: true },
 })
 
 const emit = defineEmits(['submit', 'cancel'])
@@ -21,7 +22,10 @@ const emit = defineEmits(['submit', 'cancel'])
 		<PageHeader :title="title" />
 		<div v-if="loading" class="text-sm text-gray-400 dark:text-warm-500">Laden...</div>
 		<form v-else @submit.prevent="emit('submit')">
-			<SidebarLayout>
+			<div v-if="!sidebar" class="flex flex-col gap-24">
+				<slot />
+			</div>
+			<SidebarLayout v-else>
 				<div class="flex flex-col gap-24">
 					<slot />
 				</div>
