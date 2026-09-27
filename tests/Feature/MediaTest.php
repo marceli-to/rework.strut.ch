@@ -28,7 +28,7 @@ it('accepts pdf uploads', function () {
     $file = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
 
     $this->actingAs($this->user)
-        ->postJson('/api/dashboard/media/upload', ['file' => $file])
+        ->postJson('/api/dashboard/media/upload', ['file' => $file, 'profile' => 'document'])
         ->assertOk()
         ->assertJsonPath('data.mime_type', 'application/pdf')
         ->assertJsonPath('data.thumbnail_url', null);
@@ -266,4 +266,36 @@ it('rejects partial crop values', function () {
 
 it('requires authentication for media', function () {
     $this->postJson('/api/dashboard/media/upload')->assertUnauthorized();
+});
+
+it('restricts file types per media profile', function (string $profile, string $file, string $mime, bool $allowed) {
+    Storage::fake('public');
+
+    $response = $this->actingAs($this->user)->postJson('/api/dashboard/media/upload', [
+        'profile' => $profile,
+        'file' => UploadedFile::fake()->create($file, 50, $mime),
+    ]);
+
+    $allowed ? $response->assertOk() : $response->assertJsonValidationErrors('file');
+})->with([
+    'project takes video' => ['project', 'clip.mp4', 'video/mp4', true],
+    'project rejects pdf' => ['project', 'plan.pdf', 'application/pdf', false],
+    'portrait rejects video' => ['portrait', 'clip.mp4', 'video/mp4', false],
+    'document takes pdf' => ['document', 'plan.pdf', 'application/pdf', true],
+    'document rejects image' => ['document', 'photo.jpg', 'image/jpeg', false],
+]);
+
+it('rejects unknown media profiles', function () {
+    $this->actingAs($this->user)
+        ->postJson('/api/dashboard/media/upload', ['profile' => 'nope', 'file' => UploadedFile::fake()->image('a.jpg')])
+        ->assertJsonValidationErrors('profile');
+});
+
+it('exposes media profiles with crop ratios to the admin', function () {
+    $this->actingAs($this->user)
+        ->getJson('/api/dashboard/options')
+        ->assertOk()
+        ->assertJsonPath('media_profiles.portrait.crops.0.label', 'Portrait')
+        ->assertJsonPath('media_profiles.portrait.crops.0.value', 0.864)
+        ->assertJsonPath('media_profiles.document.extensions', ['.pdf']);
 });

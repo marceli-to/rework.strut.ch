@@ -113,7 +113,7 @@ it('attaches uploaded media on save and deletes it with the record', function (s
 	Storage::fake('public');
 
 	$upload = $this->actingAs($this->user)
-		->postJson('/api/dashboard/media/upload', ['file' => UploadedFile::fake()->create('plan.pdf', 50, 'application/pdf')])
+		->postJson('/api/dashboard/media/upload', ['profile' => 'document', 'file' => UploadedFile::fake()->create('plan.pdf', 50, 'application/pdf')])
 		->json('data');
 
 	$uuid = $this->actingAs($this->user)

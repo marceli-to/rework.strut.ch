@@ -27,8 +27,8 @@ const title = computed(() => (isEdit.value ? 'Eintrag bearbeiten' : 'Neuer Eintr
 		<FormField name="title" label="Titel" v-model="form.title" :errors="errors" required />
 		<FormField name="description" label="Beschreibung" v-model="form.description" :errors="errors" />
 		<FormField name="url" label="Link" type="url" placeholder="https://" v-model="form.url" :errors="errors" />
-		<MediaField label="Bild" :maxFiles="1" />
-		<MediaField label="Datei (PDF)" collection="files" :maxFiles="1" />
+		<MediaField label="Bild" profile="entry" :maxFiles="1" />
+		<MediaField label="Datei (PDF)" collection="files" profile="document" :maxFiles="1" />
 		<template #sidebar>
 			<FormField name="publish" label="Veröffentlichen" type="checkbox" v-model="form.publish" />
 			<FormField name="year" label="Jahr" type="number" v-model="form.year" :errors="errors" required />

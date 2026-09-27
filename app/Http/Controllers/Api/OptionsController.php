@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\Competition;
 use App\Enums\EntryType;
 use App\Enums\ProjectStatus;
+use App\Support\MediaProfile;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Project;
@@ -20,6 +21,7 @@ class OptionsController extends Controller
 			'status' => ProjectStatus::options(),
 			'competition' => Competition::options(),
 			'entry_type' => EntryType::options(),
+			'media_profiles' => MediaProfile::all(),
 			'categories' => Category::ordered()->get()->map(fn (Category $category) => [
 				'value' => $category->uuid,
 				'label' => $category->name,

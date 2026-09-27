@@ -21,7 +21,7 @@ const { form, isEdit, submit, cancel, errors, loading } = useResourceForm(useTea
 			<FormField name="email" label="E-Mail" type="email" v-model="form.email" :errors="errors" />
 		</div>
 		<FormField name="cv" label="Lebenslauf" type="editor" v-model="form.cv" :errors="errors" />
-		<MediaField label="Portrait" :maxFiles="1" />
+		<MediaField label="Portrait" profile="portrait" :maxFiles="1" />
 		<template #sidebar>
 			<FormField name="publish" label="Veröffentlichen" type="checkbox" v-model="form.publish" />
 		</template>

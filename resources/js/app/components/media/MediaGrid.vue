@@ -10,9 +10,8 @@ const props = defineProps({
 	hasOg: { type: Boolean, default: false },
 	hasTeaser: { type: Boolean, default: false },
 	hasVariant: { type: Boolean, default: false },
-	hasCrop: { type: Boolean, default: true },
+	crops: { type: Array, default: () => [] }, // [{ label, value }] from the media profile
 	hasEdit: { type: Boolean, default: true },
-	variantCropFormats: { type: Boolean, default: false },
 	sidebar: { type: Boolean, default: false },
 })
 
@@ -58,7 +57,7 @@ const dragItems = computed({
 					:isTeaser="element.is_teaser"
 					:hasOg="hasOg"
 					:isOg="element.is_og"
-					:hasCrop="hasCrop && element.mime_type?.startsWith('image/')"
+					:hasCrop="crops.length > 0 && element.mime_type?.startsWith('image/')"
 					:hasEdit="hasEdit"
 					:hasVariant="hasVariant"
 					@edit="emit('edit', $event)"
@@ -74,7 +73,7 @@ const dragItems = computed({
 
 	<MediaCrop
 		:media="cropMedia"
-		:variantFormats="variantCropFormats"
+		:ratios="crops"
 		@close="cropMedia = null"
 		@save="handleCropSave"
 	/>

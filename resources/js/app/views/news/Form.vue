@@ -19,7 +19,7 @@ const { form, isEdit, submit, cancel, errors, loading } = useResourceForm(useNew
 			<FormField name="link_url" label="Link" type="url" placeholder="https://" v-model="form.link_url" :errors="errors" />
 			<FormField name="link_label" label="Linktext" v-model="form.link_label" :errors="errors" />
 		</div>
-		<MediaField label="Bild" :maxFiles="1" />
+		<MediaField label="Bild" profile="news" :maxFiles="1" />
 		<template #sidebar>
 			<FormField name="publish" label="Veröffentlichen" type="checkbox" v-model="form.publish" />
 			<FormField name="date_label" label="Datum" placeholder="z.B. August 2026" hint="Freitext, wird so angezeigt" v-model="form.date_label" :errors="errors" />

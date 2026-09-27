@@ -15,7 +15,7 @@ const { form, isEdit, submit, cancel, errors, loading } = useResourceForm(useBoo
 		<FormField name="title" label="Titel" v-model="form.title" :errors="errors" required />
 		<FormField name="description" label="Angaben" type="textarea" rows="5" hint="Umfang, Format, Preis – eine Angabe pro Zeile" v-model="form.description" :errors="errors" />
 		<FormField name="info" label="Beschreibung" type="editor" v-model="form.info" :errors="errors" />
-		<MediaField label="Cover" :maxFiles="1" />
+		<MediaField label="Cover" profile="cover" :maxFiles="1" />
 		<template #sidebar>
 			<FormField name="publish" label="Veröffentlichen" type="checkbox" v-model="form.publish" />
 			<FormField name="url" label="Bestellung" placeholder="https://… oder E-Mail" hint="Web-Adresse oder E-Mail für die Bestellung" v-model="form.url" :errors="errors" />

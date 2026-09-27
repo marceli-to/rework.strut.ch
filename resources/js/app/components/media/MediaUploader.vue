@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useOptionsStore } from '@/stores/options'
 import { PhPlus, PhUploadSimple } from '@phosphor-icons/vue'
 import Uppy from '@uppy/core'
 import XHRUpload from '@uppy/xhr-upload'
@@ -8,15 +9,14 @@ import German from '@uppy/locales/lib/de_DE'
 const props = defineProps({
 	compact: { type: Boolean, default: false },
 	maxFiles: { type: Number, default: null },
-	accept: { type: String, default: 'images' }, // 'images' (incl. video) | 'files' (PDF)
+	profile: { type: String, required: true }, // config/media.php
 	label: { type: String, default: 'Bilder hinzufügen' },
 })
 
-const types = {
-	images: { extensions: ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.mp4', '.webm', '.mov'], hint: 'JPG, PNG, WebP, GIF, MP4, WebM, MOV — max. 200 MB' },
-	files: { extensions: ['.pdf'], hint: 'PDF — max. 200 MB' },
-}
-const { extensions, hint } = types[props.accept]
+const options = useOptionsStore()
+const profile = computed(() => options.media_profiles[props.profile] ?? { extensions: [], hint: '' })
+const extensions = computed(() => profile.value.extensions)
+const hint = computed(() => profile.value.hint)
 
 const emit = defineEmits(['uploaded'])
 
@@ -26,14 +26,15 @@ const uploading = ref(false)
 const progress = ref(0)
 let uppy = null
 
-onMounted(() => {
+onMounted(async () => {
+	await options.load()
 	const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
 
 	uppy = new Uppy({
 		locale: German,
 		autoProceed: true,
 		restrictions: {
-			allowedFileTypes: extensions,
+			allowedFileTypes: extensions.value,
 			maxFileSize: 204800 * 1024,
 			maxNumberOfFiles: props.maxFiles,
 		},
@@ -42,6 +43,7 @@ onMounted(() => {
 	uppy.use(XHRUpload, {
 		endpoint: '/api/dashboard/media/upload',
 		fieldName: 'file',
+		allowedMetaFields: ['profile'],
 		headers: {
 			'X-CSRF-TOKEN': csrfToken,
 			'Accept': 'application/json',
@@ -88,7 +90,7 @@ function onFileSelect(e) {
 function addFiles(fileList) {
 	for (const file of fileList) {
 		try {
-			uppy.addFile({ name: file.name, type: file.type, data: file })
+			uppy.addFile({ name: file.name, type: file.type, data: file, meta: { profile: props.profile } })
 		} catch (err) {}
 	}
 }

@@ -7,8 +7,8 @@ Source: `changes.txt` + 4 annotated screenshots. Status per item: ☐ open · �
 - ☑ **A2** Meta descriptions of the other pages (Startseite, Werkliste, Presse, Bücher, Downloads, Auszeichnungen, Vorträge) move to a config file (see question Q1).
 
 ## B. Media
-- ☐ **B1** Image cropping: define the crop ratios per image field instead of the same generic presets everywhere (Q2).
-- ☐ **B2** Allowed file types per field instead of one global list. Today every image field also accepts videos; only project images and grids need video.
+- ☑ **B1** Image cropping: define the crop ratios per image field instead of the same generic presets everywhere (Q2).
+- ☑ **B2** Allowed file types per field instead of one global list. Today every image field also accepts videos; only project images and grids need video.
 
 ## C. Badges
 - ☑ **C1** Show category/type as black/white badges in lists (projects list: "Typ" column) (Q3).
@@ -45,3 +45,19 @@ Recorded below once answered.
 - **Q2 (B1/B2): per-field configuration.** Each image field declares its crop ratios and allowed file types; the ratios are taken from the legacy frontend.
 - **Q3 (C1): one type badge per project, styled by category.** Categories alternate black (filled) and white (outlined).
 - **Q4 (E1): structure and groups as in the screenshot, current labels kept** ("Jobs", "Seiten"). **Einstellungen** = tabs Kategorien · SEO · Benutzer (Benutzer moves there).
+
+## Implementation notes
+- **B1/B2 media profiles** are defined in `config/media.php` (`project`, `portrait`, `entry`, `page`, `cover`, `news`, `og`, `document`).
+  - The upload endpoint validates the file type per profile.
+  - The admin gets extensions, hint and crop ratios via `/api/dashboard/options`; each `MediaField` declares its profile.
+  - A single ratio locks the crop (portrait 432×500, entry 3:2, OG 1200×630).
+- **Einstellungen** tabs are Kategorien · SEO · Benutzer; the sidebar entry stays active on all three.
+- **Verified** in headless Chromium:
+  - project list badges and header filter;
+  - collapsed grid rows and the layout drawer;
+  - grid tab without the form sidebar;
+  - SEO screen (7 fields);
+  - "Seiten" lists 4 pages;
+  - portrait crop locked;
+  - PDF upload with the `document` profile accepted by the server.
+- **Found along the way (not in this round):** unattached temp uploads are never cleaned up (Template gap). A scheduled `media:clean-temp` command is proposed for later.

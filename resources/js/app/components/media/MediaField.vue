@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useMediaStore } from '@/stores/media'
 import { useConfirm } from '@/composables/useConfirm'
+import { useOptionsStore } from '@/stores/options'
 import MediaUploader from '@/components/media/MediaUploader.vue'
 import MediaGrid from '@/components/media/MediaGrid.vue'
 import MediaEdit from '@/components/media/MediaEdit.vue'
@@ -13,11 +14,11 @@ import FormLabel from '@/components/ui/form/FormLabel.vue'
  */
 const props = defineProps({
 	label: { type: String, default: 'Bilder' },
-	collection: { type: String, default: 'images' }, // 'images' | 'files'
+	collection: { type: String, default: 'images' }, // 'images' | 'files' | 'og'
+	profile: { type: String, required: true }, // config/media.php: file types + crop ratios
 	maxFiles: { type: Number, default: null },
 	hasTeaser: { type: Boolean, default: false },
 	hasOg: { type: Boolean, default: false },
-	hasCrop: { type: Boolean, default: true },
 })
 
 const store = useMediaStore()
@@ -26,6 +27,7 @@ const editing = ref(null)
 
 const items = computed(() => store.inCollection(props.collection))
 const isFiles = computed(() => props.collection === 'files')
+const crops = computed(() => useOptionsStore().media_profiles[props.profile]?.crops ?? [])
 const full = computed(() => props.maxFiles && items.value.length >= props.maxFiles)
 
 function onUploaded(media) {
@@ -53,7 +55,7 @@ async function onDelete(media) {
 		<div class="mt-8 flex flex-col gap-16">
 			<MediaUploader
 				v-if="!full"
-				:accept="isFiles ? 'files' : 'images'"
+				:profile="profile"
 				:label="isFiles ? 'Dateien hinzufügen' : 'Bilder hinzufügen'"
 				:maxFiles="maxFiles"
 				:compact="items.length > 0"
@@ -65,7 +67,7 @@ async function onDelete(media) {
 				sidebar
 				:hasTeaser="hasTeaser"
 				:hasOg="hasOg"
-				:hasCrop="hasCrop && !isFiles"
+				:crops="crops"
 				@edit="editing = $event"
 				@delete="onDelete"
 				@reorder="store.reorder($event)"

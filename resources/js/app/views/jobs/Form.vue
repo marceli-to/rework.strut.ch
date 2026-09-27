@@ -15,7 +15,7 @@ const { form, isEdit, submit, cancel, errors, loading } = useResourceForm(useJob
 		<FormField name="title" label="Titel" placeholder="z.B. offene Stelle" v-model="form.title" :errors="errors" required />
 		<FormField name="lead" label="Lead" v-model="form.lead" :errors="errors" />
 		<FormField name="info" label="Info" type="editor" v-model="form.info" :errors="errors" />
-		<MediaField label="Inserat (PDF)" collection="files" :maxFiles="1" />
+		<MediaField label="Inserat (PDF)" collection="files" profile="document" :maxFiles="1" />
 		<template #sidebar>
 			<FormField name="publish" label="Veröffentlichen" type="checkbox" v-model="form.publish" />
 		</template>

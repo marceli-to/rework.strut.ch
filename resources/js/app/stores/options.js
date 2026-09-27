@@ -12,6 +12,7 @@ export const useOptionsStore = defineStore('options', {
 		categories: [],
 		category_types: [],
 		projects: [],
+		media_profiles: {},
 		loaded: false,
 	}),
 

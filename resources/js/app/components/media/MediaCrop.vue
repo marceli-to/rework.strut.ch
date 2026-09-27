@@ -6,7 +6,7 @@ import 'vue-advanced-cropper/dist/style.css'
 
 const props = defineProps({
   media: { type: Object, default: null },
-  variantFormats: { type: Boolean, default: false },
+  ratios: { type: Array, default: () => [{ label: 'Frei', value: null }] }, // media profile crops
 })
 
 const emit = defineEmits(['close', 'save'])
@@ -15,26 +15,12 @@ const isOpen = ref(false)
 const cropperRef = ref(null)
 const aspectRatio = ref(null)
 
-const aspectOptions = computed(() => {
-  if (props.variantFormats && props.media?.variant === 'mobile') {
-    return [
-      { label: 'Frei', value: null },
-      { label: '2:3', value: 2 / 3 },
-      { label: '3:4', value: 3 / 4 },
-      { label: '1:1', value: 1 },
-    ]
-  }
-  return [
-    { label: 'Frei', value: null },
-    { label: '3:2', value: 3 / 2 },
-    { label: '4:3', value: 4 / 3 },
-    { label: '1:1', value: 1 },
-  ]
-})
+const aspectOptions = computed(() => props.ratios)
 
 watch(() => props.media, (val) => {
   isOpen.value = !!val
-  aspectRatio.value = null
+  // start with the first ratio (a single ratio locks the crop)
+  aspectRatio.value = props.ratios[0]?.value ?? null
 }, { immediate: true })
 
 function close() {
