@@ -1,172 +1,62 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { getActivePinia } from 'pinia'
 
-import LandingIndex from '@/views/landing/Index.vue'
-import LandingForm from '@/views/landing/Form.vue'
+import HomeIndex from '@/views/home/Index.vue'
 import ProjectIndex from '@/views/projects/Index.vue'
 import ProjectForm from '@/views/projects/Form.vue'
-import TopicIndex from '@/views/topics/Index.vue'
-import TopicForm from '@/views/topics/Form.vue'
-import AtelierIndex from '@/views/atelier/Index.vue'
-import AtelierForm from '@/views/atelier/Form.vue'
+import NewsIndex from '@/views/news/Index.vue'
+import NewsForm from '@/views/news/Form.vue'
+import PageIndex from '@/views/pages/Index.vue'
+import PageForm from '@/views/pages/Form.vue'
 import TeamIndex from '@/views/team/Index.vue'
 import TeamForm from '@/views/team/Form.vue'
 import JobIndex from '@/views/jobs/Index.vue'
 import JobForm from '@/views/jobs/Form.vue'
-import KontaktForm from '@/views/contact/Form.vue'
-import MediaIndex from '@/views/media/Index.vue'
-import SeoForm from '@/views/seo/Index.vue'
+import BookIndex from '@/views/books/Index.vue'
+import BookForm from '@/views/books/Form.vue'
+import EntryIndex from '@/views/entries/Index.vue'
+import EntryForm from '@/views/entries/Form.vue'
+import CategoryIndex from '@/views/settings/Categories.vue'
+import CategoryForm from '@/views/settings/CategoryForm.vue'
+import TypeForm from '@/views/settings/TypeForm.vue'
 import UserIndex from '@/views/users/Index.vue'
 import UserForm from '@/views/users/Form.vue'
 
+/**
+ * index / create / edit routes for a resource.
+ */
+function resource(name, path, Index, Form, titles, meta = {}) {
+	return [
+		{ path: `/dashboard/${path}`, name: `${name}.index`, component: Index, meta: { title: titles[0], ...meta } },
+		{ path: `/dashboard/${path}/create`, name: `${name}.create`, component: Form, meta: { title: titles[1], ...meta } },
+		{ path: `/dashboard/${path}/:id/edit`, name: `${name}.edit`, component: Form, meta: { title: titles[2], ...meta } },
+	]
+}
+
+const entry = (type, path, section) =>
+	resource(type, path, EntryIndex, EntryForm, [section, 'Neuer Eintrag', 'Eintrag bearbeiten'], { entryType: type, section })
+
 const routes = [
-  {
-    path: '/dashboard',
-    redirect: { name: 'landing.index' },
-  },
-  {
-    path: '/dashboard/landing',
-    name: 'landing.index',
-    component: LandingIndex,
-    meta: { title: 'Startseite' },
-  },
-  {
-    path: '/dashboard/landing/create',
-    name: 'landing.create',
-    component: LandingForm,
-    meta: { title: 'Neuer Slide' },
-  },
-  {
-    path: '/dashboard/landing/:id/edit',
-    name: 'landing.edit',
-    component: LandingForm,
-    meta: { title: 'Slide bearbeiten' },
-  },
-  {
-    path: '/dashboard/projects',
-    name: 'projects.index',
-    component: ProjectIndex,
-    meta: { title: 'Projekte' },
-  },
-  {
-    path: '/dashboard/projects/create',
-    name: 'projects.create',
-    component: ProjectForm,
-    meta: { title: 'Neues Projekt' },
-  },
-  {
-    path: '/dashboard/projects/:id/edit',
-    name: 'projects.edit',
-    component: ProjectForm,
-    meta: { title: 'Projekt bearbeiten' },
-  },
-  {
-    path: '/dashboard/topics',
-    name: 'topics.index',
-    component: TopicIndex,
-    meta: { title: 'Themen' },
-  },
-  {
-    path: '/dashboard/topics/create',
-    name: 'topics.create',
-    component: TopicForm,
-    meta: { title: 'Neues Thema' },
-  },
-  {
-    path: '/dashboard/topics/:id/edit',
-    name: 'topics.edit',
-    component: TopicForm,
-    meta: { title: 'Thema bearbeiten' },
-  },
-  {
-    path: '/dashboard/atelier',
-    name: 'atelier.index',
-    component: AtelierIndex,
-    meta: { title: 'Atelier' },
-  },
-  {
-    path: '/dashboard/atelier/:id/edit',
-    name: 'atelier.edit',
-    component: AtelierForm,
-    meta: { title: 'Atelier bearbeiten' },
-  },
-  {
-    path: '/dashboard/team',
-    name: 'team.index',
-    component: TeamIndex,
-    meta: { title: 'Team' },
-  },
-  {
-    path: '/dashboard/team/create',
-    name: 'team.create',
-    component: TeamForm,
-    meta: { title: 'Neues Mitglied' },
-  },
-  {
-    path: '/dashboard/team/:id/edit',
-    name: 'team.edit',
-    component: TeamForm,
-    meta: { title: 'Mitglied bearbeiten' },
-  },
-  {
-    path: '/dashboard/jobs',
-    name: 'jobs.index',
-    component: JobIndex,
-    meta: { title: 'Jobs' },
-  },
-  {
-    path: '/dashboard/jobs/create',
-    name: 'jobs.create',
-    component: JobForm,
-    meta: { title: 'Neue Stelle' },
-  },
-  {
-    path: '/dashboard/jobs/:id/edit',
-    name: 'jobs.edit',
-    component: JobForm,
-    meta: { title: 'Stelle bearbeiten' },
-  },
-  {
-    path: '/dashboard/contact',
-    name: 'contact.edit',
-    component: KontaktForm,
-    meta: { title: 'Kontakt' },
-  },
-  {
-    path: '/dashboard/media',
-    name: 'media.index',
-    component: MediaIndex,
-    meta: { title: 'Media' },
-  },
-  {
-    path: '/dashboard/seo',
-    name: 'seo.edit',
-    component: SeoForm,
-    meta: { title: 'SEO' },
-  },
-  {
-    path: '/dashboard/users',
-    name: 'users.index',
-    component: UserIndex,
-    meta: { title: 'Benutzer' },
-  },
-  {
-    path: '/dashboard/users/create',
-    name: 'users.create',
-    component: UserForm,
-    meta: { title: 'Neuer Benutzer' },
-  },
-  {
-    path: '/dashboard/users/:id/edit',
-    name: 'users.edit',
-    component: UserForm,
-    meta: { title: 'Benutzer bearbeiten' },
-  },
+	{ path: '/dashboard', redirect: { name: 'home' } },
+	{ path: '/dashboard/home', name: 'home', component: HomeIndex, meta: { title: 'Startseite' } },
+	...resource('projects', 'projects', ProjectIndex, ProjectForm, ['Projekte', 'Neues Projekt', 'Projekt bearbeiten']),
+	...resource('news', 'news', NewsIndex, NewsForm, ['News', 'Neue News', 'News bearbeiten']),
+	...resource('pages', 'pages', PageIndex, PageForm, ['Seiten', 'Neue Seite', 'Seite bearbeiten']),
+	...resource('team', 'team', TeamIndex, TeamForm, ['Team', 'Neues Mitglied', 'Mitglied bearbeiten']),
+	...resource('jobs', 'jobs', JobIndex, JobForm, ['Jobs', 'Neues Inserat', 'Inserat bearbeiten']),
+	...resource('books', 'books', BookIndex, BookForm, ['Bücher', 'Neues Buch', 'Buch bearbeiten']),
+	...entry('press', 'press', 'Presse'),
+	...entry('award', 'awards', 'Auszeichnungen'),
+	...entry('lecture', 'lectures', 'Vorträge'),
+	...resource('categories', 'categories', CategoryIndex, CategoryForm, ['Kategorien', 'Neue Kategorie', 'Kategorie bearbeiten']),
+	{ path: '/dashboard/types/create', name: 'types.create', component: TypeForm, meta: { title: 'Neuer Typ' } },
+	{ path: '/dashboard/types/:id/edit', name: 'types.edit', component: TypeForm, meta: { title: 'Typ bearbeiten' } },
+	...resource('users', 'users', UserIndex, UserForm, ['Benutzer', 'Neuer Benutzer', 'Benutzer bearbeiten']),
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+	history: createWebHistory(),
+	routes,
 })
 
 router.beforeEach(() => {

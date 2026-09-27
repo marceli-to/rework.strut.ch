@@ -8,7 +8,7 @@ import FormInput from '../form/FormInput.vue'
 import FormSelect from '../form/FormSelect.vue'
 import FormCheckbox from '../form/FormCheckbox.vue'
 import FormButton from '../form/FormButton.vue'
-import projectsApi from '@/api/projects'
+import { useOptionsStore } from '@/stores/options'
 
 const props = defineProps({
 	editor: { type: Object, required: true },
@@ -25,7 +25,7 @@ const linkTarget = ref(false)
 const linkPage = ref(null)
 const linkProject = ref(null)
 
-const projects = ref([])
+const options = useOptionsStore()
 
 const typeOptions = [
 	{ value: 'url', label: 'URL' },
@@ -41,23 +41,19 @@ const protocolOptions = [
 ]
 
 const pageOptions = [
-	{ value: '/', label: 'Home' },
-	{ value: '/projekte/auswahl', label: 'Projekte' },
-	{ value: '/projekte/werkliste', label: 'Werkliste' },
-	{ value: '/atelier/profil', label: 'Profil' },
-	{ value: '/atelier/team', label: 'Team' },
-	{ value: '/atelier/jobs', label: 'Jobs' },
+	{ value: '/', label: 'Startseite' },
+	{ value: '/werkliste', label: 'Werkliste' },
+	{ value: '/presse', label: 'Presse' },
+	{ value: '/buecher', label: 'Bücher' },
+	{ value: '/downloads', label: 'Downloads' },
+	{ value: '/ueber-uns', label: 'Über uns' },
+	{ value: '/jobs', label: 'Jobs' },
+	{ value: '/auszeichnungen', label: 'Auszeichnungen' },
+	{ value: '/vortraege', label: 'Vorträge' },
 	{ value: '/kontakt', label: 'Kontakt' },
 ]
 
-const projectOptions = computed(() =>
-	[...projects.value]
-		.sort((a, b) => a.title.localeCompare(b.title, 'de'))
-		.map(p => ({
-			value: `/projekte/auswahl/${p.slug}/bilder`,
-			label: p.location ? `${p.title}, ${p.location}` : p.title,
-		}))
-)
+const projectOptions = computed(() => options.projects.map(p => ({ value: p.url, label: p.label })))
 
 const isEditing = computed(() => props.editor.isActive('link'))
 
@@ -67,10 +63,7 @@ const placeholder = computed(() => {
 	return 'www.example.com'
 })
 
-onMounted(async () => {
-	const { data } = await projectsApi.featured()
-	projects.value = data
-})
+onMounted(() => options.load())
 
 function openDialog() {
 	const attrs = props.editor.getAttributes('link')
@@ -92,7 +85,7 @@ function openDialog() {
 			if (matchedPage) {
 				linkType.value = 'page'
 				linkPage.value = href
-			} else if (href.startsWith('/projekte/auswahl/')) {
+			} else if (href.startsWith('/bauten/')) {
 				linkType.value = 'project'
 				linkProject.value = href
 			} else {

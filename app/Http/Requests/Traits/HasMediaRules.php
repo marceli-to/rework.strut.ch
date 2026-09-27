@@ -9,7 +9,7 @@ trait HasMediaRules
 		return [
 			'media' => 'nullable|array',
 			'media.*.uuid' => 'required|string',
-			'media.*.collection' => 'sometimes|in:images,files',
+			'media.*.collection' => 'sometimes|in:images,files,og',
 			'media.*.file' => 'required|string',
 			'media.*.original_name' => 'required|string',
 			'media.*.mime_type' => 'required|string',

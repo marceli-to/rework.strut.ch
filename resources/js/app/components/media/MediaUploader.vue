@@ -8,10 +8,15 @@ import German from '@uppy/locales/lib/de_DE'
 const props = defineProps({
 	compact: { type: Boolean, default: false },
 	maxFiles: { type: Number, default: null },
+	accept: { type: String, default: 'images' }, // 'images' (incl. video) | 'files' (PDF)
+	label: { type: String, default: 'Bilder hinzufügen' },
 })
 
-const extensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif']
-const hint = 'JPG, PNG, WebP, GIF — max. 50 MB'
+const types = {
+	images: { extensions: ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.mp4', '.webm', '.mov'], hint: 'JPG, PNG, WebP, GIF, MP4, WebM, MOV — max. 200 MB' },
+	files: { extensions: ['.pdf'], hint: 'PDF — max. 200 MB' },
+}
+const { extensions, hint } = types[props.accept]
 
 const emit = defineEmits(['uploaded'])
 
@@ -29,7 +34,7 @@ onMounted(() => {
 		autoProceed: true,
 		restrictions: {
 			allowedFileTypes: extensions,
-			maxFileSize: 51200 * 1024,
+			maxFileSize: 204800 * 1024,
 			maxNumberOfFiles: props.maxFiles,
 		},
 	})
@@ -103,7 +108,7 @@ function addFiles(fileList) {
 		>
 			<div class="flex items-center justify-center gap-8 py-24">
 				<PhPlus :size="14" weight="light" class="text-gray-400 dark:text-warm-500" />
-				<span class="text-xs text-gray-500 dark:text-warm-400">Bilder hinzufügen</span>
+				<span class="text-xs text-gray-500 dark:text-warm-400">{{ label }}</span>
 				<span class="text-xs text-gray-400 dark:text-warm-500 ml-4">{{ hint }}</span>
 			</div>
 		</div>

@@ -12,6 +12,26 @@ export const useMediaStore = defineStore('media', {
 		tempItems: (state) => {
 			return state.items.filter(item => item._temp)
 		},
+
+		// New uploads as sent with the entity form (HasMediaRules)
+		payload: (state) => state.items.filter(item => item._temp).map(item => ({
+			uuid: item.uuid,
+			collection: item.collection || 'images',
+			file: item.file,
+			original_name: item.original_name,
+			mime_type: item.mime_type,
+			size: item.size,
+			width: item.width,
+			height: item.height,
+			alt: item.alt || null,
+			caption: item.caption || null,
+			crop: item.crop || null,
+			variant: item.variant || 'desktop',
+			is_teaser: !!item.is_teaser,
+			is_og: !!item.is_og,
+		})),
+
+		inCollection: (state) => (collection) => state.items.filter(item => (item.collection || 'images') === collection),
 	},
 
 	actions: {
@@ -56,8 +76,9 @@ export const useMediaStore = defineStore('media', {
 		},
 
 		async reorder(items) {
+			const collection = items[0]?.collection || 'images'
 			const hasPersistedItems = items.some(i => !i._temp)
-			this.items = items
+			this.items = [...this.items.filter(i => (i.collection || 'images') !== collection), ...items]
 
 			if (hasPersistedItems) {
 				const reorderData = items
@@ -77,7 +98,7 @@ export const useMediaStore = defineStore('media', {
 			if (item?._temp) {
 				this.items = this.items.map(i => ({
 					...i,
-					is_teaser: wasTeaser ? false : i.uuid === uuid,
+					is_teaser: i.collection === item.collection ? (wasTeaser ? false : i.uuid === uuid) : i.is_teaser,
 				}))
 				return
 			}
@@ -85,7 +106,7 @@ export const useMediaStore = defineStore('media', {
 			await mediaApi.teaser(uuid)
 			this.items = this.items.map(i => ({
 				...i,
-				is_teaser: wasTeaser ? false : i.uuid === uuid,
+				is_teaser: i.collection === item.collection ? (wasTeaser ? false : i.uuid === uuid) : i.is_teaser,
 			}))
 		},
 
@@ -96,7 +117,7 @@ export const useMediaStore = defineStore('media', {
 			if (item?._temp) {
 				this.items = this.items.map(i => ({
 					...i,
-					is_og: wasOg ? false : i.uuid === uuid,
+					is_og: i.collection === item.collection ? (wasOg ? false : i.uuid === uuid) : i.is_og,
 				}))
 				return
 			}
@@ -104,7 +125,7 @@ export const useMediaStore = defineStore('media', {
 			await mediaApi.og(uuid)
 			this.items = this.items.map(i => ({
 				...i,
-				is_og: wasOg ? false : i.uuid === uuid,
+				is_og: i.collection === item.collection ? (wasOg ? false : i.uuid === uuid) : i.is_og,
 			}))
 		},
 

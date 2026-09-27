@@ -65,7 +65,7 @@ const sortedRows = computed(() => {
 					v-if="draggableRows"
 					v-model="model"
 					tag="tbody"
-					item-key="id"
+					item-key="uuid"
 					ghost-class="opacity-30"
 					animation="150"
 				>
@@ -92,7 +92,7 @@ const sortedRows = computed(() => {
 				<tbody v-else>
 					<tr
 						v-for="(row, index) in sortedRows"
-						:key="row.id ?? index"
+						:key="row.uuid ?? index"
 						class="border-b border-gray-900/6 dark:border-warm-700/40 hover:bg-gray-50 dark:hover:bg-warm-800"
 						:class="clickableRows ? 'cursor-pointer' : ''"
 					>

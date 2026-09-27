@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-brc8NT3V.css",
+    "file": "assets/app-B75TibFM.css",
     "name": "app",
     "names": [
       "app.css"
@@ -8,59 +8,13 @@
     "src": "resources/css/app.css",
     "isEntry": true
   },
-  "resources/css/site.css": {
-    "file": "assets/site-BcxBaFby.css",
-    "name": "site",
-    "names": [
-      "site.css"
-    ],
-    "src": "resources/css/site.css",
-    "isEntry": true,
-    "assets": [
-      "assets/ChromaST-Regular-D1xfMCLw.woff2",
-      "assets/ChromaST-Regular-DWXlrxRc.woff",
-      "assets/ChromaST-Medium-BwsuIo0p.woff2",
-      "assets/ChromaST-Medium-BTOK5QUj.woff"
-    ]
-  },
-  "resources/fonts/ChromaST-Medium.woff": {
-    "file": "assets/ChromaST-Medium-BTOK5QUj.woff",
-    "src": "resources/fonts/ChromaST-Medium.woff"
-  },
-  "resources/fonts/ChromaST-Medium.woff2": {
-    "file": "assets/ChromaST-Medium-BwsuIo0p.woff2",
-    "src": "resources/fonts/ChromaST-Medium.woff2"
-  },
-  "resources/fonts/ChromaST-Regular.woff": {
-    "file": "assets/ChromaST-Regular-DWXlrxRc.woff",
-    "src": "resources/fonts/ChromaST-Regular.woff"
-  },
-  "resources/fonts/ChromaST-Regular.woff2": {
-    "file": "assets/ChromaST-Regular-D1xfMCLw.woff2",
-    "src": "resources/fonts/ChromaST-Regular.woff2"
-  },
   "resources/js/app/app.js": {
-    "file": "assets/app-AdgBeSix.js",
+    "file": "assets/app-C-jdHX4w.js",
     "name": "app",
     "src": "resources/js/app/app.js",
     "isEntry": true,
     "css": [
-      "assets/app-B75mbgXC.css"
-    ]
-  },
-  "resources/js/debug.js": {
-    "file": "assets/debug-DGZwm0DN.js",
-    "name": "debug",
-    "src": "resources/js/debug.js",
-    "isEntry": true
-  },
-  "resources/js/site.js": {
-    "file": "assets/site-Cg8tYAgV.js",
-    "name": "site",
-    "src": "resources/js/site.js",
-    "isEntry": true,
-    "css": [
-      "assets/site-Bdbi0viN.css"
+      "assets/app-d5CI4Iq4.css"
     ]
   }
 }

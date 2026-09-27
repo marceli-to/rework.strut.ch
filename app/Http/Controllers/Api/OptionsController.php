@@ -31,6 +31,7 @@ class OptionsController extends Controller
 			'projects' => Project::orderBy('name')->get()->map(fn (Project $project) => [
 				'value' => $project->uuid,
 				'label' => $project->full_title . ' (' . $project->year . ')',
+				'url' => $project->url,
 			]),
 		]);
 	}

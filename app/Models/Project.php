@@ -94,6 +94,14 @@ class Project extends Model
 		return Attribute::get(fn () => collect([$this->name, $this->location])->filter()->implode(', '));
 	}
 
+	/**
+	 * Public URL (legacy scheme, ids are kept on import): /bauten/{id}/{slug}
+	 */
+	protected function url(): Attribute
+	{
+		return Attribute::get(fn () => '/bauten/' . $this->id . '/' . $this->slug);
+	}
+
 	protected function metaDescription(): Attribute
 	{
 		return Attribute::get(function ($value) {

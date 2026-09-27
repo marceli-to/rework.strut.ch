@@ -1,0 +1,181 @@
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import draggable from 'vuedraggable'
+import { createGridApi } from '@/api/grids'
+import { useToast } from '@/composables/useToast'
+import { useConfirm } from '@/composables/useConfirm'
+import GridRow from '@/components/grid/GridRow.vue'
+import GridPicker from '@/components/grid/GridPicker.vue'
+import LayoutIcon from '@/components/grid/LayoutIcon.vue'
+
+/**
+ * The one grid editor for every grid context (project grid, homepage).
+ * Everything context-specific comes from the API config (config/grids.php).
+ * Changes are saved immediately.
+ */
+const props = defineProps({
+	context: { type: String, required: true }, // 'project' | 'home'
+	owner: { type: String, required: true },   // project uuid | 'home'
+})
+
+const api = createGridApi(props.context, props.owner)
+const toast = useToast()
+const { confirm } = useConfirm()
+
+const config = ref(null)
+const rows = ref([])
+const options = ref({ media: [], news: [] })
+const picker = ref(null) // { row, position, acceptsNews }
+const dragItem = ref(null) // { row, position }
+
+const layouts = computed(() => Object.fromEntries((config.value?.layouts ?? []).map(l => [l.key, l])))
+const rowsIn = (area) => rows.value.filter(r => r.area === area)
+const layoutsIn = (area) => area.layouts.map(key => layouts.value[key])
+
+async function run(request, message = null) {
+	try {
+		const result = await request()
+		if (message) toast.success(message)
+		return result
+	} catch (error) {
+		const errors = error.response?.data?.errors
+		toast.error(errors ? Object.values(errors).flat()[0] : 'Aktion fehlgeschlagen')
+		return null
+	}
+}
+
+async function load() {
+	const { data } = await api.show()
+	config.value = data.config
+	rows.value = data.rows
+}
+
+async function loadOptions() {
+	const { data } = await api.options()
+	options.value = data
+}
+
+function replaceRow(row) {
+	rows.value = rows.value.map(r => (r.uuid === row.uuid ? row : r))
+}
+
+async function addRow(area, layout) {
+	const response = await run(() => api.storeRow({ area: area.key, layout }))
+	if (response) rows.value.push(response.data.data)
+}
+
+async function changeLayout(row, layout) {
+	const response = await run(() => api.updateRow(row.uuid, { layout }))
+	if (response) replaceRow(response.data.data)
+}
+
+async function toggleRow(row) {
+	const response = await run(() => api.updateRow(row.uuid, { publish: !row.publish }))
+	if (response) replaceRow(response.data.data)
+}
+
+async function deleteRow(row) {
+	const ok = await confirm({ title: 'Zeile löschen', message: 'Zeile mit allen platzierten Inhalten löschen?', confirmLabel: 'Löschen', destructive: true })
+	if (!ok) return
+	if (await run(() => api.destroyRow(row.uuid))) rows.value = rows.value.filter(r => r.uuid !== row.uuid)
+}
+
+async function reorder(area, list) {
+	const others = rows.value.filter(r => r.area !== area.key)
+	rows.value = [...others, ...list]
+	await run(() => api.reorderRows(list.map((r, i) => ({ uuid: r.uuid, sort_order: i }))))
+}
+
+async function openPicker(row, position, acceptsNews) {
+	picker.value = { row, position, acceptsNews }
+	await loadOptions()
+}
+
+async function select(data) {
+	const { row, position } = picker.value
+	picker.value = null
+	const response = await run(() => api.setItem(row.uuid, position, data))
+	if (response) replaceRow(response.data.data)
+}
+
+async function removeItem(row, position) {
+	const response = await run(() => api.destroyItem(row.uuid, position))
+	if (response) replaceRow(response.data.data)
+}
+
+function startDrag(row, item, event) {
+	dragItem.value = { row: row.uuid, position: item.position }
+	event.dataTransfer.effectAllowed = 'move'
+}
+
+async function drop(row, position) {
+	const from = dragItem.value
+	dragItem.value = null
+	if (!from || (from.row === row.uuid && from.position === position)) return
+	const response = await run(() => api.moveItem({ from_row: from.row, from_position: from.position, to_row: row.uuid, to_position: position }))
+	if (response) rows.value = response.data.rows
+}
+
+onMounted(load)
+</script>
+
+<template>
+	<div v-if="config" class="flex flex-col gap-40" @dragend="dragItem = null">
+		<section v-for="area in config.areas" :key="area.key">
+			<h2 v-if="config.areas.length > 1" class="text-sm font-medium text-gray-500 dark:text-warm-400 mb-12">{{ area.label }}</h2>
+
+			<draggable
+				:modelValue="rowsIn(area.key)"
+				item-key="uuid"
+				handle=".row-handle"
+				class="flex flex-col gap-16"
+				ghost-class="opacity-30"
+				animation="150"
+				@update:modelValue="reorder(area, $event)"
+			>
+				<template #item="{ element: row }">
+					<GridRow
+						:row="row"
+						:layout="layouts[row.layout]"
+						:layouts="layoutsIn(area)"
+						:dragItem="dragItem"
+						@add="(position, acceptsNews) => openPicker(row, position, acceptsNews)"
+						@remove="position => removeItem(row, position)"
+						@dragstart="(item, event) => startDrag(row, item, event)"
+						@drop="position => drop(row, position)"
+						@layout="layout => changeLayout(row, layout)"
+						@toggle="toggleRow(row)"
+						@delete="deleteRow(row)"
+					/>
+				</template>
+			</draggable>
+
+			<div v-if="!area.max_rows || rowsIn(area.key).length < area.max_rows" class="mt-16">
+				<p class="text-xs text-gray-400 dark:text-warm-500 mb-8">{{ area.max_rows === 1 ? 'Bereich anlegen' : 'Neue Zeile' }}</p>
+				<div class="flex flex-wrap gap-8">
+					<button
+						v-for="layout in layoutsIn(area)"
+						:key="layout.key"
+						type="button"
+						class="flex items-center gap-8 px-10 py-8 rounded-md border border-gray-200 dark:border-warm-700 text-gray-400 dark:text-warm-500 hover:text-gray-900 dark:hover:text-warm-100 hover:border-gray-400 cursor-pointer"
+						:title="layout.label"
+						@click="addRow(area, layout.key)"
+					>
+						<LayoutIcon :layout="layout" />
+						<span class="text-xs">{{ layout.label }}</span>
+					</button>
+				</div>
+			</div>
+		</section>
+
+		<GridPicker
+			:open="!!picker"
+			:media="options.media"
+			:news="options.news"
+			:acceptsNews="picker?.acceptsNews ?? false"
+			@close="picker = null"
+			@select="select"
+		/>
+	</div>
+	<div v-else class="text-sm text-gray-400 dark:text-warm-500">Laden...</div>
+</template>
