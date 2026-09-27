@@ -3,8 +3,8 @@
 Source: `changes.txt` + 4 annotated screenshots. Status per item: ☐ open · ☑ done.
 
 ## A. Pages
-- ☐ **A1** The "Seiten" section only lists the content pages: Kontakt, Über uns, Jobs, Impressum.
-- ☐ **A2** Meta descriptions of the other pages (Startseite, Werkliste, Presse, Bücher, Downloads, Auszeichnungen, Vorträge) move to a config file (see question Q1).
+- ☑ **A1** The "Seiten" section only lists the content pages: Kontakt, Über uns, Jobs, Impressum.
+- ☑ **A2** Meta descriptions of the other pages (Startseite, Werkliste, Presse, Bücher, Downloads, Auszeichnungen, Vorträge) move to a config file (see question Q1).
 
 ## B. Media
 - ☐ **B1** Image cropping: define the crop ratios per image field instead of the same generic presets everywhere (Q2).
@@ -26,7 +26,7 @@ Source: `changes.txt` + 4 annotated screenshots. Status per item: ☐ open · �
   - show the type as a badge (→ C1).
 
 ## E. Sidebar navigation
-- ☐ **E1** Structure as in the screenshot (cms.strut.ch), with group titles:
+- ☑ **E1** Structure as in the screenshot (cms.strut.ch), with group titles:
   - Startseite, News, Projekte
   - **Büro:** Stellen, Team, Auszeichnungen, Vorträge
   - **Publikationen:** Bücher, Presse

@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OptionsController;
 use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\SeoController;
 use App\Http\Controllers\Api\TeamMemberController;
 use App\Http\Controllers\Api\UserController;
 
@@ -35,6 +36,8 @@ Route::prefix('dashboard')
 	->group(function () use ($resource) {
 
 		Route::get('/options', OptionsController::class);
+		Route::get('/seo', [SeoController::class, 'show']);
+		Route::put('/seo', [SeoController::class, 'update']);
 
 		$resource('projects', ProjectController::class);
 		$resource('categories', CategoryController::class);

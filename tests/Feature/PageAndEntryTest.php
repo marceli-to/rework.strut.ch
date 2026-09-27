@@ -9,17 +9,43 @@ beforeEach(function () {
 	$this->user = User::factory()->create();
 });
 
-it('lists pages in the fixed page order', function () {
+it('lists only the content pages, in the fixed page order', function () {
 	Page::factory()->create(['key' => 'contact']);
 	Page::factory()->create(['key' => 'about']);
 	Page::factory()->home()->create();
+	Page::factory()->create(['key' => 'press']);
 
 	$this->actingAs($this->user)
 		->getJson('/api/dashboard/pages')
 		->assertOk()
-		->assertJsonPath('data.0.key', 'home')
-		->assertJsonPath('data.1.key', 'about')
-		->assertJsonPath('data.2.key', 'contact');
+		->assertJsonCount(2, 'data')
+		->assertJsonPath('data.0.key', 'about')
+		->assertJsonPath('data.1.key', 'contact');
+});
+
+it('edits the meta descriptions of the listing pages under SEO', function () {
+	Page::factory()->home()->create();
+	Page::factory()->create(['key' => 'press', 'title' => 'Presse']);
+	Page::factory()->create(['key' => 'about']);
+
+	$this->actingAs($this->user)
+		->getJson('/api/dashboard/seo')
+		->assertOk()
+		->assertJsonCount(2, 'data')
+		->assertJsonPath('data.0.key', 'home');
+
+	$this->actingAs($this->user)
+		->putJson('/api/dashboard/seo', ['pages' => [
+			['key' => 'home', 'meta_description' => 'Strut Architekten Winterthur'],
+			['key' => 'press', 'meta_description' => null],
+		]])
+		->assertOk()
+		->assertJsonPath('data.0.meta_description', 'Strut Architekten Winterthur');
+
+	// content pages are edited in their own form
+	$this->actingAs($this->user)
+		->putJson('/api/dashboard/seo', ['pages' => [['key' => 'about', 'meta_description' => 'x']]])
+		->assertJsonValidationErrors('pages.0.key');
 });
 
 it('updates a page but cannot create or delete one', function () {

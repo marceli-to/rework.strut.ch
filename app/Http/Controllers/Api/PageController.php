@@ -8,7 +8,7 @@ use App\Models\Page;
 use Illuminate\Http\Request;
 
 /**
- * Fixed set of pages: no store/destroy (see routes/api.php).
+ * Content pages (Über uns, Jobs, Kontakt, Impressum): no store/destroy.
  */
 class PageController extends ResourceController
 {
@@ -18,8 +18,6 @@ class PageController extends ResourceController
 
 	public function index(Request $request)
 	{
-		$order = array_flip(array_keys(Page::KEYS));
-
-		return PageResource::collection(Page::all()->sortBy(fn (Page $page) => $order[$page->key] ?? PHP_INT_MAX)->values());
+		return PageResource::collection(Page::sortByKey(Page::content()->get()));
 	}
 }

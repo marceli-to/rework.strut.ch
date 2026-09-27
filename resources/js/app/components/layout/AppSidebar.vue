@@ -5,14 +5,13 @@ import {
 	PhBriefcase,
 	PhBuildings,
 	PhFiles,
+	PhGear,
 	PhHouse,
 	PhMicrophoneStage,
 	PhNewspaper,
 	PhNewspaperClipping,
 	PhSignOut,
-	PhTag,
 	PhTrophy,
-	PhUserCircle,
 	PhUsers,
 } from '@phosphor-icons/vue'
 import StrutLogo from '@/components/layout/StrutLogo.vue'
@@ -24,39 +23,37 @@ const navigation = [
 		items: [
 			{ name: 'Startseite', to: '/dashboard/home', icon: PhHouse },
 			{ name: 'News', to: '/dashboard/news', icon: PhNewspaper },
-		],
-	},
-	{
-		items: [
 			{ name: 'Projekte', to: '/dashboard/projects', icon: PhBuildings },
 		],
 	},
 	{
+		title: 'Büro',
 		items: [
-			{ name: 'Presse', to: '/dashboard/press', icon: PhNewspaperClipping },
-			{ name: 'Bücher', to: '/dashboard/books', icon: PhBooks },
-		],
-	},
-	{
-		items: [
-			{ name: 'Team', to: '/dashboard/team', icon: PhUsers },
 			{ name: 'Jobs', to: '/dashboard/jobs', icon: PhBriefcase },
+			{ name: 'Team', to: '/dashboard/team', icon: PhUsers },
 			{ name: 'Auszeichnungen', to: '/dashboard/awards', icon: PhTrophy },
 			{ name: 'Vorträge', to: '/dashboard/lectures', icon: PhMicrophoneStage },
 		],
 	},
 	{
+		title: 'Publikationen',
+		items: [
+			{ name: 'Bücher', to: '/dashboard/books', icon: PhBooks },
+			{ name: 'Presse', to: '/dashboard/press', icon: PhNewspaperClipping },
+		],
+	},
+	{
 		items: [
 			{ name: 'Seiten', to: '/dashboard/pages', icon: PhFiles },
-			{ name: 'Kategorien', to: '/dashboard/categories', icon: PhTag },
-			{ name: 'Benutzer', to: '/dashboard/users', icon: PhUserCircle },
+			// settings screens share one entry (tabs: Kategorien, SEO, Benutzer)
+			{ name: 'Einstellungen', to: '/dashboard/categories', icon: PhGear, match: ['/dashboard/categories', '/dashboard/types', '/dashboard/seo', '/dashboard/users'] },
 		],
 	},
 ]
 
 function isActive(item) {
 	if (item.exact) return route.path === item.to
-	return route.path.startsWith(item.to)
+	return (item.match ?? [item.to]).some(path => route.path.startsWith(path))
 }
 
 function logout() {
@@ -83,8 +80,9 @@ function logout() {
 
 		<!-- Navigation -->
 		<nav class="flex-1 py-16 px-16 overflow-y-auto">
-			<div class="space-y-16">
+			<div class="space-y-24">
 				<div v-for="(group, index) in navigation" :key="index">
+					<p v-if="group.title" class="px-12 mb-6 text-[0.6875rem] uppercase tracking-[0.08em] text-gray-400 dark:text-warm-500">{{ group.title }}</p>
 					<ul role="list">
 						<li v-for="item in group.items" :key="item.to">
 							<router-link
