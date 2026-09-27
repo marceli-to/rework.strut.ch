@@ -26,7 +26,7 @@ const dragging = computed(() => !!props.dragItem)
 
 <template>
 	<div class="rounded-md border border-gray-200 dark:border-warm-700 bg-white dark:bg-warm-900" :class="row.publish ? '' : 'opacity-50'">
-		<div class="flex items-center gap-12 px-12 py-8 text-gray-400 dark:text-warm-500" :class="collapsed ? '' : 'border-b border-gray-100 dark:border-warm-800'">
+		<div class="flex items-center gap-12 h-40 px-12 border-b text-gray-400 dark:text-warm-500" :class="collapsed ? 'border-transparent' : 'border-gray-100 dark:border-warm-800'">
 			<span class="row-handle cursor-grab active:cursor-grabbing" title="Zeile verschieben"><PhDotsSixVertical :size="16" /></span>
 			<!-- collapsed: small previews keep the row recognisable while sorting -->
 			<span v-if="collapsed" class="flex items-center gap-4 overflow-hidden">
