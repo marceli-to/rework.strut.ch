@@ -72,3 +72,85 @@ Decisions (by client):
   - `php artisan test`: **100 passed**.
   - `npm run build` OK.
 - CI workflow now targets `main`. Added `.nvmrc` (22).
+
+## 2026-09-27 — Phase 1.2: Backend and admin
+
+Architecture decisions:
+- **Shared CRUD layer instead of per-module copies.** The Template repeats Store/Update/Delete/Reorder actions, identical store/update requests, Pinia stores and index tables in every module.
+  - Backend: `ResourceController` (abstract), `ContentRequest` (fields plus German `attributes()`, uuid → id resolution), `Actions/Content/{Save,Delete,Reorder}Action`.
+  - Frontend: `createResourceApi`, `defineResourceStore`, `useResourceForm`, `ResourceIndex`, `ResourceForm`, `FormField`, `MediaField`.
+  - A content module is now: Model, Factory, Request, Resource, a controller of about 10 lines, and two small views.
+- Traits:
+  - `HasMedia`: collections `images`, `files`, `og`; media is deleted with its owner.
+  - `HasGrid`: polymorphic grid rows.
+  - `HasSortOrder`: appends within a group (projects per type, types per category).
+- Enums with German labels: `ProjectStatus`, `Competition`, `EntryType`.
+- An enforced morph map is used for all polymorphic relations.
+- **Shared grid:**
+  - `config/grids.php` is the one layout spec for both contexts.
+  - `GridContext` handles validation, media scope and admin config.
+  - One `GridController` with actions and requests.
+  - One `GridEditor.vue` that renders every layout from the spec; layout icons are generated from it.
+  - Homepage highlight slideshow = area `highlight` with layout `slideshow`.
+  - New compared to Updated: rows can be dragged in the visual view, items can be dragged between slots (swap), a row's layout can be changed, rows have a publish flag, and placed media is marked in the picker.
+- Validation messages come from `lang/de/validation.php` plus German attribute names (`ß` → `ss` in the lang file). `lang/de/auth.php` and `passwords.php` were added.
+- Project public URL stays `/bauten/{id}/{slug}`: the import keeps legacy ids and the slug uses the legacy algorithm.
+
+Template bugs found and fixed:
+- `HasUuid` registered `creating` with an arrow function that returns the uuid. Model events halt on a returned value, so every later `creating` listener was skipped (sort order was always 0, the slug hook never ran). `HasGrid`'s `deleting` listener had the same problem (media of deleted projects stayed).
+- `Drawer.vue`: a stale unmount timer closed a drawer that was opened within 200 ms of mounting.
+- `DataTable.vue` keyed draggable rows by `id`, but rows only carry `uuid`.
+- `AttachAction` dropped `is_teaser`; the teaser and OG flags were not scoped to a collection.
+- The media library page (uploads were never attached) was removed; the Glide URL builder was duplicated in two places (now `MediaUrls`).
+
+## 2026-09-27 — Phase 1.3: Import
+
+`php artisan strut:import [--fresh] [--dry-run]`, then `php artisan strut:verify`.
+
+- Read-only legacy connection: `SET SESSION TRANSACTION READ ONLY`; a test write was rejected by MySQL.
+- Media is copied (never moved) from `LEGACY_MEDIA_PATH` to `storage/app/public/uploads`, then normalized (maximum 3200 px).
+- Idempotent: a second run produced identical counts, file count and `legacy_map`.
+
+### Import report (2026-09-27)
+
+| Content | Legacy | Imported |
+|---|---|---|
+| Users | 3 | 3 (existing password hashes; please rotate) |
+| Categories / types | 3 / 7 | 3 / 7 |
+| Projects | 62 | 62 (legacy ids kept; all 62 URLs identical to `docs/legacy-urls.txt`) |
+| Project images / videos / PDFs | 431 / 0 / 24 | 431 / 0 / 24 |
+| Project grid rows / items | 130 / 314 | 130 / 314 |
+| News | 26 | 26 |
+| Pages from `content` / page images | 4 / 2 | 4 / 2 (+ 7 further pages created with the legacy SEO texts) |
+| Homepage rows (+ highlight) / items | 27 + 1 / 67 | 28 / 66 |
+| Team / jobs / books | 13 / 2 / 15 | 13 / 2 / 15 |
+| Press / awards / lectures | 37 / 13 / 10 | 37 / 13 / 10 |
+
+Notes on the report:
+- **Skipped (1):** `home_grid_elements #143` duplicates #142 (same row, same position 1, same image; a double-click in the old admin). The live site renders #142.
+- **Missing file (1):** `jobs.media #1` `5ede2863a5b0a_job_strut_architekten_2020.pdf` (unpublished job).
+- **Unused legacy files, not imported (9):** test files and old copies, see §8 of the analysis.
+- **Attached as decided (Q8):** 12 Stadtterrasse images → project 51 (unplaced).
+- `ß` found: 0.
+- Media records and files: 531 / 531 (≈382 MB).
+- HTML cleanup: MS-Word markup removed (the worst description went from 40 KB to 808 characters); spans and class/style/lang attributes stripped; entities decoded.
+
+### Verification (`strut:verify`)
+
+All counts match (`jobs.media` 2 → 1 because of the missing file). There are:
+- no dangling `legacy_map` entries;
+- no media without an owner, no media without a file, and no files without a media record;
+- no problems in any of the 158 grid rows / 380 items checked against the layout rules.
+
+Result: **"Keine Probleme gefunden."**
+
+### Admin click-through (headless Chromium, imported data)
+
+- **Pages visited:** all 20 admin screens load without console errors or failing API calls.
+- **Real write flows:**
+  - News created with an uploaded image (Uppy 6 → temp → attached on save).
+  - Grid row added in a project, image placed via the picker.
+- **Bugs found and fixed:** the grid config serialization and the Drawer race.
+- **Cleanup:** the test data was removed afterwards (`strut:import --fresh`, test user deleted).
+
+Tests: **133 passing** (Pest 5): CRUD for all modules, projects, pages/entries, both grid contexts, media, import cleanup, auth.
