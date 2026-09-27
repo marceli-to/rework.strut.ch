@@ -39,10 +39,10 @@ it('returns the context config and rows', function (string $context) {
 		->and($response->json('rows'))->toBe([]);
 
 	if ($context === 'project') {
-		expect($response->json('config.layouts'))->toHaveCount(7)
+		expect($response->json('config.layouts'))->toBeList()->toHaveCount(7)
 			->and($response->json('config.accepts_news'))->toBeFalse();
 	} else {
-		expect($response->json('config.layouts'))->toHaveCount(12)
+		expect($response->json('config.layouts'))->toBeList()->toHaveCount(12)
 			->and(collect($response->json('config.areas'))->pluck('key')->all())->toBe(['highlight', 'main'])
 			->and($response->json('config.accepts_news'))->toBeTrue();
 	}

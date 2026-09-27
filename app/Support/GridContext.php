@@ -160,7 +160,7 @@ class GridContext
 					'slots' => ($cells = $this->cells($key)) === null ? null : count($cells),
 					'columns' => $columns,
 				];
-			}),
+			})->values(),
 		];
 	}
 }

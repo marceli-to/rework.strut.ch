@@ -20,18 +20,29 @@ const sizes = {
 	lg: 'max-w-[720px]',
 }
 
+// pending unmount; cancelled when the drawer is opened again (a stale timer
+// used to close a drawer opened within 200 ms)
+let unmountTimer = null
+
+function unmountLater(callback = null) {
+	clearTimeout(unmountTimer)
+	unmountTimer = setTimeout(() => {
+		mounted.value = false
+		callback?.()
+	}, 200)
+}
+
 watch(() => props.open, (val) => {
 	if (val) {
+		clearTimeout(unmountTimer)
 		closing.value = false
 		mounted.value = true
 		requestAnimationFrame(() => {
 			visible.value = true
 		})
-	} else if (!closing.value) {
+	} else if (!closing.value && mounted.value) {
 		visible.value = false
-		setTimeout(() => {
-			mounted.value = false
-		}, 200)
+		unmountLater()
 	}
 }, { immediate: true })
 
@@ -39,10 +50,7 @@ function close() {
 	if (closing.value) return
 	closing.value = true
 	visible.value = false
-	setTimeout(() => {
-		mounted.value = false
-		emit('close')
-	}, 200)
+	unmountLater(() => emit('close'))
 }
 
 function onKeydown(e) {
@@ -53,7 +61,10 @@ function onKeydown(e) {
 }
 
 onMounted(() => document.addEventListener('keydown', onKeydown))
-onUnmounted(() => document.removeEventListener('keydown', onKeydown))
+onUnmounted(() => {
+	clearTimeout(unmountTimer)
+	document.removeEventListener('keydown', onKeydown)
+})
 </script>
 
 <template>
