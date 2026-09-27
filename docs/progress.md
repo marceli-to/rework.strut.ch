@@ -39,3 +39,36 @@ Decisions (by client):
 - Q10: 301 redirects for old `/storage/media/...` and `/media/...` URLs.
 - Q11: `/bauten` → 301 to `/werkliste`.
 - Q12: Google Maps kept on `/kontakt`, API key via env (`GOOGLE_MAPS_KEY`).
+
+## 2026-09-27 — Phase 1.1: Scaffold
+
+- Copied the Template (without `.git`, `vendor`, `node_modules`, `.env`, build, storage data). FZA seed commands were removed *before* the first commit because `SeedUser` contained plaintext credentials.
+  - An rsync exclude of `vendor` also dropped `resources/css/vendor`; this was noticed via the build error and restored.
+- Renamed to "Strut Architekten": config (name, locale `de`, timezone `Europe/Zurich`, faker `de_CH`), composer metadata, web manifest, and strut favicons, logo and login splash. The favicon markup was copied in 3 layouts and is now one partial, `components/layout/partials/favicons.blade.php`.
+- Created DB `rework_strut` (MAMP MySQL; credentials taken from the Template `.env`). Added `.env.example` (the Template had deleted it) with `LEGACY_DB_*`, `LEGACY_MEDIA_PATH` and `GOOGLE_MAPS_KEY`.
+- Herd: `herd link` + `herd secure` → https://rework.strut.ch.test.
+- **Upgrades** (approved Q2):
+
+  | Package | From | To |
+  |---|---|---|
+  | laravel/framework | 13.7.0 | 13.33.0 |
+  | pestphp/pest | 4.6.3 | 5.2.1 |
+  | phpunit/phpunit | 12.5 | 13.3 |
+  | league/glide | 3.2 | **4.1** |
+  | vite | 7.3.2 | **8.3.1** |
+  | laravel-vite-plugin | 2 | **3** |
+  | pinia | 3.0.4 | **4.0.3** |
+  | @uppy/core, @uppy/xhr-upload | 5 | **6** |
+  | tailwindcss | 4.1.18 | 4.3.3 |
+  | vue | 3.5.27 | 3.5.43 |
+  | vue-router | 5.0.2 | 5.3.1 |
+  | tiptap | 3.19 | 3.31 |
+
+  - Removed the unused `@uppy/drag-drop` and `@uppy/status-bar`.
+  - The Glide 4 API used by `ImageController` (`ServerFactory::create`, `makeImage`, `getCache`, `driver` option) is unchanged. Verified: webp and avif resize works over HTTPS.
+- Verified:
+  - `/` and `/login` return 200.
+  - Admin login → `/dashboard` 200, `/api/dashboard/projects` 200 (throwaway user, deleted afterwards).
+  - `php artisan test`: **100 passed**.
+  - `npm run build` OK.
+- CI workflow now targets `main`. Added `.nvmrc` (22).

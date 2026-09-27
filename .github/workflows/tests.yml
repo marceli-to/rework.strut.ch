@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   tests:
@@ -25,7 +25,7 @@ jobs:
 
       - name: Prepare environment
         run: |
-          cp .env.example .env || echo "APP_KEY=" > .env
+          cp .env.example .env
           php artisan key:generate
 
       - name: Run tests
