@@ -1,8 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import { PhDotsSixVertical, PhTrash, PhEye, PhEyeSlash, PhCaretDown, PhNewspaper } from '@phosphor-icons/vue'
+import { PhDotsSixVertical, PhTrash, PhEye, PhEyeSlash, PhCaretDown, PhNewspaper, PhPencilSimple } from '@phosphor-icons/vue'
 import GridCell from '@/components/grid/GridCell.vue'
-import LayoutIcon from '@/components/grid/LayoutIcon.vue'
 
 /**
  * Renders any layout from its spec (columns → stacked cells), so no
@@ -11,12 +10,12 @@ import LayoutIcon from '@/components/grid/LayoutIcon.vue'
 const props = defineProps({
 	row: { type: Object, required: true },
 	layout: { type: Object, required: true },
-	layouts: { type: Array, required: true }, // layouts allowed in this area
+	editable: { type: Boolean, default: false }, // area offers more than one layout
 	dragItem: { type: Object, default: null },
 	collapsed: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['add', 'remove', 'dragstart', 'drop', 'layout', 'toggle', 'delete', 'collapse'])
+const emit = defineEmits(['add', 'remove', 'dragstart', 'drop', 'layout', 'toggle', 'delete', 'collapse', 'edit'])
 
 const itemAt = (position) => props.row.items.find(i => i.position === position) ?? null
 const isSlideshow = computed(() => props.layout.slots === null)
@@ -29,21 +28,8 @@ const dragging = computed(() => !!props.dragItem)
 	<div class="rounded-md border border-gray-200 dark:border-warm-700 bg-white dark:bg-warm-900" :class="row.publish ? '' : 'opacity-50'">
 		<div class="flex items-center gap-12 px-12 py-8 text-gray-400 dark:text-warm-500" :class="collapsed ? '' : 'border-b border-gray-100 dark:border-warm-800'">
 			<span class="row-handle cursor-grab active:cursor-grabbing" title="Zeile verschieben"><PhDotsSixVertical :size="16" /></span>
-			<button type="button" class="hover:text-gray-900 dark:hover:text-warm-100 cursor-pointer transition-transform" :class="collapsed ? '-rotate-90' : ''" :title="collapsed ? 'Aufklappen' : 'Zuklappen'" @click="emit('collapse')">
-				<PhCaretDown :size="14" />
-			</button>
-			<LayoutIcon :layout="layout" class="text-gray-300 dark:text-warm-600" />
-			<select
-				v-if="layouts.length > 1"
-				:value="row.layout"
-				class="text-xs bg-transparent text-gray-600 dark:text-warm-300 cursor-pointer focus:outline-none"
-				@change="emit('layout', $event.target.value)"
-			>
-				<option v-for="l in layouts" :key="l.key" :value="l.key">{{ l.label }}</option>
-			</select>
-			<span v-else class="text-xs text-gray-600 dark:text-warm-300">{{ layout.label }}</span>
 			<!-- collapsed: small previews keep the row recognisable while sorting -->
-			<span v-if="collapsed" class="flex items-center gap-4 ml-8 overflow-hidden">
+			<span v-if="collapsed" class="flex items-center gap-4 overflow-hidden">
 				<template v-for="item in row.items" :key="item.uuid">
 					<span v-if="item.type === 'news'" class="size-24 flex items-center justify-center rounded-sm border border-gray-200 dark:border-warm-700" :title="item.news.title"><PhNewspaper :size="12" /></span>
 					<img v-else-if="item.media.thumbnail_url" :src="item.media.thumbnail_url" class="size-24 object-cover rounded-sm" alt="" />
@@ -51,12 +37,18 @@ const dragging = computed(() => !!props.dragItem)
 				</template>
 			</span>
 			<span class="flex-1" />
+			<button v-if="editable" type="button" class="hover:text-gray-900 dark:hover:text-warm-100 cursor-pointer" title="Layout ändern" @click="emit('edit')">
+				<PhPencilSimple :size="16" weight="light" />
+			</button>
 			<button type="button" class="hover:text-gray-900 dark:hover:text-warm-100 cursor-pointer" :title="row.publish ? 'Zeile ausblenden' : 'Zeile einblenden'" @click="emit('toggle')">
 				<PhEye v-if="row.publish" :size="16" weight="light" />
 				<PhEyeSlash v-else :size="16" weight="light" />
 			</button>
 			<button type="button" class="hover:text-red-600 cursor-pointer" title="Zeile löschen" @click="emit('delete')">
 				<PhTrash :size="16" weight="light" />
+			</button>
+			<button type="button" class="hover:text-gray-900 dark:hover:text-warm-100 cursor-pointer transition-transform" :class="collapsed ? 'rotate-90' : ''" :title="collapsed ? 'Aufklappen' : 'Zuklappen'" @click="emit('collapse')">
+				<PhCaretDown :size="14" />
 			</button>
 		</div>
 

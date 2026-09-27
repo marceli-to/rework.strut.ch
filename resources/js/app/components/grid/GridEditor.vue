@@ -28,7 +28,7 @@ const options = ref({ media: [], news: [] })
 const picker = ref(null) // { row, position, acceptsNews }
 const dragItem = ref(null) // { row, position }
 const collapsed = ref(new Set()) // row uuids
-const layoutPicker = ref(null) // area
+const layoutPicker = ref(null) // { area, row } — row set when changing a layout
 
 const layouts = computed(() => Object.fromEntries((config.value?.layouts ?? []).map(l => [l.key, l])))
 const rowsIn = (area) => rows.value.filter(r => r.area === area)
@@ -79,16 +79,22 @@ function toggleAll(area) {
 // one layout (slideshow): add directly, otherwise choose in the drawer
 function newRow(area) {
 	const layouts = layoutsIn(area)
-	layouts.length === 1 ? addRow(area, layouts[0].key) : (layoutPicker.value = area)
+	layouts.length === 1 ? addRow(area, layouts[0].key) : (layoutPicker.value = { area, row: null })
+}
+
+function selectLayout(layout) {
+	const { area, row } = layoutPicker.value
+	layoutPicker.value = null
+	row ? changeLayout(row, layout) : addRow(area, layout)
 }
 
 async function addRow(area, layout) {
-	layoutPicker.value = null
 	const response = await run(() => api.storeRow({ area: area.key, layout }))
 	if (response) rows.value.push(response.data.data)
 }
 
 async function changeLayout(row, layout) {
+	if (layout === row.layout) return
 	const response = await run(() => api.updateRow(row.uuid, { layout }))
 	if (response) replaceRow(response.data.data)
 }
@@ -146,7 +152,7 @@ onMounted(load)
 <template>
 	<div v-if="config" class="flex flex-col gap-40" @dragend="dragItem = null">
 		<section v-for="area in config.areas" :key="area.key">
-			<div class="flex items-center gap-16 mb-12">
+			<div class="flex items-center gap-16 mb-24">
 				<h2 v-if="config.areas.length > 1" class="text-sm font-medium text-gray-500 dark:text-warm-400">{{ area.label }}</h2>
 				<span class="flex-1" />
 				<button v-if="rowsIn(area.key).length > 1" type="button" class="text-xs text-gray-500 dark:text-warm-400 hover:text-gray-900 dark:hover:text-warm-100 cursor-pointer" @click="toggleAll(area)">
@@ -176,14 +182,14 @@ onMounted(load)
 					<GridRow
 						:row="row"
 						:layout="layouts[row.layout]"
-						:layouts="layoutsIn(area)"
+						:editable="area.layouts.length > 1"
 						:dragItem="dragItem"
 						:collapsed="collapsed.has(row.uuid)"
 						@add="(position, acceptsNews) => openPicker(row, position, acceptsNews)"
 						@remove="position => removeItem(row, position)"
 						@dragstart="(item, event) => startDrag(row, item, event)"
 						@drop="position => drop(row, position)"
-						@layout="layout => changeLayout(row, layout)"
+						@edit="layoutPicker = { area, row }"
 						@toggle="toggleRow(row)"
 						@delete="deleteRow(row)"
 						@collapse="toggleCollapse(row)"
@@ -195,9 +201,10 @@ onMounted(load)
 
 		<LayoutPicker
 			:open="!!layoutPicker"
-			:layouts="layoutPicker ? layoutsIn(layoutPicker) : []"
+			:layouts="layoutPicker ? layoutsIn(layoutPicker.area) : []"
+			:current="layoutPicker?.row?.layout ?? null"
 			@close="layoutPicker = null"
-			@select="layout => addRow(layoutPicker, layout)"
+			@select="selectLayout"
 		/>
 
 		<GridPicker

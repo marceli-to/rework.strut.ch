@@ -38,6 +38,11 @@ Source: `changes.txt` + 4 annotated screenshots. Status per item: ☐ open · �
 - ☑ **F1** Rows are collapsible, which makes sorting easier (both contexts).
 - ☑ **F2** "Neue Zeile": instead of the list of layout buttons below the grid, a button at the top opens a sidebar (drawer) with the layouts.
 - ☑ **F3** Project form: hide the form sidebar while the "Raster" tab is active.
+- ☑ **F4** Row header (follow-up screenshot, both contexts):
+  - left side shows only the drag handle, plus the image previews when the row is collapsed;
+  - the chevron moves to the right, after the eye and trash icons;
+  - a pencil icon replaces the layout dropdown and opens the layout drawer, with the current layout highlighted;
+  - more space between the area header and the first row.
 
 ## Questions / decisions
 Recorded below once answered.
