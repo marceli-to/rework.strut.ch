@@ -1,0 +1,5 @@
+<div class="swiper {{ $class ?? '' }}">
+  <div class="swiper-wrapper">
+    {{ $slot }}
+  </div>
+</div>

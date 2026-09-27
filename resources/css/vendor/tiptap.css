@@ -1,0 +1,54 @@
+.editor {
+	@apply border border-gray-200 rounded-md bg-white overflow-hidden;
+	@variant dark {
+		@apply border-warm-700 bg-warm-800;
+	}
+}
+
+.editor--error {
+	@apply border-red-400;
+	@variant dark {
+		@apply border-red-500;
+	}
+}
+
+.editor:focus-within {
+	@apply ring-2 ring-gray-200 border-gray-300;
+	@variant dark {
+		@apply ring-warm-700 border-warm-600;
+	}
+}
+
+.editor .tiptap {
+	@apply px-12 py-10 text-sm leading-normal min-h-[200px] outline-none bg-white text-gray-900;
+	@variant dark {
+		@apply bg-warm-800 text-warm-100;
+	}
+}
+
+.editor .tiptap p {
+	@apply mb-[1em];
+}
+
+.editor .tiptap ul {
+	@apply list-disc pl-[1.5em] mb-[0.5em];
+}
+
+.editor .tiptap ol {
+	@apply list-decimal pl-[1.5em] mb-[0.5em];
+}
+
+.editor .tiptap li {
+	@apply mb-[0.25em];
+}
+
+.editor .tiptap a {
+	@apply text-gray-900 underline decoration-gray-300 underline-offset-4 hover:decoration-gray-900;
+	@variant dark {
+		@apply text-warm-100 decoration-warm-600 hover:decoration-warm-300;
+	}
+}
+
+.editor .tiptap strong {
+	@apply font-semibold;
+}

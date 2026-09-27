@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@import "./partials/spacing.css";
+@import "./vendor/uppy.css";
+@import "./vendor/tiptap.css";
+
+@theme {
+  /* Font family */
+  --font-sans: 'Google Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --text-xxs: 0.625rem;
+
+  /* Colors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-snow: #f5f5f5;
+  --color-gray: #828282;
+  --color-navy: #00455c;
+  --color-slate: #5a778e;
+  --color-silver: #c8c8c8;
+  --color-red: #dc0000;
+  --color-lime: #7d9b00;
+  --color-olive: #555700;
+  --color-wine: #75000a;
+  --color-bronze: #8c6900;
+
+  /* Warm palette */
+  --color-warm-50: #faf9f7;
+  --color-warm-100: #f5f3f0;
+  --color-warm-200: #e8e4df;
+  --color-warm-300: #d4cec6;
+  --color-warm-400: #a8a196;
+  --color-warm-500: #857d72;
+  --color-warm-600: #6b6359;
+  --color-warm-700: #514a42;
+  --color-warm-800: #3a342d;
+  --color-warm-900: #272320;
+  --color-warm-950: #1a1715;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* Debug for grids */
+.debug-grid {
+  @apply bg-yellow-50/50;
+}
+
+.debug-grid > * {
+  @apply outline outline-1 outline-yellow-500/50;
+}

@@ -1,0 +1,31 @@
+.media-uploader .uppy-DragDrop-container {
+	@apply bg-snow border border-dashed border-silver rounded-none min-h-[120px];
+}
+
+.media-uploader .uppy-DragDrop-inner {
+	@apply p-8;
+}
+
+.media-uploader .uppy-DragDrop-inner svg {
+	@apply !hidden;
+}
+
+.media-uploader .uppy-DragDrop-container:hover {
+	@apply border-black;
+}
+
+.media-uploader .uppy-DragDrop--isDraggingOver {
+	@apply border-black bg-silver/30;
+}
+
+.media-uploader .uppy-DragDrop-label {
+	@apply text-sm text-gray;
+}
+
+.media-uploader .uppy-DragDrop-browse {
+	@apply text-black font-semibold;
+}
+
+.media-uploader .uppy-StatusBar {
+	@apply rounded-none border border-silver border-t-0;
+}
