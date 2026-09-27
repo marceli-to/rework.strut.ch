@@ -4,6 +4,7 @@ import { useProjectStore } from '@/stores/resources'
 import { useOptionsStore } from '@/stores/options'
 import ResourceIndex from '@/components/resource/ResourceIndex.vue'
 import FormSelect from '@/components/ui/form/FormSelect.vue'
+import Badge from '@/components/ui/badge/Badge.vue'
 
 const options = useOptionsStore()
 const type = ref(null)
@@ -14,8 +15,10 @@ const columns = [
 	{ key: 'year', label: 'Jahr' },
 	{ key: 'type', label: 'Typ' },
 	{ key: 'status_label', label: 'Status' },
-	{ key: 'has_detail', label: 'Detailseite' },
 ]
+
+// categories alternate between solid and outlined badges
+const variant = (row) => (row.category_type?.category?.sort_order ?? 0) % 2 === 0 ? 'solid' : 'outline'
 
 onMounted(() => options.load())
 </script>
@@ -31,13 +34,13 @@ onMounted(() => options.load())
 		:sortable="!!type"
 		:rowLabel="row => row.full_title"
 	>
-		<template #before>
-			<div class="flex items-center gap-12 mb-24 max-w-[28rem]">
+		<template #actions>
+			<div class="w-[18rem]">
 				<FormSelect v-model="type" :options="options.category_types" placeholder="Alle Typen" />
 			</div>
-			<p v-if="!type" class="text-xs text-gray-400 dark:text-warm-500 mb-16">Zum Sortieren einen Typ wählen.</p>
 		</template>
-		<template #cell-type="{ row }">{{ row.category_type?.name_singular }}</template>
-		<template #cell-has_detail="{ row }">{{ row.has_detail ? 'Ja' : '–' }}</template>
+		<template #cell-type="{ row }">
+			<Badge v-if="row.category_type" :variant="variant(row)">{{ row.category_type.name_singular }}</Badge>
+		</template>
 	</ResourceIndex>
 </template>

@@ -60,8 +60,9 @@ async function remove(row) {
 <template>
 	<div>
 		<PageHeader :title="title" />
-		<FormActions v-if="createLabel">
-			<button type="button" class="text-sm px-16 py-8 rounded-md bg-gray-900 dark:bg-warm-100 text-white dark:text-warm-900 hover:bg-gray-800 dark:hover:bg-warm-200 transition-colors cursor-pointer" @click="router.push({ name: routes.create, query: $route.query })">
+		<FormActions v-if="createLabel || $slots.actions">
+			<slot name="actions" />
+			<button v-if="createLabel" type="button" class="text-sm px-16 py-8 rounded-md bg-gray-900 dark:bg-warm-100 text-white dark:text-warm-900 hover:bg-gray-800 dark:hover:bg-warm-200 transition-colors cursor-pointer" @click="router.push({ name: routes.create, query: $route.query })">
 				{{ createLabel }}
 			</button>
 		</FormActions>

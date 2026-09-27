@@ -11,7 +11,7 @@ Source: `changes.txt` + 4 annotated screenshots. Status per item: ☐ open · �
 - ☐ **B2** Allowed file types per field instead of one global list. Today every image field also accepts videos; only project images and grids need video.
 
 ## C. Badges
-- ☐ **C1** Show category/type as black/white badges in lists (projects list: "Typ" column) (Q3).
+- ☑ **C1** Show category/type as black/white badges in lists (projects list: "Typ" column) (Q3).
 
 ## D. Listings
 - ☑ **D1** Vorträge, Auszeichnungen, Presse: remove the "Beschreibung" column.
@@ -19,7 +19,7 @@ Source: `changes.txt` + 4 annotated screenshots. Status per item: ☐ open · �
 - ☑ **D3** News: remove the "Untertitel" column.
 - ☑ **D4** Team: remove the "Position" column.
 - ☑ **D5** Bücher: remove the "Bestellung" column.
-- ☐ **D6** Projects list:
+- ☑ **D6** Projects list:
   - move the type filter up into the header (next to "Neues Projekt");
   - remove the help text "Zum Sortieren einen Typ wählen.";
   - remove the "Detailseite" column;
