@@ -10,8 +10,7 @@ const type = computed(() => route.meta.entryType)
 
 const columns = computed(() => [
 	{ key: 'title', label: 'Titel', primary: true },
-	{ key: 'description', label: 'Beschreibung' },
-	...(type.value === 'press' ? [{ key: 'project', label: 'Projekt' }] : []),
+	...(type.value === 'press' ? [{ key: 'project', label: 'Projekt', limit: 40 }] : []),
 	{ key: 'year', label: 'Jahr' },
 ])
 </script>

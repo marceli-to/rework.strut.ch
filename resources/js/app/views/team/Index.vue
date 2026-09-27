@@ -5,7 +5,6 @@ import ResourceIndex from '@/components/resource/ResourceIndex.vue'
 const columns = [
 	{ key: 'full_name', label: 'Name', primary: true },
 	{ key: 'role', label: 'Funktion' },
-	{ key: 'position', label: 'Position' },
 	{ key: 'email', label: 'E-Mail' },
 ]
 </script>

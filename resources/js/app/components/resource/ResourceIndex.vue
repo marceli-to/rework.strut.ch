@@ -11,6 +11,7 @@ import DataTable from '@/components/ui/table/DataTable.vue'
 /**
  * List view for a resource store: table, publish toggle, edit, delete and
  * (optionally) drag & drop ordering. Cell slots are passed to the table.
+ * Column options (besides DataTable's): limit (max. characters, full text on hover).
  */
 const props = defineProps({
 	title: { type: String, required: true },
@@ -80,6 +81,7 @@ async function remove(row) {
 			<template v-for="col in props.columns" #[`cell-${col.key}`]="scope">
 				<slot :name="`cell-${col.key}`" v-bind="scope">
 					<button type="button" v-if="col.primary" class="text-left cursor-pointer hover:underline" @click="edit(scope.row)">{{ scope.value }}</button>
+					<span v-else-if="col.limit && scope.value?.length > col.limit" :title="scope.value">{{ scope.value.slice(0, col.limit).trimEnd() }}…</span>
 					<template v-else>{{ scope.value }}</template>
 				</slot>
 			</template>
