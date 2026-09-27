@@ -29,3 +29,6 @@ Thumbs.db
 /public/.htaccess
 /public/robots.txt
 /INSTALL.txt
+
+# local machine transfer bundle (secrets, client data)
+/.transfer
