@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
 		'category' => \App\Models\Category::class,
 		'category_type' => \App\Models\CategoryType::class,
 		'grid_row' => \App\Models\GridRow::class,
+		'grid_item' => \App\Models\GridItem::class,
+		'media' => \App\Models\Media::class,
 		'user' => \App\Models\User::class,
 	];
 
