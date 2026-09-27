@@ -60,4 +60,4 @@ Recorded below once answered.
   - "Seiten" lists 4 pages;
   - portrait crop locked;
   - PDF upload with the `document` profile accepted by the server.
-- **Found along the way (not in this round):** unattached temp uploads are never cleaned up (Template gap). A scheduled `media:clean-temp` command is proposed for later.
+- **Found along the way:** unattached temp uploads were never cleaned up (Template gap). Added `media:clean-temp` (daily 03:30, see `docs/deployment.md`).
