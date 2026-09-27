@@ -1,139 +1,116 @@
 <?php
 
+use App\Enums\Competition;
+use App\Enums\ProjectStatus;
+use App\Models\CategoryType;
+use App\Models\GridRow;
+use App\Models\Media;
 use App\Models\Project;
-use App\Models\Topic;
 use App\Models\User;
 
 beforeEach(function () {
-    $this->user = User::factory()->create();
+	$this->user = User::factory()->create();
 });
 
-it('lists all projects', function () {
-    Project::factory()->count(3)->create();
+it('generates the slug like the legacy site', function () {
+	$project = Project::factory()->create([
+		'name' => 'Bärenhöhle, Kindertagesstätte',
+		'location' => 'Frauenfeld',
+		'year' => 2017,
+	]);
 
-    $this->actingAs($this->user)
-        ->getJson('/api/dashboard/projects')
-        ->assertOk()
-        ->assertJsonCount(3, 'data');
+	expect($project->slug)->toBe('baerenhoehle-kindertagesstaette-frauenfeld-2017');
 });
 
-it('creates a project and generates slug from title, location, and year', function () {
-    $this->actingAs($this->user)
-        ->postJson('/api/dashboard/projects', [
-            'title' => 'New Project',
-            'location' => 'Zurich',
-            'year' => 2024,
-        ])
-        ->assertCreated()
-        ->assertJsonPath('data.title', 'New Project')
-        ->assertJsonPath('data.slug', 'new-project-zurich-2024');
+it('keeps the slug stable when the name changes', function () {
+	$project = Project::factory()->create(['name' => 'Hofwiesenweg', 'location' => 'Winterthur', 'year' => 2017]);
 
-    expect(Project::count())->toBe(1);
+	$project->update(['name' => 'Hofwiesenweg neu']);
+
+	expect($project->fresh()->slug)->toBe('hofwiesenweg-winterthur-2017');
 });
 
-it('validates required fields on create', function () {
-    $this->actingAs($this->user)
-        ->postJson('/api/dashboard/projects', [])
-        ->assertUnprocessable()
-        ->assertJsonValidationErrors(['title', 'year']);
+it('makes duplicate slugs unique instead of failing', function () {
+	$a = Project::factory()->create(['name' => 'Haus A', 'location' => 'Winterthur', 'year' => 2015]);
+	$b = Project::factory()->create(['name' => 'Haus A', 'location' => 'Winterthur', 'year' => 2015]);
+
+	expect($a->slug)->toBe('haus-a-winterthur-2015')
+		->and($b->slug)->toBe('haus-a-winterthur-2015-2');
 });
 
-it('shows a single project', function () {
-    $project = Project::factory()->create(['title' => 'My Project']);
+it('stores the category type from its uuid and returns enum values', function () {
+	$type = CategoryType::factory()->create();
 
-    $this->actingAs($this->user)
-        ->getJson("/api/dashboard/projects/{$project->uuid}")
-        ->assertOk()
-        ->assertJsonPath('data.title', 'My Project');
+	$this->actingAs($this->user)
+		->postJson('/api/dashboard/projects', [
+			'category_type_id' => $type->uuid,
+			'name' => 'Sky-Frame',
+			'location' => 'Frauenfeld',
+			'year' => 2014,
+			'status' => 'executed',
+			'competition' => 'first_prize',
+		])
+		->assertCreated()
+		->assertJsonPath('data.category_type_id', $type->uuid)
+		->assertJsonPath('data.status', 'executed')
+		->assertJsonPath('data.status_label', 'Ausgeführt')
+		->assertJsonPath('data.competition', 'first_prize');
+
+	$project = Project::first();
+	expect($project->category_type_id)->toBe($type->id)
+		->and($project->status)->toBe(ProjectStatus::Executed)
+		->and($project->competition)->toBe(Competition::FirstPrize);
 });
 
-it('updates a project', function () {
-    $project = Project::factory()->create();
-
-    $this->actingAs($this->user)
-        ->putJson("/api/dashboard/projects/{$project->uuid}", [
-            'title' => 'Updated Title',
-            'location' => 'Zurich',
-            'year' => 2020,
-        ])
-        ->assertOk()
-        ->assertJsonPath('data.title', 'Updated Title');
-
-    expect($project->fresh()->title)->toBe('Updated Title');
+it('rejects unknown status and competition values', function () {
+	$this->actingAs($this->user)
+		->postJson('/api/dashboard/projects', [
+			'category_type_id' => CategoryType::factory()->create()->uuid,
+			'name' => 'X',
+			'location' => 'Y',
+			'year' => 2020,
+			'status' => 'Ausgeführt',
+			'competition' => '3. Preis',
+		])
+		->assertUnprocessable()
+		->assertJsonValidationErrors(['status', 'competition']);
 });
 
-it('attaches a topic on create', function () {
-    $topic = Topic::factory()->create();
+it('lists projects in category, type and project order', function () {
+	$type = CategoryType::factory()->create();
+	$second = Project::factory()->for($type)->create(['name' => 'Second', 'sort_order' => 1]);
+	$first = Project::factory()->for($type)->create(['name' => 'First', 'sort_order' => 0]);
 
-    $response = $this->actingAs($this->user)
-        ->postJson('/api/dashboard/projects', [
-            'title' => 'Project with Topic',
-            'location' => 'Zurich',
-            'year' => 2022,
-            'topic_id' => $topic->uuid,
-        ])
-        ->assertCreated();
-
-    expect($response->json('data.topic.uuid'))->toBe($topic->uuid);
+	$this->actingAs($this->user)
+		->getJson('/api/dashboard/projects')
+		->assertOk()
+		->assertJsonPath('data.0.uuid', $first->uuid)
+		->assertJsonPath('data.1.uuid', $second->uuid);
 });
 
-it('rejects an invalid topic_id', function () {
-    $this->actingAs($this->user)
-        ->postJson('/api/dashboard/projects', [
-            'title' => 'Project',
-            'year' => 2022,
-            'topic_id' => 'non-existent-uuid',
-        ])
-        ->assertUnprocessable()
-        ->assertJsonValidationErrors(['topic_id']);
+it('deletes grid rows and media together with the project', function () {
+	$project = Project::factory()->create();
+	$media = Media::factory()->create(['mediable_type' => 'project', 'mediable_id' => $project->id]);
+	$row = GridRow::factory()->create(['gridable_type' => 'project', 'gridable_id' => $project->id]);
+	$row->items()->create(['position' => 0, 'media_id' => $media->id]);
+
+	$this->actingAs($this->user)
+		->deleteJson("/api/dashboard/projects/{$project->uuid}")
+		->assertNoContent();
+
+	expect(GridRow::count())->toBe(0)
+		->and(Media::count())->toBe(0)
+		->and(\App\Models\GridItem::count())->toBe(0);
 });
 
-it('toggles publish state', function () {
-    $project = Project::factory()->create(['publish' => false]);
+it('provides select options for admin forms', function () {
+	CategoryType::factory()->create();
 
-    $this->actingAs($this->user)
-        ->patchJson("/api/dashboard/projects/{$project->uuid}/publish")
-        ->assertOk()
-        ->assertJsonPath('data.publish', true);
-
-    $this->actingAs($this->user)
-        ->patchJson("/api/dashboard/projects/{$project->uuid}/publish")
-        ->assertOk()
-        ->assertJsonPath('data.publish', false);
-});
-
-it('toggles feature state', function () {
-    $project = Project::factory()->create(['feature' => false]);
-
-    $this->actingAs($this->user)
-        ->patchJson("/api/dashboard/projects/{$project->uuid}/feature")
-        ->assertOk()
-        ->assertJsonPath('data.feature', true);
-});
-
-it('lists projects ordered by year DESC', function () {
-    $older = Project::factory()->create(['year' => 2018]);
-    $newer = Project::factory()->create(['year' => 2024]);
-    $middle = Project::factory()->create(['year' => 2020]);
-
-    $this->actingAs($this->user)
-        ->getJson('/api/dashboard/projects')
-        ->assertOk()
-        ->assertJsonPath('data.0.uuid', (string) $newer->uuid)
-        ->assertJsonPath('data.1.uuid', (string) $middle->uuid)
-        ->assertJsonPath('data.2.uuid', (string) $older->uuid);
-});
-
-it('deletes a project', function () {
-    $project = Project::factory()->create();
-
-    $this->actingAs($this->user)
-        ->deleteJson("/api/dashboard/projects/{$project->uuid}")
-        ->assertNoContent();
-
-    expect(Project::count())->toBe(0);
-});
-
-it('requires authentication', function () {
-    $this->getJson('/api/dashboard/projects')->assertUnauthorized();
+	$this->actingAs($this->user)
+		->getJson('/api/dashboard/options')
+		->assertOk()
+		->assertJsonCount(3, 'status')
+		->assertJsonPath('status.0.label', 'Ausgeführt')
+		->assertJsonCount(3, 'entry_type')
+		->assertJsonCount(1, 'category_types');
 });

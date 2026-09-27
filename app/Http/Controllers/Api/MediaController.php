@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Media\CropAction;
 use App\Actions\Media\DeleteAction as DeleteMediaAction;
-use App\Actions\Media\ReorderAction as ReorderMediaAction;
-use App\Actions\Media\SetOgAction;
-use App\Actions\Media\SetTeaserAction;
+use App\Actions\Content\ReorderAction;
+use App\Actions\Media\SetFlagAction;
 use App\Actions\Media\UpdateAction as UpdateMediaAction;
 use App\Actions\Media\UploadAction as UploadMediaAction;
 use App\Http\Controllers\Controller;
@@ -19,13 +18,6 @@ use App\Models\Media;
 
 class MediaController extends Controller
 {
-	public function index()
-	{
-		$media = Media::orderByDesc('created_at')->get();
-
-		return MediaResource::collection($media);
-	}
-
 	public function upload(UploadMediaRequest $request)
 	{
 		$data = (new UploadMediaAction)->execute($request->file('file'));
@@ -49,21 +41,21 @@ class MediaController extends Controller
 
 	public function reorder(ReorderMediaRequest $request)
 	{
-		(new ReorderMediaAction)->execute($request->validated('items'));
+		(new ReorderAction)->execute(Media::class, $request->validated('items'));
 
 		return response()->json(['message' => 'ok']);
 	}
 
 	public function teaser(Media $media)
 	{
-		$media = (new SetTeaserAction)->execute($media);
+		$media = (new SetFlagAction)->execute($media, 'is_teaser');
 
 		return new MediaResource($media);
 	}
 
 	public function og(Media $media)
 	{
-		$media = (new SetOgAction)->execute($media);
+		$media = (new SetFlagAction)->execute($media, 'is_og');
 
 		return new MediaResource($media);
 	}

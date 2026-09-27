@@ -11,19 +11,23 @@ class ProjectResource extends JsonResource
 	{
 		return [
 			'uuid' => $this->uuid,
+			'category_type_id' => $this->whenLoaded('categoryType', fn () => $this->categoryType->uuid),
 			'title' => $this->title,
+			'name' => $this->name,
 			'location' => $this->location,
+			'full_title' => $this->full_title,
 			'slug' => $this->slug,
-			'subtitle' => $this->subtitle,
 			'year' => $this->year,
 			'description' => $this->description,
 			'info' => $this->info,
-			'meta_description' => $this->meta_description,
+			'status' => $this->status?->value,
+			'status_label' => $this->status?->label(),
+			'competition' => $this->competition?->value,
+			'has_detail' => $this->has_detail,
+			'meta_description' => $this->getRawOriginal('meta_description'),
 			'publish' => $this->publish,
-			'feature' => $this->feature,
-			'detail' => $this->detail,
 			'sort_order' => $this->sort_order,
-			'topic' => new TopicResource($this->whenLoaded('topic')),
+			'category_type' => new CategoryTypeResource($this->whenLoaded('categoryType')),
 			'media' => MediaResource::collection($this->whenLoaded('media')),
 		];
 	}

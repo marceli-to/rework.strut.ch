@@ -9,6 +9,7 @@ trait HasMediaRules
 		return [
 			'media' => 'nullable|array',
 			'media.*.uuid' => 'required|string',
+			'media.*.collection' => 'sometimes|in:images,files',
 			'media.*.file' => 'required|string',
 			'media.*.original_name' => 'required|string',
 			'media.*.mime_type' => 'required|string',
@@ -16,9 +17,11 @@ trait HasMediaRules
 			'media.*.width' => 'nullable|integer',
 			'media.*.height' => 'nullable|integer',
 			'media.*.alt' => 'nullable|string|max:255',
-			'media.*.caption' => 'nullable|string|max:255',
+			'media.*.caption' => 'nullable|string|max:1000',
 			'media.*.crop' => 'nullable|array',
 			'media.*.variant' => 'sometimes|in:desktop,mobile',
+			'media.*.is_teaser' => 'sometimes|boolean',
+			'media.*.is_og' => 'sometimes|boolean',
 		];
 	}
 }

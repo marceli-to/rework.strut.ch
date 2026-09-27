@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Media extends Model
@@ -15,6 +16,7 @@ class Media extends Model
 		'uuid',
 		'mediable_type',
 		'mediable_id',
+		'collection',
 		'file',
 		'original_name',
 		'mime_type',
@@ -44,22 +46,41 @@ class Media extends Model
 		return $this->morphTo();
 	}
 
+	public function gridItems(): HasMany
+	{
+		return $this->hasMany(GridItem::class);
+	}
+
 	public function isImage(): bool
 	{
-		return str_starts_with($this->mime_type, 'image/');
+		return str_starts_with((string) $this->mime_type, 'image/');
+	}
+
+	public function isVideo(): bool
+	{
+		return str_starts_with((string) $this->mime_type, 'video/');
+	}
+
+	public function isPdf(): bool
+	{
+		return $this->mime_type === 'application/pdf';
 	}
 
 	public function getOrientationAttribute(): string
 	{
-		if (!$this->width || !$this->height) {
+		return static::orientationFor($this->width, $this->height);
+	}
+
+	public static function orientationFor(?int $width, ?int $height): string
+	{
+		if (!$width || !$height) {
 			return 'unknown';
 		}
-		if ($this->width > $this->height) {
-			return 'landscape';
-		}
-		if ($this->height > $this->width) {
-			return 'portrait';
-		}
-		return 'square';
+
+		return match (true) {
+			$width > $height => 'landscape',
+			$height > $width => 'portrait',
+			default => 'square',
+		};
 	}
 }

@@ -2,73 +2,30 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\Project\DeleteAction;
-use App\Actions\Project\StoreAction;
-use App\Actions\Project\UpdateAction;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Project\StoreProjectRequest;
-use App\Http\Requests\Project\UpdateProjectRequest;
+use App\Http\Requests\Content\ProjectRequest;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
-class ProjectController extends Controller
+class ProjectController extends ResourceController
 {
-	public function index()
-	{
-		$projects = Project::with('topic')
-			->orderByDesc('year')
-			->orderByDesc('id')
-			->get();
+	protected string $model = Project::class;
+	protected string $resource = ProjectResource::class;
+	protected string $request = ProjectRequest::class;
 
-		return ProjectResource::collection($projects);
-	}
+	protected array $with = ['media', 'categoryType.category'];
+	protected array $indexWith = ['categoryType.category'];
 
-	public function featured()
+	protected function query(Request $request): Builder
 	{
-		return Project::published()
-			->featured()
-			->orderBy('title')
-			->get(['uuid', 'title', 'slug', 'location'])
-			->map(fn ($p) => [
-				'uuid' => $p->uuid,
-				'title' => $p->title,
-				'slug' => $p->slug,
-				'location' => $p->location,
-			]);
-	}
-
-	public function store(StoreProjectRequest $request)
-	{
-		$project = (new StoreAction)->execute($request->validated());
-		return (new ProjectResource($project->load('topic')))->response()->setStatusCode(201);
-	}
-
-	public function show(Project $project)
-	{
-		return new ProjectResource($project->load(['media', 'topic']));
-	}
-
-	public function update(UpdateProjectRequest $request, Project $project)
-	{
-		$project = (new UpdateAction)->execute($project, $request->validated());
-		return new ProjectResource($project->load(['media', 'topic']));
-	}
-
-	public function toggle(Project $project)
-	{
-		$project->update(['publish' => !$project->publish]);
-		return new ProjectResource($project);
-	}
-
-	public function feature(Project $project)
-	{
-		$project->update(['feature' => !$project->feature]);
-		return new ProjectResource($project);
-	}
-
-	public function destroy(Project $project)
-	{
-		(new DeleteAction)->execute($project);
-		return response()->json(null, 204);
+		return Project::query()
+			->with($this->indexWith)
+			->join('category_types', 'category_types.id', '=', 'projects.category_type_id')
+			->join('categories', 'categories.id', '=', 'category_types.category_id')
+			->orderBy('categories.sort_order')
+			->orderBy('category_types.sort_order')
+			->orderBy('projects.sort_order')
+			->select('projects.*');
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Support\MediaUrls;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -9,13 +10,10 @@ class MediaResource extends JsonResource
 {
 	public function toArray(Request $request): array
 	{
-		$cropParam = $this->crop && isset($this->crop['w'], $this->crop['h'], $this->crop['x'], $this->crop['y'])
-			? '&crop=' . $this->crop['w'] . ',' . $this->crop['h'] . ',' . $this->crop['x'] . ',' . $this->crop['y']
-			: '';
-
 		return [
 			'id' => $this->id,
 			'uuid' => $this->uuid,
+			'collection' => $this->collection,
 			'file' => $this->file,
 			'original_name' => $this->original_name,
 			'mime_type' => $this->mime_type,
@@ -30,9 +28,7 @@ class MediaResource extends JsonResource
 			'is_teaser' => $this->is_teaser,
 			'is_og' => $this->is_og,
 			'sort_order' => $this->sort_order,
-			'original_url' => '/storage/uploads/' . $this->file,
-			'thumbnail_url' => '/img/uploads/' . $this->file . '?w=400&h=400&fit=crop' . $cropParam,
-			'preview_url' => '/img/uploads/' . $this->file . '?w=800&fit=max' . $cropParam,
+			...MediaUrls::for($this->file, $this->mime_type, $this->crop),
 		];
 	}
 }

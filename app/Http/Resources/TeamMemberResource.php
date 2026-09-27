@@ -12,13 +12,16 @@ class TeamMemberResource extends JsonResource
 		return [
 			'uuid' => $this->uuid,
 			'firstname' => $this->firstname,
-			'name' => $this->name,
-			'title' => $this->title,
+			'lastname' => $this->lastname,
+			'full_name' => $this->full_name,
+			'role' => $this->role,
+			'position' => $this->position,
+			'phone' => $this->phone,
 			'email' => $this->email,
 			'cv' => $this->cv,
 			'publish' => $this->publish,
-			'former' => $this->former,
 			'sort_order' => $this->sort_order,
+			'media' => MediaResource::collection($this->whenLoaded('media')),
 		];
 	}
 }

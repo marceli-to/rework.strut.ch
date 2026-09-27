@@ -2,25 +2,35 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\View;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
-use App\View\Composers\SeoComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
+	/**
+	 * Morph aliases for polymorphic relations (media, grid rows).
+	 */
+	public const MORPH_MAP = [
+		'project' => \App\Models\Project::class,
+		'page' => \App\Models\Page::class,
+		'news' => \App\Models\News::class,
+		'team_member' => \App\Models\TeamMember::class,
+		'job_listing' => \App\Models\JobListing::class,
+		'book' => \App\Models\Book::class,
+		'entry' => \App\Models\Entry::class,
+		'category' => \App\Models\Category::class,
+		'category_type' => \App\Models\CategoryType::class,
+		'grid_row' => \App\Models\GridRow::class,
+		'user' => \App\Models\User::class,
+	];
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        View::composer('*', SeoComposer::class);
-    }
+	public function register(): void
+	{
+		//
+	}
+
+	public function boot(): void
+	{
+		Relation::enforceMorphMap(self::MORPH_MAP);
+	}
 }

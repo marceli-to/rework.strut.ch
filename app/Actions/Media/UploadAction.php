@@ -2,6 +2,8 @@
 
 namespace App\Actions\Media;
 
+use App\Models\Media;
+use App\Support\MediaUrls;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -11,7 +13,7 @@ class UploadAction
 	public function execute(UploadedFile $file): array
 	{
 		$directory = 'temp';
-		$filename = $this->uniqueFilename($file->getClientOriginalName());
+		$filename = self::filename($file->getClientOriginalName());
 		$mimeType = $file->getMimeType();
 		$originalName = $file->getClientOriginalName();
 
@@ -20,8 +22,7 @@ class UploadAction
 
 		(new NormalizeAction)->execute($absolutePath, $mimeType);
 
-		$size = @getimagesize($absolutePath);
-		$dimensions = [$size[0] ?? null, $size[1] ?? null];
+		[$width, $height] = self::dimensions($absolutePath, $mimeType);
 
 		return [
 			'uuid' => Str::uuid()->toString(),
@@ -29,41 +30,39 @@ class UploadAction
 			'original_name' => $originalName,
 			'mime_type' => $mimeType,
 			'size' => @filesize($absolutePath) ?: 0,
-			'width' => $dimensions[0],
-			'height' => $dimensions[1],
+			'width' => $width,
+			'height' => $height,
 			'alt' => null,
 			'caption' => null,
 			'is_teaser' => false,
+			'is_og' => false,
 			'variant' => 'desktop',
 			'sort_order' => 0,
-			'orientation' => $this->orientation($dimensions[0], $dimensions[1]),
-			'original_url' => '/storage/temp/' . $filename,
-			'thumbnail_url' => '/img/temp/' . $filename . '?w=400&h=400&fit=crop',
-			'preview_url' => '/img/temp/' . $filename . '?w=800&fit=max',
+			'orientation' => Media::orientationFor($width, $height),
+			...MediaUrls::for($filename, $mimeType, null, $directory),
 			'_temp' => true,
 		];
 	}
 
-	private function uniqueFilename(string $originalName): string
+	public static function filename(string $originalName): string
 	{
 		$name = Str::slug(pathinfo($originalName, PATHINFO_FILENAME));
 		$extension = Str::lower(pathinfo($originalName, PATHINFO_EXTENSION));
-		$suffix = Str::random(6);
 
-		return $name . '-' . $suffix . '.' . $extension;
+		return $name . '-' . Str::random(6) . '.' . $extension;
 	}
 
-	private function orientation(?int $width, ?int $height): string
+	/**
+	 * @return array{0: ?int, 1: ?int}
+	 */
+	public static function dimensions(string $absolutePath, ?string $mimeType): array
 	{
-		if (!$width || !$height) {
-			return 'unknown';
+		if (!str_starts_with((string) $mimeType, 'image/')) {
+			return [null, null];
 		}
-		if ($width > $height) {
-			return 'landscape';
-		}
-		if ($height > $width) {
-			return 'portrait';
-		}
-		return 'square';
+
+		$size = @getimagesize($absolutePath);
+
+		return [$size[0] ?? null, $size[1] ?? null];
 	}
 }

@@ -11,15 +11,6 @@ beforeEach(function () {
     Storage::fake('public');
 });
 
-it('lists all media', function () {
-    Media::factory()->count(5)->create();
-
-    $this->actingAs($this->user)
-        ->getJson('/api/dashboard/media')
-        ->assertOk()
-        ->assertJsonCount(5, 'data');
-});
-
 it('uploads an image to temp storage', function () {
     $file = UploadedFile::fake()->image('photo.jpg', 800, 600);
 
@@ -33,8 +24,18 @@ it('uploads an image to temp storage', function () {
     Storage::disk('public')->assertExists('temp/' . $response->json('data.file'));
 });
 
-it('rejects non-image uploads', function () {
+it('accepts pdf uploads', function () {
     $file = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
+
+    $this->actingAs($this->user)
+        ->postJson('/api/dashboard/media/upload', ['file' => $file])
+        ->assertOk()
+        ->assertJsonPath('data.mime_type', 'application/pdf')
+        ->assertJsonPath('data.thumbnail_url', null);
+});
+
+it('rejects unsupported uploads', function () {
+    $file = UploadedFile::fake()->create('notes.txt', 10, 'text/plain');
 
     $this->actingAs($this->user)
         ->postJson('/api/dashboard/media/upload', ['file' => $file])
@@ -180,12 +181,12 @@ it('includes crop in media resource', function () {
     ]);
 
     $this->actingAs($this->user)
-        ->getJson('/api/dashboard/media')
+        ->getJson("/api/dashboard/projects/{$media->mediable->uuid}")
         ->assertOk()
-        ->assertJsonPath('data.0.crop.x', 100)
-        ->assertJsonPath('data.0.crop.y', 50)
-        ->assertJsonPath('data.0.crop.w', 800)
-        ->assertJsonPath('data.0.crop.h', 600);
+        ->assertJsonPath('data.media.0.crop.x', 100)
+        ->assertJsonPath('data.media.0.crop.y', 50)
+        ->assertJsonPath('data.media.0.crop.w', 800)
+        ->assertJsonPath('data.media.0.crop.h', 600);
 });
 
 it('appends crop param to thumbnail_url when crop is set', function () {
@@ -195,9 +196,9 @@ it('appends crop param to thumbnail_url when crop is set', function () {
     ]);
 
     $this->actingAs($this->user)
-        ->getJson('/api/dashboard/media')
+        ->getJson("/api/dashboard/projects/{$media->mediable->uuid}")
         ->assertOk()
-        ->assertJsonPath('data.0.thumbnail_url', '/img/uploads/test-image.jpg?w=400&h=400&fit=crop&crop=800,600,100,50');
+        ->assertJsonPath('data.media.0.thumbnail_url', '/img/uploads/test-image.jpg?w=400&h=400&fit=crop&crop=800,600,100,50');
 });
 
 it('does not append crop param when crop is null', function () {
@@ -207,9 +208,9 @@ it('does not append crop param when crop is null', function () {
     ]);
 
     $this->actingAs($this->user)
-        ->getJson('/api/dashboard/media')
+        ->getJson("/api/dashboard/projects/{$media->mediable->uuid}")
         ->assertOk()
-        ->assertJsonPath('data.0.thumbnail_url', '/img/uploads/test-image.jpg?w=400&h=400&fit=crop');
+        ->assertJsonPath('data.media.0.thumbnail_url', '/img/uploads/test-image.jpg?w=400&h=400&fit=crop');
 });
 
 it('sets crop on media', function () {
@@ -264,5 +265,5 @@ it('rejects partial crop values', function () {
 });
 
 it('requires authentication for media', function () {
-    $this->getJson('/api/dashboard/media')->assertUnauthorized();
+    $this->postJson('/api/dashboard/media/upload')->assertUnauthorized();
 });

@@ -4,6 +4,7 @@ namespace App\Actions\Media;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+
 class AttachAction
 {
 	public function execute(array $mediaItems, Model $parent): void
@@ -22,6 +23,7 @@ class AttachAction
 			$maxSort++;
 			$parent->media()->create([
 				'uuid' => $item['uuid'],
+				'collection' => $item['collection'] ?? 'images',
 				'file' => $item['file'],
 				'original_name' => $item['original_name'],
 				'mime_type' => $item['mime_type'],
@@ -32,6 +34,7 @@ class AttachAction
 				'caption' => $item['caption'] ?? null,
 				'crop' => $item['crop'] ?? null,
 				'variant' => $item['variant'] ?? 'desktop',
+				'is_teaser' => $item['is_teaser'] ?? false,
 				'is_og' => $item['is_og'] ?? false,
 				'sort_order' => $maxSort,
 			]);

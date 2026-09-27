@@ -15,7 +15,8 @@ class MediaFactory extends Factory
     {
         return [
             'uuid' => Str::uuid(),
-            'mediable_type' => Project::class,
+            'mediable_type' => 'project',
+            'collection' => 'images',
             'mediable_id' => Project::factory(),
             'file' => fake()->uuid() . '.jpg',
             'original_name' => fake()->word() . '.jpg',

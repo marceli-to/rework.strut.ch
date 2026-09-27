@@ -12,9 +12,11 @@ class JobListingResource extends JsonResource
 		return [
 			'uuid' => $this->uuid,
 			'title' => $this->title,
-			'text' => $this->text,
+			'lead' => $this->lead,
+			'info' => $this->info,
 			'publish' => $this->publish,
 			'sort_order' => $this->sort_order,
+			'media' => MediaResource::collection($this->whenLoaded('media')),
 		];
 	}
 }
