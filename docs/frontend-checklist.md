@@ -11,7 +11,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 ## 0. Setup
 
 - ☑ Playwright + pixelmatch as dev dependencies, `tests/visual/compare.js`, output git-ignored.
-- ◐ Tokens in the Tailwind theme (`resources/css/site.css`): breakpoints 600/900/1200, colours, text scale `text-xs`…`text-6xl` (all 10 legacy sizes, no `text-base`), header heights, page widths. Page-specific values follow with each page.
+- ☑ Tokens in the Tailwind theme (`resources/css/site.css`): breakpoints 600/900/1200, colours, text scale `text-xs`…`text-6xl` (all 10 legacy sizes, no `text-base`), header heights, page widths. Page-specific values follow with each page.
 - ☑ Fonts: Basis Grotesque Pro Regular + Medium, woff2/woff copied from the legacy project (F2).
 - ☑ Separate public entry points (`resources/css/site.css`, `resources/js/site.js`); the admin bundle is not loaded on the public site.
 
@@ -19,7 +19,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 
 | # | Feature | Legacy | New | Status |
 |---|---|---|---|---|
-| 1.1 | Layout: `<head>`, SEO/OG tags, favicons, main wrapper (home gets `site-content--home`) | `web/layout/app.blade.php` | `x-layout.site` | ◐ (SEO tags in step 5) |
+| 1.1 | Layout: `<head>`, SEO/OG tags, favicons, main wrapper (home gets `site-content--home`) | `web/layout/app.blade.php` | `x-layout.site` | ☑ |
 | 1.2 | Header: menu button, logo linking to `/` | same | `x-site.header` | ☑ |
 | 1.3 | Header on scroll: < 901 px `is-tiny` when scrolling down, reset at top. ≥ 901 px hidden when scrolling down past 170 px, shown tiny when scrolling up | `header.js` | `modules/header.js` | ☑ |
 | 1.4 | Navigation, desktop (≥ 901 px): nested dropdowns (Bauten → category → type → projects; Publikationen; Büro). Menu height follows the open list (+30 px). Click outside closes it | `menu.js` | `modules/menu.js` | ☑ |
