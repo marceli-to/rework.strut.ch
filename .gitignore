@@ -32,3 +32,4 @@ Thumbs.db
 
 # local machine transfer bundle (secrets, client data)
 /.transfer
+/tests/visual/output

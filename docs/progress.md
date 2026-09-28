@@ -154,3 +154,10 @@ Result: **"Keine Probleme gefunden."**
 - **Cleanup:** the test data was removed afterwards (`strut:import --fresh`, test user deleted).
 
 Tests: **133 passing** (Pest 5): CRUD for all modules, projects, pages/entries, both grid contexts, media, import cleanup, auth.
+
+## 2026-09-28 — Phase 2: Frontend kick-off
+
+Decisions (by client):
+- F1: Strict 1:1 reproduction for now; changes come in a later round.
+- F2: The Basis Grotesque Pro web fonts are copied from the legacy project.
+- F3: No Google Maps key yet. The map is built, and the key stays empty locally until go-live.
