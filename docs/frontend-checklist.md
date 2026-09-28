@@ -46,7 +46,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 | 2.12 | `/jobs` | Job list (title, lead, info, PDF link) or the page text if there are no jobs; page images with lightbox (gallery if more than one) | Lightbox: step 3 | ☑ |
 | 2.13 | `/kontakt` | Contact text, "Impressum" toggle (imprint page), "Datenschutz" toggle (static text, kept 1:1), Google Map (styled, fixed coordinates) + "Auf Google Maps anzeigen" link | No key yet (F3). The map is masked in the diff | ☑ (map: without a key only the container, see step 2e) |
 | 2.14 | 404 | Error page in the site layout | 500 follows the same pattern | ☐ |
-| 2.15 | PDFs | `/werkliste/pdf/{8 variants}`, `/download/pdf/{id}/{slug}` (merged category PDFs) | Kept 1:1 (Q7); compared by content, not screenshot | ☐ |
+| 2.15 | PDFs | `/werkliste/pdf/{8 variants}`, `/download/pdf/{id}/{slug}` (merged category PDFs) | Kept 1:1 (Q7); compared with live strut.ch by text and rendered pages | ☑ |
 
 ## 3. Shared pieces
 
@@ -54,7 +54,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 - ◐ Images through the Glide pipeline (`/img/...`) at the exact legacy sizes (`Media::imageUrl()`); alt texts from the media records. `srcset`/`sizes` and `loading="lazy"` are not in legacy and would change nothing visible: step 5 (performance), after parity.
 - ☑ Lightbox (replaces Fancybox): single image and gallery, custom close/prev/next buttons with an inactive state at the ends, caption. Vanilla module, no dependency.
 - ☑ Slideshow: Swiper fade (4.5 s, 1.5 s, loop). Swiper is already a dependency and works without jQuery. A video slide pauses autoplay until it ends.
-- ◐ Toggles: one `modules/toggle.js`. Done for Impressum/Datenschutz, book info and team CV (the masonry re-layouts on `toggle:change`); still to wire: project info (closes on outside click).
+- ☑ Toggles: one `modules/toggle.js` for Impressum/Datenschutz, book info, team CV (the masonry re-layouts on `toggle:change`) and project info (`data-toggle="open"`, closes on outside click).
 - ☑ Masonry: `modules/masonry.js`, port of the legacy Packery placement; runs after images and fonts load, on width change, and re-packs after a toggle. One column below 600 px.
 - ◐ Map: `modules/map.js`, Google Maps JS API, styles and coordinates from the legacy code, key from `GOOGLE_MAPS_KEY`; renders nothing without a key.
 

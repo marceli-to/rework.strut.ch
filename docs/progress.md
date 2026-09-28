@@ -285,3 +285,19 @@ Client decisions: `<picture>` markup (not Accept-header negotiation); AVIF + Web
 - **Result (Chrome, Resource Timing, whole page scrolled):** image bytes legacy → new: homepage 15.44 → 7.64 MB, project 1 2.16 → 0.92 MB, project 2 2.79 → 1.22 MB, Über uns 0.52 → 0.28 MB, Bücher 0.37 → 0.35 MB (tiny covers). Chrome loads AVIF for the page and the lightbox.
 - **Visual:** all image pages re-compared (12 pages × 4 widths): page sizes identical; diff pixels only inside photos (0 outside, checked on home, project 60, Bücher).
 - Tests: `tests/Feature/Site/ImageFormatsTest.php` (params, `<picture>` markup and lightbox data, cache warming).
+
+## 2026-09-28 — Phase 2, step 5a: PDFs
+
+- **Reference = live strut.ch**, not the local legacy copy: locally the logo is missing (remote loading over the self-signed certificate) and the category merge fails (`iio\libmergepdf\Merger` not installed there).
+- **Werkliste PDFs** (8 variants, legacy URLs `/werkliste/pdf/{gesamt|wohnen|gewerbe|oeffentlich|wettbewerb|status|jahr|typ}`): `GetWorksPdf` builds the content of each legacy template as sections → groups (bold heading, lines, blank line) → one Blade template `pdf/works.blade.php` with the legacy styles and markup verbatim. `PdfRenderer` = dompdf with the legacy options (A4, 96 dpi, font height ratio 1.1); fonts (TTF) and logo are local files in `resources/pdf` (no remote loading, no inline PHP). Wohnen/Gewerbe/Öffentlich find their category through `legacy_map` (legacy ids 1/2/3), so a rename in the admin doesn't break them.
+- **dompdf 3.1** instead of legacy's 2.0.8: 2.0.8 has six security advisories and Composer refuses it.
+- **Merged project documentation per category** (`/download/pdf/{id}/{slug}`): `PdfMerger` on TCPDI (`propa/tcpdi` + TCPDF 6.11). The project PDFs are PDF 1.6 with compressed object streams, which the free FPDI parser can't read; legacy's `rafikhaceb/tcpdi` needs TCPDF 6.2 (8 advisories). The merged file is cached in `storage/app/pdf-cache` per category, keyed by the source files and their modification times: Wohnen 3.7 s → 0.09 s.
+- **Comparison with live strut.ch:**
+  - Page counts equal for all 8 Werkliste PDFs and all 3 merged PDFs (34 / 10 / 4 pages); file names equal.
+  - Text: identical in all 8 except the approved alphabetical order within a year (step 2b) and the page counter.
+  - Rendered pages (72 dpi): Gewerbe and Wettbewerbe pixel-identical (logo, footer, type); the others differ only in the reordered lines and the counter.
+  - Merged PDFs: every page has the same text in the same order; a rendered sample page is pixel-identical.
+- **Legacy bugs, current state:**
+  - Page counter: legacy prints "1/1" on page 1 only (its inline PHP script); the rework prints "1/3, 2/3, 3/3" on every page (dompdf canvas `page_text`, same position and font). **To be confirmed by the client.**
+  - Kept as legacy: the date and title lines ("28. September 2026", "Werkliste Gesamt") are positioned outside the page by the legacy CSS and never appear; the address footer is on page 1 only.
+- Tests: `tests/Feature/Site/PdfTest.php` (lines per variant, headers, merge + 404).
