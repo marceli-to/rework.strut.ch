@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\Site\DownloadsController;
 use App\Http\Controllers\Site\EntryController;
 use App\Http\Controllers\Site\WorksController;
 use App\Models\Project;
@@ -20,9 +21,11 @@ Route::get('/werkliste/typ', [WorksController::class, 'type'])->name('page.works
 Route::get('/werkliste/pdf/{variant}', fn () => abort(404))
 	->whereIn('variant', ['gesamt', 'wohnen', 'gewerbe', 'oeffentlich', 'wettbewerb', 'status', 'jahr', 'typ'])
 	->name('pdf.works');
+// Merged project documentation per category, built in step 5.
+Route::get('/download/pdf/{category:id}/{slug?}', fn () => abort(404))->whereNumber('category')->name('pdf.category');
 Route::get('/presse', EntryController::class)->defaults('type', 'press')->name('page.press');
 Route::view('/buecher', 'pages.shell')->name('page.books');
-Route::view('/downloads', 'pages.shell')->name('page.downloads');
+Route::get('/downloads', DownloadsController::class)->name('page.downloads');
 Route::view('/kontakt', 'pages.shell')->name('page.contact');
 Route::view('/ueber-uns', 'pages.shell')->name('page.about');
 Route::view('/jobs', 'pages.shell')->name('page.jobs');

@@ -5,7 +5,7 @@
 @endphp
 <x-layout.site title="Werkliste" :description="$page->meta_description">
   <section>
-    <nav class="sm:grid sm:grid-cols-2 sm:gap-24 md:grid-cols-[2fr_1fr]" aria-label="Werkliste">
+    <nav class="sm:grid sm:grid-cols-[repeat(2,1fr)] sm:gap-24 md:grid-cols-[2fr_1fr]" aria-label="Werkliste">
       <div class="mb-8 sm:mb-0">
         <ul>
           @foreach ($views as $key => [$label, $route])
@@ -19,6 +19,6 @@
         <x-site.file-link :href="route('pdf.works', $views[$by][2])" target="_blank">Werkliste nach {{ $views[$by][0] }}</x-site.file-link>
       </div>
     </nav>
-    <div class="grid sm:grid-cols-2 sm:gap-x-24 md:grid-cols-3">{{ $slot }}</div>
+    <div class="grid sm:grid-cols-[repeat(2,1fr)] sm:gap-x-24 md:grid-cols-[repeat(3,1fr)]">{{ $slot }}</div>
   </section>
 </x-layout.site>

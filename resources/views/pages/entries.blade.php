@@ -2,7 +2,7 @@
 <x-layout.site :title="$type->label()" :description="$page->meta_description">
   <section>
     <x-site.heading>{{ $type->label() }}</x-site.heading>
-    <div class="grid gap-24 sm:grid-cols-2 md:grid-cols-3">
+    <div class="grid gap-24 sm:grid-cols-[repeat(2,1fr)] md:grid-cols-[repeat(3,1fr)]">
       @foreach ($columns as $years)
         <div>
           <article>

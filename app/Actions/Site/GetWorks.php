@@ -48,15 +48,19 @@ class GetWorks
 
 	/**
 	 * Published categories → published types → projects; empty types and
-	 * categories are left out.
+	 * categories are left out. `withFiles`: only projects with PDF downloads
+	 * (Downloads page), files loaded.
 	 *
 	 * @return Collection<int, Category>
 	 */
-	public function byType(): Collection
+	public function byType(bool $withFiles = false): Collection
 	{
+		$projects = fn ($q) => $this->ordered($q->published())
+			->when($withFiles, fn ($q) => $q->whereHas('files')->with('files'));
+
 		return Category::published()
 			->orderBy('sort_order')->orderBy('id')
-			->with(['types' => fn ($q) => $q->published()->with(['projects' => fn ($q) => $this->ordered($q->published())])])
+			->with(['types' => fn ($q) => $q->published()->with(['projects' => $projects])])
 			->get()
 			->each(fn (Category $category) => $category->setRelation(
 				'types',

@@ -210,3 +210,12 @@ Result unchanged: 0.000 % on all shell comparisons (319; the 136 errors are page
 - **Explained difference (order):** legacy sorts by the raw JSON `name` column, e.g. `{"de":"Dürrenrain"}` sorts after `{"de": "Schollenholzstrasse…"}` and `Ärgete` after `Sky-Frame`. That is a storage artefact, not an intended order, so the rework sorts alphabetically by name. It moves a few projects within the same year (2018, 2015, 2014, 2008, 2005, 1997 and the related status/type lists), so the plain comparison shows 0.1–2.5 % on the Werkliste pages.
 - Legacy details kept: the PDF link label is underlined only while the pointer is on the label itself (`.icon-file:hover span:hover`); the year headings keep the 24 px top margin from 900 px (the legacy `> div + h2` rule outranks the Werkliste override).
 - Tests: `tests/Feature/Site/WorksTest.php` (status/competition grouping and order, year columns, empty types/categories, active tab + PDF link + detail links per view).
+
+## 2026-09-28 — Phase 2, step 2c: Downloads
+
+- `Site\DownloadsController` → `pages.downloads`. Projektdokumentationen reuse `GetWorks::byType(withFiles: true)`: only projects with PDFs, and only types and categories that have some (as legacy). Werkliste: the 8 PDF links. Jobs: published job PDFs, else "Zur Zeit sind alle unsere Stellen besetzt."
+- `x-site.article` got `large` (off here: the Downloads page keeps the body text size).
+- Category PDF links use the new route `pdf.category` (`/download/pdf/{id}/{slug}`, 404 until step 5). The category ids changed in the import (legacy 1–3, now 14–16), so the old links need a redirect in step 5.
+- **Grid columns:** Tailwind's `grid-cols-3` is `repeat(3, minmax(0, 1fr))`, legacy uses `repeat(3, 1fr)`, whose tracks grow to fit the longest word. "Projektdokumentationen" at 31 px widens the first column at 900–1024 px. All list grids now use the legacy definition (`grid-cols-[repeat(3,1fr)]`).
+- **Visual result: 0.000 % at all 17 viewports.** Presse/Auszeichnungen/Vorträge re-checked after the grid change: still 0.000 %.
+- Tests: `tests/Feature/Site/DownloadsTest.php`.
