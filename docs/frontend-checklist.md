@@ -66,9 +66,9 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 
 ## 5. URL continuity
 
-- ☐ All 87 URLs in `docs/legacy-urls.txt` return 200 or 301 (Pest test).
-- ☐ `/bauten` → 301 `/werkliste` (Q11). Old `/storage/media/…` and `/media/…` → 301 to the new media URLs via `legacy_map` (Q10).
-- ☐ Dropped: `/bauten/vorschau/{id}`, `/404`, `/500`, `/artisan/*`.
+- ☑ All 87 URLs in `docs/legacy-urls.txt` return 200 or 301 → 200: `php artisan strut:check-urls` (against the real data; the Pest suite runs on an empty test database). Redirect logic covered by `LegacyRedirectTest`.
+- ☑ `/bauten` → 301 `/werkliste` (Q11). Old `/storage/media/…` and `/media/…` → 301 to the new media URLs via `legacy_map.legacy_file` (Q10). Old category PDF ids (1–3) → 301 to the new ones.
+- ☑ Dropped (404): `/bauten/vorschau/{id}`, `/404`, `/500`, `/artisan/*`.
 
 ## 6. Accessibility
 
@@ -77,7 +77,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 ## 7. Tests
 
 - ☐ Feature test for every public route (status + key content).
-- ☐ Redirect test (5).
+- ☑ Redirect test (5).
 - ☐ Visual report: all pages × all viewports (+ states) in `tests/visual/output/report.md`, remaining differences listed in `docs/progress.md`.
 
 ## Build order

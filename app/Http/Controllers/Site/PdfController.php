@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Site;
 use App\Actions\Site\GetWorksPdf;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\LegacyMap;
 use App\Models\Media;
 use App\Models\Project;
 use App\Support\Pdf\PdfMerger;
 use App\Support\Pdf\PdfRenderer;
 use Dompdf\Dompdf;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -36,8 +38,18 @@ class PdfController extends Controller
 	/**
 	 * All PDF downloads of the category's published projects in one file.
 	 */
-	public function category(PdfMerger $merger, Category $category, ?string $slug = null): Response
+	public function category(PdfMerger $merger, int $category, ?string $slug = null): Response|RedirectResponse
 	{
+		// Legacy links use the old category ids (1–3); they redirect to the new ones.
+		$found = Category::find($category);
+		if (!$found) {
+			$id = LegacyMap::where('legacy_table', 'categories')->where('legacy_id', $category)->value('model_id');
+			abort_unless($id, 404);
+
+			return redirect()->route('pdf.category', array_filter([$id, $slug]), 301);
+		}
+		$category = $found;
+
 		$paths = Project::published()
 			->whereHas('categoryType', fn ($q) => $q->where('category_id', $category->id))
 			->with('files')

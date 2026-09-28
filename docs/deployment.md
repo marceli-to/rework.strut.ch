@@ -89,7 +89,7 @@ The content comes from the legacy strut.ch database and its media folder. There 
 2. Run `php artisan strut:import --fresh`, then `php artisan strut:verify`.
 3. Clear `LEGACY_*` afterwards.
 
-**After either option:** `php artisan images:warm` ☐ pre-generates every public image variant (legacy sizes × JPEG/PNG, WebP, AVIF; about 4,100 files, ~7 minutes locally). Without it, the first visitor of each image waits for its encode. It can run again at any time (existing variants are skipped).
+**After either option:** `php artisan strut:check-urls` ☐ must report "87 URLs, 0 fehlerhaft" (every legacy URL answers 200 or redirects to a page that does). Then `php artisan images:warm` ☐ pre-generates every public image variant (legacy sizes × JPEG/PNG, WebP, AVIF; about 4,100 files, ~7 minutes locally). Without it, the first visitor of each image waits for its encode. It can run again at any time (existing variants are skipped).
 
 Notes:
 - The import is idempotent. `--dry-run` shows the report without writing anything.

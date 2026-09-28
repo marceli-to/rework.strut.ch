@@ -9,6 +9,7 @@ use App\Http\Controllers\Site\DownloadsController;
 use App\Http\Controllers\Site\EntryController;
 use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\JobsController;
+use App\Http\Controllers\Site\LegacyRedirectController;
 use App\Http\Controllers\Site\PdfController;
 use App\Http\Controllers\Site\ProjectController;
 use App\Http\Controllers\Site\SeoController;
@@ -30,7 +31,12 @@ Route::get('/werkliste/typ', [WorksController::class, 'type'])->name('page.works
 Route::get('/werkliste/pdf/{variant}', [PdfController::class, 'works'])
 	->whereIn('variant', array_keys(\App\Actions\Site\GetWorksPdf::VARIANTS))
 	->name('pdf.works');
-Route::get('/download/pdf/{category:id}/{slug?}', [PdfController::class, 'category'])->whereNumber('category')->name('pdf.category');
+Route::get('/download/pdf/{category}/{slug?}', [PdfController::class, 'category'])->whereNumber('category')->name('pdf.category');
+
+// Legacy URLs without a page of their own (Q10, Q11).
+Route::permanentRedirect('/bauten', '/werkliste');
+Route::get('/storage/media/{path}', [LegacyRedirectController::class, 'storage'])->where('path', '[^/]+(/[^/]+)?');
+Route::get('/media/{file}/{size?}', [LegacyRedirectController::class, 'media']);
 Route::get('/presse', EntryController::class)->defaults('type', 'press')->name('page.press');
 Route::get('/buecher', BooksController::class)->name('page.books');
 Route::get('/downloads', DownloadsController::class)->name('page.downloads');

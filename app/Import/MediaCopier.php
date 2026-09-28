@@ -4,6 +4,7 @@ namespace App\Import;
 
 use App\Actions\Media\NormalizeAction;
 use App\Actions\Media\UploadAction;
+use App\Models\LegacyMap;
 use App\Models\Media;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
@@ -72,12 +73,19 @@ class MediaCopier
 			];
 		}
 
-		return $this->context->upsert($legacyTable, $legacyId, Media::class, [
+		$media = $this->context->upsert($legacyTable, $legacyId, Media::class, [
 			'mediable_type' => $owner->getMorphClass(),
 			'mediable_id' => $owner->getKey(),
 			'collection' => $collection,
 			...$attributes,
 		], $legacyColumn);
+
+		// Legacy file name, for redirecting old media URLs (Q10).
+		if (!$this->context->dryRun) {
+			LegacyMap::where(['legacy_table' => $legacyTable, 'legacy_id' => $legacyId, 'legacy_column' => $legacyColumn])->update(['legacy_file' => $file]);
+		}
+
+		return $media;
 	}
 
 	/**

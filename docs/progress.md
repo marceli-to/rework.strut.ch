@@ -311,3 +311,14 @@ Client decisions: `<picture>` markup (not Accept-header negotiation); AVIF + Web
 - `sitemap.xml` (new, legacy has none): 12 pages + 35 published projects with a detail page, `lastmod` from `updated_at`; valid XML. `robots.txt` as a route per environment (deployment guide updated).
 - Pitfall noted: `?>` ends PHP mode even inside a `//` comment; the XML declaration is added in the controller.
 - Tests: `tests/Feature/Site/SeoTest.php`.
+
+## 2026-09-28 — Phase 2, step 5c: redirects and legacy URLs
+
+- **Legacy file names:** `legacy_map.legacy_file` (new column) holds the legacy file name of every imported media item; the importer sets it from now on, and `php artisan strut:legacy-files` filled the existing rows once from the legacy DB: 531 of 531, all unique. (Re-running the import was not an option: it would overwrite admin edits made since Phase 1.)
+- `LegacyRedirectController` (301):
+  - `/storage/media/{file}` → the original file; `/storage/media/{xsmall|small|medium|large}/{file}` → the image at that legacy size (thumbs → xs, grid → md); `/storage/media/downloads/{file}` → the PDF; `/media/{file}/{size}` (legacy on-demand resize) likewise. Unknown files: 404.
+  - `/bauten` → `/werkliste` (Q11).
+  - `/download/pdf/{1|2|3}/{slug}` → the new category ids 14–16 (via `legacy_map`), in `PdfController`.
+- **All 87 legacy URLs** (`php artisan strut:check-urls`, real data): 83 × 200 (all 62 project URLs with their current slugs, the pages and PDFs), 4 × 301 → 200 (`/bauten`, three category PDFs). 0 errors. Added to the go-live checklist in `docs/deployment.md`.
+- Dropped legacy routes answer 404: `/bauten/vorschau/{id}`, `/404`, `/500`, `/artisan/*`.
+- Tests: `tests/Feature/Site/LegacyRedirectTest.php`.

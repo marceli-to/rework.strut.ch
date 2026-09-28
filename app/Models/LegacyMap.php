@@ -15,6 +15,7 @@ class LegacyMap extends Model
 		'legacy_table',
 		'legacy_id',
 		'legacy_column',
+		'legacy_file',
 		'model_type',
 		'model_id',
 	];
