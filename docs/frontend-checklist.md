@@ -37,12 +37,12 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 | 2.3 | `/werkliste`, `/werkliste/status` | Tabs Status/Jahr/Typ + PDF link; columns Ausgeführt / In Planung + Studie / Wettbewerb (1. Preis, 2. Preis, Andere) | Items link only when the project has a detail; preview image = `is_preview_status` | ☐ |
 | 2.4 | `/werkliste/jahr` | Grouped by year, in columns | Preview = `is_preview_year` | ☐ |
 | 2.5 | `/werkliste/typ` | Category → types (headings only when `show_types`) | Preview = `is_preview_type` | ☐ |
-| 2.6 | `/presse` | Year groups in columns: title (link to file or URL), description + project reference, small image | Shared "entries list" component with 2.10 and 2.11 | ☐ |
+| 2.6 | `/presse` | Year groups in columns: title (link to file or URL), description + project reference, small image | Shared "entries list" component with 2.10 and 2.11 | ☑ |
 | 2.7 | `/buecher` | Masonry, 3 columns ≥ 600 px: title, image, description, "Info" toggle, order link (mailto with subject/body, or external URL) | Masonry → vanilla `modules/masonry.js` (approved) | ☐ |
 | 2.8 | `/downloads` | Projektdokumentationen per category ("Alle …" merged PDF + per project), Werkliste PDFs (8), Jobs PDFs or "Zur Zeit sind alle unsere Stellen besetzt." | | ☐ |
 | 2.9 | `/ueber-uns` | Intro text + page images (lightbox), team masonry: name (mailto), role, position, portrait, phone, email, "Lebenslauf" toggle | Masonry as 2.7 | ☐ |
-| 2.10 | `/auszeichnungen` | Like 2.6 without project reference | | ☐ |
-| 2.11 | `/vortraege` | Like 2.10 | | ☐ |
+| 2.10 | `/auszeichnungen` | Like 2.6 without project reference | | ☑ |
+| 2.11 | `/vortraege` | Like 2.10 | | ☑ |
 | 2.12 | `/jobs` | Job list (title, lead, info, PDF link) or the page text if there are no jobs; page images with lightbox (gallery if more than one) | | ☐ |
 | 2.13 | `/kontakt` | Contact text, "Impressum" toggle (imprint page), "Datenschutz" toggle (static text, kept 1:1), Google Map (styled, fixed coordinates) + "Auf Google Maps anzeigen" link | No key yet (F3). The map is masked in the diff | ☐ |
 | 2.14 | 404 | Error page in the site layout | 500 follows the same pattern | ☐ |

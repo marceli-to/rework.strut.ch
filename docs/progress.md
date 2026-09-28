@@ -191,3 +191,11 @@ The step 1 CSS was reworked after the client's review:
 - **Header heights as tokens** (`h-header`, `pt-header-md`, …).
 
 Result unchanged: 0.000 % on all shell comparisons (319; the 136 errors are page states that don't exist yet).
+
+## 2026-09-28 — Phase 2, step 2a: Presse, Auszeichnungen, Vorträge
+
+- One page for all three: `Site\EntryController` (type from the route defaults) → `GetEntries` action → `pages.entries`. `GetEntries` reproduces the legacy `AppHelper::partition`: years newest first, split into three columns of whole years (`ceil(years / 3)` per column).
+- Shared Blade components, reusable for the Werkliste (legacy `%card` / `%card-group`): `x-site.heading` (page title), `x-site.card` (dash, or arrow when linked), `x-site.card.heading` (year/group heading with the rule), `x-site.link` (green link, underline on hover), `x-site.entry`.
+- The title links to the PDF if there is one, else to the URL (as legacy). Images: Glide `?w=500` (legacy "xsmall" = 500 px wide), admin crop applied (`Media::imageUrl()`); files: `Media::url()`.
+- **Visual result: 0.000 % at all 17 viewports on all three pages** (51 comparisons). Link hover state checked separately at 375 and 1440 px: 0 px difference.
+- Tests: `tests/Feature/Site/EntriesTest.php` (column split, published/type filter per page, PDF-before-URL link, project reference).

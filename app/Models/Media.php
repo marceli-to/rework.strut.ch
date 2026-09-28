@@ -66,6 +66,27 @@ class Media extends Model
 		return $this->mime_type === 'application/pdf';
 	}
 
+	/**
+	 * Public URL of the original file.
+	 */
+	public function url(): string
+	{
+		return '/storage/uploads/' . $this->file;
+	}
+
+	/**
+	 * Public Glide URL, with the crop from the admin applied.
+	 */
+	public function imageUrl(array $params = []): string
+	{
+		$crop = $this->crop;
+		if ($crop && isset($crop['w'], $crop['h'], $crop['x'], $crop['y'])) {
+			$params['crop'] = implode(',', [$crop['w'], $crop['h'], $crop['x'], $crop['y']]);
+		}
+
+		return '/img/uploads/' . $this->file . ($params ? '?' . http_build_query($params) : '');
+	}
+
 	public function getOrientationAttribute(): string
 	{
 		return static::orientationFor($this->width, $this->height);
