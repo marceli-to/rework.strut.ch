@@ -55,7 +55,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 - ☑ Lightbox (replaces Fancybox): single image and gallery, custom close/prev/next buttons with an inactive state at the ends, caption. Vanilla module, no dependency.
 - ☐ Slideshow: Swiper fade (4.5 s, 1.5 s, loop). Swiper is already a dependency and works without jQuery. A video slide pauses autoplay until it ends.
 - ◐ Toggles: one `modules/toggle.js`. Done for Impressum/Datenschutz, book info and team CV (the masonry re-layouts on `toggle:change`); still to wire: project info (closes on outside click).
-- ☑ Masonry: `modules/masonry.js`, shortest column first (ties go left), re-run on image load, resize and toggle. Stacked below 600 px.
+- ☑ Masonry: `modules/masonry.js`, port of the legacy Packery placement; runs after images and fonts load, on width change, and re-packs after a toggle. One column below 600 px.
 - ◐ Map: `modules/map.js`, Google Maps JS API, styles and coordinates from the legacy code, key from `GOOGLE_MAPS_KEY`; renders nothing without a key.
 
 ## 4. SEO
