@@ -6,7 +6,7 @@ import ResourceIndex from '@/components/resource/ResourceIndex.vue'
 const columns = [
 	{ key: 'title', label: 'Seite', primary: true },
 	{ key: 'meta_description', label: 'Meta Description', limit: 60 },
-	{ key: 'og', label: 'OG-Bild', class: 'w-100' },
+	{ key: 'og', label: 'Opengraph Image', class: 'w-100' },
 ]
 
 const ogImage = (row) => row.media?.find(m => m.collection === 'og')

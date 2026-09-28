@@ -33,7 +33,7 @@ const { form, isEdit, submit, cancel, errors, loading } = useResourceForm(store,
 			<Tab name="seo">
 				<div class="flex flex-col gap-24 max-w-[48rem]">
 					<FormField name="meta_description" label="Meta Description" type="textarea" rows="4" hint="max. 160 Zeichen" v-model="form.meta_description" :errors="errors" />
-					<MediaField label="Social-Media-Bild (OG)" collection="og" profile="og" :maxFiles="1" />
+					<MediaField label="Opengraph Image" collection="og" profile="og" :maxFiles="1" />
 				</div>
 			</Tab>
 		</Tabs>

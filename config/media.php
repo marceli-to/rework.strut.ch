@@ -33,7 +33,7 @@ return [
 		'cover' => ['types' => ['image'], 'crops' => ['Frei' => null]],
 		'news' => ['types' => ['image'], 'crops' => ['Frei' => null]],
 		// social media share image (1200 × 630)
-		'og' => ['types' => ['image'], 'crops' => ['OG 1200×630' => [1200, 630]]],
+		'og' => ['types' => ['image'], 'crops' => ['Opengraph 1200×630' => [1200, 630]]],
 		// PDF downloads
 		'document' => ['types' => ['pdf'], 'crops' => []],
 	],

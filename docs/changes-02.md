@@ -6,6 +6,7 @@ Source: annotated screenshots and chat feedback. Status per item: ☐ open · �
 - ☑ **A3** SEO is a list of the 7 listing pages (Seite, Meta Description, OG-Bild) instead of one form with 7 fields. Each record opens its own form with meta description and OG image in the main column (no sidebar). API: `/api/dashboard/seo` is now a resource (index, show, update; listing pages only, content pages → 404), replacing the bulk `PUT`. Replaces the SEO screen from round 1 (Q1).
 - ☑ **A4** Page form ("Seiten"): tabs Inhalt · SEO instead of the sidebar; meta description and OG image are on the SEO tab. Both tabs are limited to the form width (`max-w-[48rem]`) instead of full width.
 - ☑ **A5** SEO and Seiten lists: meta description shortened to 60 characters (column `limit`, full text on hover); the CSS `truncate` had no effect in table cells.
+- ☑ **A6** Label "Opengraph Image" everywhere instead of "Social-Media-Bild (OG)" / "OG-Bild" (form fields, SEO list column, image action tooltip, crop preset name).
 
 ## C. Badges
 - ☑ **C2** Badge style: `rounded-md` instead of `rounded-full`, bold text with normal tracking (`tracking-normal`, the body is `tracking-wide`), less horizontal padding (`px-6`).

@@ -79,7 +79,7 @@ function formatSize(bytes) {
 				<button v-if="hasTeaser" type="button" class="text-white/70 hover:text-white cursor-pointer" title="Als Teaser setzen" @click.stop="emit('teaser', media)">
 					<PhStar :size="15" :weight="isTeaser ? 'fill' : 'light'" />
 				</button>
-				<button v-if="hasOg" type="button" class="text-white/70 hover:text-white cursor-pointer" title="Als OG Image setzen" @click.stop="emit('og', media)">
+				<button v-if="hasOg" type="button" class="text-white/70 hover:text-white cursor-pointer" title="Als Opengraph Image setzen" @click.stop="emit('og', media)">
 					<PhImage :size="15" :weight="isOg ? 'fill' : 'light'" />
 				</button>
 				<button type="button" class="text-white/70 hover:text-white cursor-pointer" title="Löschen" @click.stop="emit('delete', media)">
