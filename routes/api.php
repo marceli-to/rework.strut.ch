@@ -36,13 +36,12 @@ Route::prefix('dashboard')
 	->group(function () use ($resource) {
 
 		Route::get('/options', OptionsController::class);
-		Route::get('/seo', [SeoController::class, 'show']);
-		Route::put('/seo', [SeoController::class, 'update']);
 
 		$resource('projects', ProjectController::class);
 		$resource('categories', CategoryController::class);
 		$resource('category-types', CategoryTypeController::class);
 		$resource('pages', PageController::class, ['index', 'show', 'update', 'toggle']);
+		$resource('seo', SeoController::class, ['index', 'show', 'update']);
 		$resource('news', NewsController::class, ['index', 'store', 'show', 'update', 'toggle', 'destroy']);
 		$resource('team', TeamMemberController::class);
 		$resource('jobs', JobListingController::class);

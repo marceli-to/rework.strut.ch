@@ -2,44 +2,30 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Content\SeoRequest;
+use App\Http\Resources\PageResource;
 use App\Models\Page;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 /**
- * Meta descriptions of the listing pages (Einstellungen → SEO).
+ * SEO of the listing pages (Einstellungen → SEO): meta description and OG
+ * image. The content pages have theirs in their own form ("Seiten").
  */
-class SeoController extends Controller
+class SeoController extends ResourceController
 {
-	public function show()
+	protected string $model = Page::class;
+	protected string $resource = PageResource::class;
+	protected string $request = SeoRequest::class;
+	protected array $indexWith = ['media'];
+
+	public function index(Request $request)
 	{
-		return response()->json(['data' => $this->pages()]);
+		return PageResource::collection(Page::sortByKey(Page::listing()->with($this->indexWith)->get()));
 	}
 
-	public function update(Request $request)
+	protected function find(string $uuid): Model
 	{
-		$data = $request->validate([
-			'pages' => 'required|array',
-			'pages.*.key' => ['required', 'string', fn ($attribute, $value, $fail) => Page::listing()->where('key', $value)->exists() ?: $fail('Unbekannte Seite.')],
-			'pages.*.meta_description' => 'nullable|string|max:255',
-		], [], ['pages.*.meta_description' => 'Meta Description']);
-
-		DB::transaction(function () use ($data) {
-			foreach ($data['pages'] as $page) {
-				Page::where('key', $page['key'])->update(['meta_description' => $page['meta_description'] ?? null]);
-			}
-		});
-
-		return response()->json(['data' => $this->pages()]);
-	}
-
-	protected function pages()
-	{
-		return Page::sortByKey(Page::listing()->get())->map(fn (Page $page) => [
-			'key' => $page->key,
-			'title' => $page->title,
-			'meta_description' => $page->meta_description,
-		]);
+		return Page::listing()->where('uuid', $uuid)->firstOrFail();
 	}
 }

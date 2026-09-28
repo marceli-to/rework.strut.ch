@@ -1,56 +1,22 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import api from '@/api/axios'
-import { useToast } from '@/composables/useToast'
-import { useUnsavedChanges } from '@/composables/useUnsavedChanges'
-import PageHeader from '@/components/layout/PageHeader.vue'
-import FormActions from '@/components/ui/form/FormActions.vue'
-import FormField from '@/components/ui/form/FormField.vue'
+import { useSeoStore } from '@/stores/resources'
+import ResourceIndex from '@/components/resource/ResourceIndex.vue'
 
-// Meta descriptions of the listing pages (the content pages have theirs in "Seiten")
-const toast = useToast()
-const form = ref([])
-const errors = ref({})
-const { setOriginal } = useUnsavedChanges(form)
+// SEO of the listing pages (the content pages have theirs in "Seiten")
+const columns = [
+	{ key: 'title', label: 'Seite', primary: true },
+	{ key: 'meta_description', label: 'Meta Description', class: 'max-w-[32rem] truncate' },
+	{ key: 'og', label: 'OG-Bild', class: 'w-100' },
+]
 
-onMounted(async () => {
-	const { data } = await api.get('/seo')
-	form.value = data.data
-	setOriginal()
-})
-
-async function save() {
-	errors.value = {}
-	try {
-		const { data } = await api.put('/seo', { pages: form.value })
-		form.value = data.data
-		setOriginal()
-		toast.success('SEO gespeichert')
-	} catch (error) {
-		if (error.response?.status === 422) {
-			errors.value = error.response.data.errors
-			toast.error('Bitte überprüfen Sie das Formular')
-		}
-	}
-}
+const ogImage = (row) => row.media?.find(m => m.collection === 'og')
 </script>
 
 <template>
-	<form @submit.prevent="save">
-		<PageHeader title="SEO" />
-		<FormActions submitLabel="Speichern" />
-		<div class="flex flex-col gap-24 max-w-[48rem]">
-			<FormField
-				v-for="(page, index) in form"
-				:key="page.key"
-				:name="`pages.${index}.meta_description`"
-				:label="`Meta Description – ${page.title}`"
-				type="textarea"
-				rows="3"
-				hint="max. 160 Zeichen"
-				v-model="page.meta_description"
-				:errors="errors"
-			/>
-		</div>
-	</form>
+	<ResourceIndex title="SEO" :store="useSeoStore()" :columns="columns" :routes="{ edit: 'seo.edit' }" :deletable="false" :togglable="false">
+		<template #cell-og="{ row }">
+			<img v-if="ogImage(row)?.thumbnail_url" :src="ogImage(row).thumbnail_url" alt="" class="size-24 rounded-sm object-cover">
+			<span v-else class="text-gray-300 dark:text-warm-700">–</span>
+		</template>
+	</ResourceIndex>
 </template>

@@ -26,6 +26,7 @@ const navigation = [
 			{ name: 'Startseite', to: '/dashboard/home', icon: PhHouse },
 			{ name: 'News', to: '/dashboard/news', icon: PhNewspaper },
 			{ name: 'Projekte', to: '/dashboard/projects', icon: PhBuildings },
+			{ name: 'Seiten', to: '/dashboard/pages', icon: PhFiles },
 		],
 	},
 	{
@@ -42,11 +43,6 @@ const navigation = [
 		items: [
 			{ name: 'Bücher', to: '/dashboard/books', icon: PhBooks },
 			{ name: 'Presse', to: '/dashboard/press', icon: PhNewspaperClipping },
-		],
-	},
-	{
-		items: [
-			{ name: 'Seiten', to: '/dashboard/pages', icon: PhFiles },
 		],
 	},
 	{
