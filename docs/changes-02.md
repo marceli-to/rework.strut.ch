@@ -15,6 +15,9 @@ Source: annotated screenshots and chat feedback. Status per item: ☐ open · �
 - ☑ **C3** Kategorien list: the types are shown as badges in a "Typen" column (instead of "5 Typen"), alternating per category like in the project list.
 - ☑ **C4** Badge redesign: quiet, borderless chip (light gray fill, regular weight, `rounded-sm`) instead of solid black bold, which felt out of place in the otherwise quiet admin. One variant only; the solid/outline alternation per category is dropped (the `variant` prop is removed). Replaces the black/white badge decision from round 1 (Q3).
 
+## D. Listings
+- ☑ **D7** Projects list grouped by type like the Werkliste: one group header per type (plural name, e.g. "Wohnhäuser"), in category/type order. The "Typ" column (badges) and the type filter are removed (also the `?type=` filter of the API). Projects can always be dragged, within their type group only; the sort order stays per type. Generic `groupBy` option in `DataTable` / `ResourceIndex`. Replaces D6 from round 1 (type filter in the header).
+
 ## E. Sidebar navigation
 - ☑ **E2** "Einstellungen" is now a sidebar group title (like Büro, Publikationen) with its own entries: Kategorien, SEO, Benutzer (SEO moved into Seiten with A7). Each is its own page with its own title; the tab bar (`SettingsTabs`) is gone. Replaces the tab layout from round 1 (Q4).
 - ☑ **E3** "Seiten" moves up, directly below Projekte.

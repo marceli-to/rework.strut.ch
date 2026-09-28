@@ -26,7 +26,6 @@ class ProjectController extends ResourceController
 			->orderBy('categories.sort_order')
 			->orderBy('category_types.sort_order')
 			->orderBy('projects.sort_order')
-			->select('projects.*')
-			->when($request->query('type'), fn (Builder $q, string $uuid) => $q->where('category_types.uuid', $uuid));
+			->select('projects.*');
 	}
 }

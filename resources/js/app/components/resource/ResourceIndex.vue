@@ -24,6 +24,7 @@ const props = defineProps({
 	togglable: { type: [Boolean, Function], default: true }, // or row => boolean
 	params: { type: Object, default: () => ({}) },
 	rowLabel: { type: Function, default: row => row.title ?? row.name },
+	groupBy: { type: Function, default: null }, // see DataTable
 })
 
 const router = useRouter()
@@ -78,6 +79,7 @@ async function remove(row) {
 			:columns="columns"
 			:rows="rows"
 			:draggable-rows="sortable"
+			:group-by="groupBy"
 			@update:model-value="store.reorder($event)"
 		>
 			<template v-for="col in props.columns" #[`cell-${col.key}`]="scope">
