@@ -1,0 +1,6 @@
+# Admin changes — round 2 (client feedback 2026-09-28)
+
+Source: annotated screenshot of Startseite → Raster. Status per item: ☐ open · ☑ done.
+
+## F. Grid (Raster), projects and homepage
+- ☑ **F5** Existing grid rows are collapsed when the editor opens (both contexts, all areas). Rows added afterwards stay open so they can be filled right away; "Alle ausklappen" opens them all.

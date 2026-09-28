@@ -50,6 +50,8 @@ async function load() {
 	const { data } = await api.show()
 	config.value = data.config
 	rows.value = data.rows
+	// existing rows start collapsed; rows added later stay open for filling
+	collapsed.value = new Set(data.rows.map(r => r.uuid))
 }
 
 async function loadOptions() {
