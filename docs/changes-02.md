@@ -11,8 +11,9 @@ Source: annotated screenshots and chat feedback. Status per item: ☐ open · �
 - ☑ **A8** Page image (Über uns, Jobs): one image (`maxFiles: 1`, label "Bild"), like the legacy pages. Once an image is there, the uploader is hidden (as for the Opengraph Image); single-file uploaders say "Bild hinzufügen".
 
 ## C. Badges
-- ☑ **C2** Badge style: `rounded-md` instead of `rounded-full`, bold text with normal tracking (`tracking-normal`, the body is `tracking-wide`), less horizontal padding (`px-6`).
+- ☑ **C2** *(superseded by C4)* Badge style: `rounded-md` instead of `rounded-full`, bold text with normal tracking (`tracking-normal`, the body is `tracking-wide`), less horizontal padding (`px-6`).
 - ☑ **C3** Kategorien list: the types are shown as badges in a "Typen" column (instead of "5 Typen"), alternating per category like in the project list.
+- ☑ **C4** Badge redesign: quiet, borderless chip (light gray fill, regular weight, `rounded-sm`) instead of solid black bold, which felt out of place in the otherwise quiet admin. One variant only; the solid/outline alternation per category is dropped (the `variant` prop is removed). Replaces the black/white badge decision from round 1 (Q3).
 
 ## E. Sidebar navigation
 - ☑ **E2** "Einstellungen" is now a sidebar group title (like Büro, Publikationen) with its own entries: Kategorien, SEO, Benutzer (SEO moved into Seiten with A7). Each is its own page with its own title; the tab bar (`SettingsTabs`) is gone. Replaces the tab layout from round 1 (Q4).

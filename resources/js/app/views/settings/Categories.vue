@@ -7,9 +7,6 @@ const columns = [
 	{ key: 'name', label: 'Kategorie', primary: true },
 	{ key: 'types', label: 'Typen' },
 ]
-
-// same alternation as the type badges in the project list
-const variant = (row) => (row.sort_order ?? 0) % 2 === 0 ? 'solid' : 'outline'
 </script>
 
 <template>
@@ -19,7 +16,7 @@ const variant = (row) => (row.sort_order ?? 0) % 2 === 0 ? 'solid' : 'outline'
 		</template>
 		<template #cell-types="{ row }">
 			<div class="flex flex-wrap gap-4">
-				<Badge v-for="type in row.types" :key="type.uuid" :variant="variant(row)">{{ type.name_singular }}</Badge>
+				<Badge v-for="type in row.types" :key="type.uuid">{{ type.name_singular }}</Badge>
 			</div>
 		</template>
 	</ResourceIndex>

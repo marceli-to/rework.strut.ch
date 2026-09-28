@@ -17,9 +17,6 @@ const columns = [
 	{ key: 'status_label', label: 'Status' },
 ]
 
-// categories alternate between solid and outlined badges
-const variant = (row) => (row.category_type?.category?.sort_order ?? 0) % 2 === 0 ? 'solid' : 'outline'
-
 onMounted(() => options.load())
 </script>
 
@@ -40,7 +37,7 @@ onMounted(() => options.load())
 			</div>
 		</template>
 		<template #cell-type="{ row }">
-			<Badge v-if="row.category_type" :variant="variant(row)">{{ row.category_type.name_singular }}</Badge>
+			<Badge v-if="row.category_type">{{ row.category_type.name_singular }}</Badge>
 		</template>
 	</ResourceIndex>
 </template>
