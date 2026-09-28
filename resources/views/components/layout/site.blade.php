@@ -9,7 +9,7 @@
   $description ??= 'Strut Architekten Winterthur';
 @endphp
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="min-h-full overflow-y-scroll">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,10 +24,13 @@
 <meta name="format-detection" content="telephone=no">
 @vite(['resources/css/site.css', 'resources/js/site.js'])
 </head>
-<body>
+<body class="min-h-full font-regular text-sm leading-[1.13] sm:text-xs sm:leading-[1.2] md:text-2xl text-black bg-white antialiased [text-rendering:optimizeLegibility]">
 <x-site.header />
-<main class="pt-90 md:pt-170">
-  <div @class(['page-block pb-10', $home ? 'md:pb-0' : 'md:pb-20'])>{{ $slot }}</div>
+<main class="pt-header md:pt-header-md">
+  <div @class([
+    'relative mx-auto max-w-page-xs px-10 pb-10 sm:max-w-none md:px-20 lg:max-w-page-lg',
+    $home ? 'md:pb-0' : 'md:pb-20',
+  ])>{{ $slot }}</div>
 </main>
 </body>
 </html>

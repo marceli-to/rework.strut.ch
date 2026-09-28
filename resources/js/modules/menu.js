@@ -30,9 +30,10 @@ export function initMenu(root = document) {
 		if (desktop.matches) nav.style.height = '';
 	};
 
+	const html = document.documentElement;
+	const isOpen = () => html.hasAttribute('data-menu-open');
 	const toggleMenu = (show) => {
-		document.documentElement.classList.toggle('has-menu', show);
-		nav.classList.toggle('is-visible', show);
+		html.toggleAttribute('data-menu-open', show);
 		button?.setAttribute('aria-expanded', String(show));
 	};
 
@@ -63,7 +64,7 @@ export function initMenu(root = document) {
 		btn.setAttribute('aria-expanded', String(isVisible(list)));
 	};
 
-	button?.addEventListener('click', () => toggleMenu(!nav.classList.contains('is-visible')));
+	button?.addEventListener('click', () => toggleMenu(!isOpen()));
 
 	nav.addEventListener('click', (event) => {
 		const btn = event.target.closest('[data-submenu-button]');
@@ -85,7 +86,7 @@ export function initMenu(root = document) {
 
 	document.addEventListener('keydown', (event) => {
 		if (event.key !== 'Escape') return;
-		if (nav.classList.contains('is-visible')) {
+		if (isOpen()) {
 			toggleMenu(false);
 			button?.focus();
 		} else if (desktop.matches) {

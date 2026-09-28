@@ -11,7 +11,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 ## 0. Setup
 
 - ☑ Playwright + pixelmatch as dev dependencies, `tests/visual/compare.js`, output git-ignored.
-- ◐ Tokens in the Tailwind theme (`resources/css/site.css`, `partials/site/*`): breakpoints 600/900/1200, colours, type scale `type-nav|subnav|sm|md|lg`, page block, link underlines. Page-specific values follow with each page.
+- ◐ Tokens in the Tailwind theme (`resources/css/site.css`): breakpoints 600/900/1200, colours, text scale `text-xs`…`text-6xl` (all 10 legacy sizes, no `text-base`), header heights, page widths. Page-specific values follow with each page.
 - ☑ Fonts: Basis Grotesque Pro Regular + Medium, woff2/woff copied from the legacy project (F2).
 - ☑ Separate public entry points (`resources/css/site.css`, `resources/js/site.js`); the admin bundle is not loaded on the public site.
 

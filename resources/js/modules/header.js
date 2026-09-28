@@ -12,25 +12,23 @@ export function initHeader(root = document) {
 	if (!header) return;
 
 	let last = 0;
+	const is = (state) => header.dataset.scroll === state;
+	const set = (state) => (state ? (header.dataset.scroll = state) : delete header.dataset.scroll);
 
 	window.addEventListener('scroll', debounce(() => {
 		const y = window.scrollY;
 
 		if (mobile.matches) {
-			if (y > last) header.classList.add('is-tiny');
-			if (y === 0) header.classList.remove('is-tiny');
+			if (y > last) set('tiny');
+			if (y === 0 && is('tiny')) set(null);
 		} else {
 			if (y <= 0) {
-				header.classList.remove('is-tiny');
+				// Legacy: only "tiny" is reset at the top; "hidden" stays.
+				if (is('tiny')) set(null);
 				return;
 			}
-			if (y > last && y > THRESHOLD) {
-				header.classList.add('is-hidden');
-				header.classList.remove('is-tiny');
-			} else if (y < last && y > THRESHOLD) {
-				header.classList.remove('is-hidden');
-				header.classList.add('is-tiny');
-			}
+			if (y > last && y > THRESHOLD) set('hidden');
+			else if (y < last && y > THRESHOLD) set('tiny');
 		}
 		last = y;
 	}, 10), { passive: true });

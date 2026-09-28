@@ -180,3 +180,14 @@ Decisions and details:
   - A category without type headings opens only the first type's list (legacy `next('ul')`). This has no effect today: Gewerbe and Öffentlich have one type each.
   - The desktop header stays hidden if the page jumps straight to the top (legacy only clears `is-hidden` while scrolling up past 170 px).
 - `compare.js` changes: `--shell` mode (viewport only, content hidden, tall body so scroll states work), gradual scroll back to the top before screenshots, and states with `viewportOnly`. Nav states run on the pages flagged `navStates` (home, first sample project).
+
+### CSS review (client feedback, 2026-09-28)
+
+The step 1 CSS was reworked after the client's review:
+- **Text scale:** `text-xs` … `text-6xl` covers all 10 legacy font sizes (15–51 px), with no `text-base`. Line heights are inline arbitrary values.
+- **No custom utilities** (`type-*`, `link-*` and `page-block` removed). Underlines and the page block are inline in the Blade components; `html`/`body` classes sit on the elements. `base.css` only holds global element rules, written with `@apply`.
+- **JS state as data attributes** with named variants: `header[data-scroll=tiny|hidden]` → `header-tiny:` / `header-hidden:`, and `html[data-menu-open]` → `menu-open:`. Lists keep `data-open` / `data-current`, and entries `data-active`.
+- **Navigation split into components** `x-site.nav.item|toggle|list|link`; no class strings in `@php` any more.
+- **Header heights as tokens** (`h-header`, `pt-header-md`, …).
+
+Result unchanged: 0.000 % on all shell comparisons (319; the 136 errors are page states that don't exist yet).
