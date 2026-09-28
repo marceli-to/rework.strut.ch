@@ -43,7 +43,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 | 2.9 | `/ueber-uns` | Intro text + page images (lightbox), team masonry: name (mailto), role, position, portrait, phone, email, "Lebenslauf" toggle | Masonry as 2.7 | ☐ |
 | 2.10 | `/auszeichnungen` | Like 2.6 without project reference | | ☑ |
 | 2.11 | `/vortraege` | Like 2.10 | | ☑ |
-| 2.12 | `/jobs` | Job list (title, lead, info, PDF link) or the page text if there are no jobs; page images with lightbox (gallery if more than one) | | ☐ |
+| 2.12 | `/jobs` | Job list (title, lead, info, PDF link) or the page text if there are no jobs; page images with lightbox (gallery if more than one) | Page 0 %; images marked `data-lightbox`, the lightbox module follows with `/ueber-uns` (step 3) | ◐ |
 | 2.13 | `/kontakt` | Contact text, "Impressum" toggle (imprint page), "Datenschutz" toggle (static text, kept 1:1), Google Map (styled, fixed coordinates) + "Auf Google Maps anzeigen" link | No key yet (F3). The map is masked in the diff | ☐ |
 | 2.14 | 404 | Error page in the site layout | 500 follows the same pattern | ☐ |
 | 2.15 | PDFs | `/werkliste/pdf/{8 variants}`, `/download/pdf/{id}/{slug}` (merged category PDFs) | Kept 1:1 (Q7); compared by content, not screenshot | ☐ |

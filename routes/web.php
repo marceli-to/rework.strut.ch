@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Site\DownloadsController;
 use App\Http\Controllers\Site\EntryController;
+use App\Http\Controllers\Site\JobsController;
 use App\Http\Controllers\Site\WorksController;
 use App\Models\Project;
 
@@ -28,7 +29,7 @@ Route::view('/buecher', 'pages.shell')->name('page.books');
 Route::get('/downloads', DownloadsController::class)->name('page.downloads');
 Route::view('/kontakt', 'pages.shell')->name('page.contact');
 Route::view('/ueber-uns', 'pages.shell')->name('page.about');
-Route::view('/jobs', 'pages.shell')->name('page.jobs');
+Route::get('/jobs', JobsController::class)->name('page.jobs');
 Route::get('/auszeichnungen', EntryController::class)->defaults('type', 'award')->name('page.awards');
 Route::get('/vortraege', EntryController::class)->defaults('type', 'lecture')->name('page.lectures');
 

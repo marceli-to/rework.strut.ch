@@ -219,3 +219,14 @@ Result unchanged: 0.000 % on all shell comparisons (319; the 136 errors are page
 - **Grid columns:** Tailwind's `grid-cols-3` is `repeat(3, minmax(0, 1fr))`, legacy uses `repeat(3, 1fr)`, whose tracks grow to fit the longest word. "Projektdokumentationen" at 31 px widens the first column at 900–1024 px. All list grids now use the legacy definition (`grid-cols-[repeat(3,1fr)]`).
 - **Visual result: 0.000 % at all 17 viewports.** Presse/Auszeichnungen/Vorträge re-checked after the grid change: still 0.000 %.
 - Tests: `tests/Feature/Site/DownloadsTest.php`.
+
+## 2026-09-28 — Phase 2, step 2d: Jobs
+
+- `Site\JobsController` → `pages.jobs`: published job listings (title, lead, info, PDF link), else the page text; page images in the right column.
+- New shared components: `x-site.prose` (admin rich text; links get the green hover underline), `x-site.page-images` (page images with `data-lightbox="single|gallery"`, reused by Über uns).
+- `Media::imageUrl('xs|sm|md|lg')`: the legacy image sizes. Legacy scales landscape images to the max width and all others to the max height (500/350, 900/500, 1200/800, 1600/1100), without upscaling; the Glide params reproduce that.
+- **Fix in the global CSS:** legacy removes the bottom margin of `p:last-child` **and** `p:last-of-type`; `base.css` only had `last-child`. A job text ending in `<p>` + link was 16 px taller.
+- **Visual result: 0.000 % at all 17 viewports** (no job is published, so the page text shows). The job listing branch was checked separately: jobs temporarily published in the new DB, and the legacy template's markup for the same jobs injected into the legacy page (the legacy DB stays read-only). 0 px difference at 11 widths from 375 to 2560. Jobs unpublished again afterwards.
+- The lightbox itself (Fancybox replacement) is not built yet; without JS the image link opens the large image. It follows with `/ueber-uns` in step 3.
+- Legacy job 1's PDF is missing in the legacy storage, so the import has no file for it; the rework shows no download link for that job (legacy would link to a missing file).
+- Tests: `tests/Feature/Site/JobsTest.php`.

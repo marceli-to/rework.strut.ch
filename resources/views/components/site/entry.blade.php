@@ -15,7 +15,7 @@
   <div>{{ $entry->description }}@if ($entry->project), {{ $entry->project->name }} {{ $entry->project->location }} ({{ $entry->project->year }})@endif</div>
   @if ($image)
     <figure class="mt-8 mb-4 md:mb-16">
-      <img src="{{ $image->imageUrl(['w' => 500]) }}" width="600" height="400" alt="{{ $image->alt ?: $entry->title }}" class="block w-[70%] h-auto">
+      <img src="{{ $image->imageUrl('xs') }}" width="600" height="400" alt="{{ $image->alt ?: $entry->title }}" class="block w-[70%] h-auto">
     </figure>
   @endif
 </x-site.card>

@@ -75,12 +75,32 @@ class Media extends Model
 	}
 
 	/**
-	 * Public Glide URL, with the crop from the admin applied.
+	 * Image sizes of the legacy site (MediaService), as [max width, max height]:
+	 * landscape images are scaled to the width, all others to the height.
 	 */
-	public function imageUrl(array $params = []): string
+	public const SIZES = [
+		'xs' => [500, 350],
+		'sm' => [900, 500],
+		'md' => [1200, 800],
+		'lg' => [1600, 1100],
+	];
+
+	/**
+	 * Public Glide URL for a size of SIZES (or explicit Glide params), with the
+	 * crop from the admin applied.
+	 */
+	public function imageUrl(string|array $size = []): string
 	{
-		$crop = $this->crop;
-		if ($crop && isset($crop['w'], $crop['h'], $crop['x'], $crop['y'])) {
+		$crop = $this->crop && isset($this->crop['w'], $this->crop['h'], $this->crop['x'], $this->crop['y']) ? $this->crop : null;
+		$params = $size;
+
+		if (is_string($size)) {
+			[$maxWidth, $maxHeight] = self::SIZES[$size];
+			$landscape = ($crop['w'] ?? $this->width) > ($crop['h'] ?? $this->height);
+			$params = ($landscape ? ['w' => $maxWidth] : ['h' => $maxHeight]) + ['fit' => 'max'];
+		}
+
+		if ($crop) {
 			$params['crop'] = implode(',', [$crop['w'], $crop['h'], $crop['x'], $crop['y']]);
 		}
 
