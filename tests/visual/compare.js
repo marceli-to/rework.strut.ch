@@ -69,7 +69,9 @@ async function prepare(page) {
 async function shoot(context, site, target, vp, state) {
 	const page = await context.newPage();
 	await page.setViewportSize({ width: vp, height: 900 });
-	const response = await page.goto(sites[site] + target.path, { waitUntil: 'networkidle' });
+	// `path` may differ per site ({ ref, act }), e.g. the 404 page.
+	const path = typeof target.path === 'string' ? target.path : target.path[site];
+	const response = await page.goto(sites[site] + path, { waitUntil: 'networkidle' });
 	if (shell) await page.addStyleTag({ content: `${CONTENT[site]} { visibility: hidden !important; } body { min-height: 5000px; }` });
 	await prepare(page);
 	if (state) {

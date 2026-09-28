@@ -322,3 +322,10 @@ Client decisions: `<picture>` markup (not Accept-header negotiation); AVIF + Web
 - **All 87 legacy URLs** (`php artisan strut:check-urls`, real data): 83 × 200 (all 62 project URLs with their current slugs, the pages and PDFs), 4 × 301 → 200 (`/bauten`, three category PDFs). 0 errors. Added to the go-live checklist in `docs/deployment.md`.
 - Dropped legacy routes answer 404: `/bauten/vorschau/{id}`, `/404`, `/500`, `/artisan/*`.
 - Tests: `tests/Feature/Site/LegacyRedirectTest.php`.
+
+## 2026-09-28 — Phase 2, step 5d: error pages
+
+- `resources/views/errors/404.blade.php` and `500.blade.php` on one component `x-site.error-page` (legacy texts, soft hyphens included). Unknown URLs answer **404 in place**; legacy redirected them with 302 to `/404`, which answered 200 (search engines saw "soft 404s").
+- Legacy detail kept: the "Zur Startseite" link has no style, so it shows in the browser's default link colour; reproduced with `color: revert`, listed for the later round.
+- `compare.js` now accepts a path per site (`{ ref, act }`); new page `error-404` (legacy `/404` vs an unknown URL). **0.000 % at all 17 viewports.**
+- Tests: `tests/Feature/Site/ErrorPageTest.php` (404 and 500).

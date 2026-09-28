@@ -79,6 +79,8 @@ export const pages = [
 	{ key: 'jobs', path: '/jobs' },
 	{ key: 'auszeichnungen', path: '/auszeichnungen' },
 	{ key: 'vortraege', path: '/vortraege' },
+	// Legacy redirects unknown URLs to /404 (status 200); the rework answers 404 in place.
+	{ key: 'error-404', path: { ref: '/404', act: '/gibt-es-nicht' } },
 ];
 
 export const projectPage = (id) => ({

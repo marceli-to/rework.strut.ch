@@ -9,7 +9,7 @@ import { chromium } from 'playwright';
 import { PNG } from 'pngjs'; import fs from 'node:fs';
 const [page, ...vps] = process.argv.slice(2);
 const target = [...pages, ...sampleProjects.map(projectPage)].find((t) => t.key === page) ?? projectPage(Number(page.replace('projekt-', '')));
-const path = target.path;
+const path = typeof target.path === 'string' ? target.path : target.path.act;
 const b = await chromium.launch();
 for (const w of vps.map(Number)) {
   const p = await b.newPage({ ignoreHTTPSErrors: true, viewport: { width: w, height: 900 } });

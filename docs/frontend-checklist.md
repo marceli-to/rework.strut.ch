@@ -45,7 +45,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 | 2.11 | `/vortraege` | Like 2.10 | | ☑ |
 | 2.12 | `/jobs` | Job list (title, lead, info, PDF link) or the page text if there are no jobs; page images with lightbox (gallery if more than one) | Lightbox: step 3 | ☑ |
 | 2.13 | `/kontakt` | Contact text, "Impressum" toggle (imprint page), "Datenschutz" toggle (static text, kept 1:1), Google Map (styled, fixed coordinates) + "Auf Google Maps anzeigen" link | No key yet (F3). The map is masked in the diff | ☑ (map: without a key only the container, see step 2e) |
-| 2.14 | 404 | Error page in the site layout | 500 follows the same pattern | ☐ |
+| 2.14 | 404 | Error page in the site layout | 500 follows the same pattern. Real 404 status (legacy: 302 → `/404` with 200) | ☑ |
 | 2.15 | PDFs | `/werkliste/pdf/{8 variants}`, `/download/pdf/{id}/{slug}` (merged category PDFs) | Kept 1:1 (Q7); compared with live strut.ch by text and rendered pages | ☑ |
 
 ## 3. Shared pieces
@@ -92,5 +92,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 
 - The Datenschutz text is hard-coded in the view and describes Google Analytics, which the site doesn't use.
 - "Werkliste" menu item not active on its sub-views (1.7).
+- The "Zur Startseite" link on the error pages has no style (browser blue).
+- Werkliste PDFs: date and title lines positioned off the page (never visible); the address footer is on page 1 only.
 - `/werkliste` and `/werkliste/status` show the same page (handled with a canonical tag).
 - **Not kept:** the legacy Werkliste sorts same-year projects by the raw JSON of the name (`{"de": "…"}`), so escaped umlauts and JSON spacing decide the order. The rework sorts by name (see `docs/progress.md`, step 2b).
