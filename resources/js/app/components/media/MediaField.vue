@@ -56,7 +56,7 @@ async function onDelete(media) {
 			<MediaUploader
 				v-if="!full"
 				:profile="profile"
-				:label="isFiles ? 'Dateien hinzufügen' : 'Bilder hinzufügen'"
+				:label="isFiles ? 'Dateien hinzufügen' : maxFiles === 1 ? 'Bild hinzufügen' : 'Bilder hinzufügen'"
 				:maxFiles="maxFiles"
 				:compact="items.length > 0"
 				@uploaded="onUploaded"

@@ -21,7 +21,7 @@ const props = defineProps({
 	createLabel: { type: String, default: null },
 	sortable: { type: Boolean, default: false },
 	deletable: { type: Boolean, default: true },
-	togglable: { type: Boolean, default: true },
+	togglable: { type: [Boolean, Function], default: true }, // or row => boolean
 	params: { type: Object, default: () => ({}) },
 	rowLabel: { type: Function, default: row => row.title ?? row.name },
 })
@@ -90,7 +90,7 @@ async function remove(row) {
 			<template #cell-actions="{ row }">
 				<div class="flex items-center justify-end gap-12">
 					<button
-						v-if="togglable"
+						v-if="typeof togglable === 'function' ? togglable(row) : togglable"
 						type="button"
 						class="rounded transition-colors cursor-pointer"
 						:class="row.publish ? 'text-gray-400 dark:text-warm-500 hover:text-gray-900 dark:hover:text-warm-100' : 'text-gray-300 dark:text-warm-700 hover:text-gray-600 dark:hover:text-warm-500'"

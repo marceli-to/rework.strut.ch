@@ -12,6 +12,7 @@ class PageResource extends JsonResource
 		return [
 			'uuid' => $this->uuid,
 			'key' => $this->key,
+			'is_content' => $this->isContent(),
 			'title' => $this->title,
 			'text' => $this->text,
 			'meta_description' => $this->meta_description,

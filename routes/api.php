@@ -12,7 +12,6 @@ use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\OptionsController;
 use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\ProjectController;
-use App\Http\Controllers\Api\SeoController;
 use App\Http\Controllers\Api\TeamMemberController;
 use App\Http\Controllers\Api\UserController;
 
@@ -41,7 +40,6 @@ Route::prefix('dashboard')
 		$resource('categories', CategoryController::class);
 		$resource('category-types', CategoryTypeController::class);
 		$resource('pages', PageController::class, ['index', 'show', 'update', 'toggle']);
-		$resource('seo', SeoController::class, ['index', 'show', 'update']);
 		$resource('news', NewsController::class, ['index', 'store', 'show', 'update', 'toggle', 'destroy']);
 		$resource('team', TeamMemberController::class);
 		$resource('jobs', JobListingController::class);

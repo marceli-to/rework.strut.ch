@@ -6,7 +6,6 @@ import {
 	PhBuildings,
 	PhFiles,
 	PhHouse,
-	PhMagnifyingGlass,
 	PhMicrophoneStage,
 	PhNewspaper,
 	PhNewspaperClipping,
@@ -50,7 +49,6 @@ const navigation = [
 		items: [
 			// types are edited from within their category
 			{ name: 'Kategorien', to: '/dashboard/categories', icon: PhTag, match: ['/dashboard/categories', '/dashboard/types'] },
-			{ name: 'SEO', to: '/dashboard/seo', icon: PhMagnifyingGlass },
 			{ name: 'Benutzer', to: '/dashboard/users', icon: PhUserCircle },
 		],
 	},

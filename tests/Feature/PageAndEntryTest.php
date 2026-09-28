@@ -9,7 +9,7 @@ beforeEach(function () {
 	$this->user = User::factory()->create();
 });
 
-it('lists only the content pages, in the fixed page order', function () {
+it('lists all pages in the fixed page order', function () {
 	Page::factory()->create(['key' => 'contact']);
 	Page::factory()->create(['key' => 'about']);
 	Page::factory()->home()->create();
@@ -18,32 +18,32 @@ it('lists only the content pages, in the fixed page order', function () {
 	$this->actingAs($this->user)
 		->getJson('/api/dashboard/pages')
 		->assertOk()
-		->assertJsonCount(2, 'data')
-		->assertJsonPath('data.0.key', 'about')
-		->assertJsonPath('data.1.key', 'contact');
+		->assertJsonCount(4, 'data')
+		->assertJsonPath('data.0.key', 'home')
+		->assertJsonPath('data.1.key', 'press')
+		->assertJsonPath('data.2.key', 'about')
+		->assertJsonPath('data.3.key', 'contact');
 });
 
-it('lists and edits the SEO of the listing pages', function () {
+it('lists all pages; listing pages only take the SEO fields and stay online', function () {
 	$home = Page::factory()->home()->create();
-	Page::factory()->create(['key' => 'press', 'title' => 'Presse']);
-	$about = Page::factory()->create(['key' => 'about']);
+	Page::factory()->create(['key' => 'about', 'title' => 'Über uns']);
 
 	$this->actingAs($this->user)
-		->getJson('/api/dashboard/seo')
+		->getJson('/api/dashboard/pages')
 		->assertOk()
 		->assertJsonCount(2, 'data')
-		->assertJsonPath('data.0.key', 'home');
+		->assertJsonPath('data.0.key', 'home')
+		->assertJsonPath('data.0.is_content', false)
+		->assertJsonPath('data.1.is_content', true);
 
 	$this->actingAs($this->user)
-		->putJson("/api/dashboard/seo/{$home->uuid}", ['meta_description' => 'Strut Architekten Winterthur', 'title' => 'ignored'])
+		->putJson("/api/dashboard/pages/{$home->uuid}", ['meta_description' => 'Strut Architekten Winterthur', 'title' => 'ignored'])
 		->assertOk()
 		->assertJsonPath('data.meta_description', 'Strut Architekten Winterthur')
 		->assertJsonPath('data.title', $home->title);
 
-	// content pages are edited in their own form
-	$this->actingAs($this->user)->getJson("/api/dashboard/seo/{$about->uuid}")->assertNotFound();
-	$this->actingAs($this->user)->putJson("/api/dashboard/seo/{$about->uuid}", ['meta_description' => 'x'])->assertNotFound();
-	$this->actingAs($this->user)->postJson('/api/dashboard/seo', [])->assertStatus(405);
+	$this->actingAs($this->user)->patchJson("/api/dashboard/pages/{$home->uuid}/publish")->assertNotFound();
 });
 
 it('updates a page but cannot create or delete one', function () {

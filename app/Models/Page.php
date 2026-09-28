@@ -6,7 +6,6 @@ use App\Traits\HasGrid;
 use App\Traits\HasMedia;
 use App\Traits\HasPublish;
 use App\Traits\HasUuid;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,8 +31,8 @@ class Page extends Model
 	];
 
 	/**
-	 * Pages with editable text/images (admin "Seiten"); the others are listing
-	 * pages whose meta description is edited under Einstellungen → SEO.
+	 * Pages with editable title/text/images. The others are listing pages;
+	 * for those only the SEO fields (meta description, OG image) are edited.
 	 */
 	public const CONTENT_KEYS = ['about', 'jobs', 'contact', 'imprint'];
 
@@ -50,14 +49,9 @@ class Page extends Model
 		'publish' => 'boolean',
 	];
 
-	public function scopeContent(Builder $query): Builder
+	public function isContent(): bool
 	{
-		return $query->whereIn('key', self::CONTENT_KEYS);
-	}
-
-	public function scopeListing(Builder $query): Builder
-	{
-		return $query->whereNotIn('key', self::CONTENT_KEYS);
+		return in_array($this->key, self::CONTENT_KEYS);
 	}
 
 	/**

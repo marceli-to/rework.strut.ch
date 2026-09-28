@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { usePageStore } from '@/stores/resources'
 import { useResourceForm } from '@/composables/useResourceForm'
 import ResourceForm from '@/components/resource/ResourceForm.vue'
@@ -9,11 +9,13 @@ import Tabs from '@/components/ui/tabs/Tabs.vue'
 import Tab from '@/components/ui/tabs/Tab.vue'
 
 const store = usePageStore()
-const tab = ref('content')
-const tabs = [
-	{ key: 'content', label: 'Inhalt' },
+const tab = ref(null) // first tab
+
+// listing pages (Werkliste, Presse, …) only have the SEO tab; the server ignores the other fields
+const tabs = computed(() => [
+	...(store.current?.is_content ? [{ key: 'content', label: 'Inhalt' }] : []),
 	{ key: 'seo', label: 'SEO' },
-]
+])
 
 const { form, isEdit, submit, cancel, errors, loading } = useResourceForm(store, {
 	title: '', text: '', meta_description: '', publish: true,
@@ -27,7 +29,7 @@ const { form, isEdit, submit, cancel, errors, loading } = useResourceForm(store,
 				<div class="flex flex-col gap-24 max-w-[48rem]">
 					<FormField name="title" label="Titel" v-model="form.title" :errors="errors" required />
 					<FormField name="text" label="Text" type="editor" v-model="form.text" :errors="errors" />
-					<MediaField v-if="['about', 'jobs'].includes(store.current?.key)" label="Bilder" profile="page" />
+					<MediaField v-if="['about', 'jobs'].includes(store.current?.key)" label="Bild" profile="page" :maxFiles="1" />
 				</div>
 			</Tab>
 			<Tab name="seo">

@@ -16,8 +16,6 @@ import BookIndex from '@/views/books/Index.vue'
 import BookForm from '@/views/books/Form.vue'
 import EntryIndex from '@/views/entries/Index.vue'
 import EntryForm from '@/views/entries/Form.vue'
-import SeoIndex from '@/views/settings/SeoIndex.vue'
-import SeoForm from '@/views/settings/SeoForm.vue'
 import CategoryIndex from '@/views/settings/Categories.vue'
 import CategoryForm from '@/views/settings/CategoryForm.vue'
 import TypeForm from '@/views/settings/TypeForm.vue'
@@ -53,8 +51,6 @@ const routes = [
 	...resource('categories', 'categories', CategoryIndex, CategoryForm, ['Kategorien', 'Neue Kategorie', 'Kategorie bearbeiten']),
 	{ path: '/dashboard/types/create', name: 'types.create', component: TypeForm, meta: { title: 'Neuer Typ' } },
 	{ path: '/dashboard/types/:id/edit', name: 'types.edit', component: TypeForm, meta: { title: 'Typ bearbeiten' } },
-	{ path: '/dashboard/seo', name: 'seo.index', component: SeoIndex, meta: { title: 'SEO' } },
-	{ path: '/dashboard/seo/:id/edit', name: 'seo.edit', component: SeoForm, meta: { title: 'SEO bearbeiten' } },
 	...resource('users', 'users', UserIndex, UserForm, ['Benutzer', 'Neuer Benutzer', 'Benutzer bearbeiten']),
 ]
 
