@@ -54,7 +54,6 @@ const tabs = computed(() => [
 				<MediaField label="Projektdokumentation (PDF)" collection="files" profile="document" />
 			</Tab>
 			<Tab name="grid">
-				<p class="text-xs text-gray-400 dark:text-warm-500 mb-16">Neu hochgeladene Bilder sind nach dem Speichern verfügbar. Änderungen am Raster werden sofort gespeichert.</p>
 				<GridEditor v-if="uuid" context="project" :owner="uuid" />
 			</Tab>
 		</Tabs>
