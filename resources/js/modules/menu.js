@@ -17,6 +17,7 @@ export function initMenu(root = document) {
 	// only a top-level list drops its initial "current" state.
 	const close = (ul) => {
 		ul.removeAttribute('data-open');
+		ul.previousElementSibling?.matches('[data-submenu-button]') && ul.previousElementSibling.setAttribute('aria-expanded', 'false');
 		if (ul.previousElementSibling?.hasAttribute('data-submenu-parent')) ul.removeAttribute('data-current');
 	};
 	const closeWithin = (el) => el.querySelectorAll('ul').forEach(close);
@@ -90,8 +91,10 @@ export function initMenu(root = document) {
 			toggleMenu(false);
 			button?.focus();
 		} else if (desktop.matches) {
+			const openParent = nav.querySelector('[data-submenu-parent][aria-expanded="true"]');
 			nav.querySelectorAll('ul[data-open]').forEach(close);
 			resetHeight();
+			openParent?.focus();
 		}
 	});
 }

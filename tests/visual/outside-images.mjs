@@ -14,6 +14,9 @@ const b = await chromium.launch();
 for (const w of vps.map(Number)) {
   const p = await b.newPage({ ignoreHTTPSErrors: true, viewport: { width: w, height: 900 } });
   await p.goto(sites.act + path); await p.waitForLoadState('networkidle');
+  // Load lazy images first, so every image box has its real size.
+  await p.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 600) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } scrollTo(0, 0); });
+  await p.waitForLoadState('networkidle');
   const rects = await p.evaluate(() => [...document.querySelectorAll('main img, main video, [data-slideshow]')].map(e => { const r = e.getBoundingClientRect(); return [r.left, r.top + scrollY, r.right, r.bottom + scrollY]; }));
   const d = PNG.sync.read(fs.readFileSync(`tests/visual/output/${page}/${w}-diff.png`));
   let inside = 0, outside = 0; const out = [];

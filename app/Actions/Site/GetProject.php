@@ -39,7 +39,7 @@ class GetProject
 		return $project->gridRows()
 			->published()
 			->inArea('main')
-			->with('items.media')
+			->with('items.media.mediable')
 			->get()
 			->map(fn (GridRow $row) => ['layout' => $row->layout, 'columns' => $grid->fill($row->layout, $row->items)]);
 	}

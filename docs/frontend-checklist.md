@@ -51,7 +51,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 ## 3. Shared pieces
 
 - ☑ **One grid for both contexts**, driven by `config/grids.php` (`GridContext::fill()`): `x-site.grid.project` (flex stacks, layout ratios) and `x-site.grid.home` (ratio boxes), with `x-site.grid.media`, `x-site.news` and `x-site.caption`.
-- ◐ Images through the Glide pipeline (`/img/...`) at the exact legacy sizes (`Media::imageUrl()`); alt texts from the media records. `srcset`/`sizes` and `loading="lazy"` are not in legacy and would change nothing visible: step 5 (performance), after parity.
+- ☑ Images through the Glide pipeline (`/img/...`) at the exact legacy sizes (`Media::imageUrl()`), as `<picture>` with AVIF/WebP; `loading="lazy"` + `decoding="async"` (eager at the top of a page and in the masonry); alt texts from the media records, else the project name. No `srcset`: the legacy sizes stay (parity), AVIF already halves the bytes.
 - ☑ Lightbox (replaces Fancybox): single image and gallery, custom close/prev/next buttons with an inactive state at the ends, caption. Vanilla module, no dependency.
 - ☑ Slideshow: Swiper fade (4.5 s, 1.5 s, loop). Swiper is already a dependency and works without jQuery. A video slide pauses autoplay until it ends.
 - ☑ Toggles: one `modules/toggle.js` for Impressum/Datenschutz, book info, team CV (the masonry re-layouts on `toggle:change`) and project info (`data-toggle="open"`, closes on outside click).
@@ -72,13 +72,13 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 
 ## 6. Accessibility
 
-- ☐ Semantic landmarks and headings; buttons instead of `href="javascript:;"` (styled identically); `aria-expanded` on toggles and menus; focus states; menu usable with the keyboard; Escape closes the menu and lightbox.
+- ☑ Semantic landmarks and headings; buttons instead of `href="javascript:;"` (styled identically); `aria-expanded` on toggles and menus; focus states; menu usable with the keyboard; Escape closes the menu and lightbox.
 
 ## 7. Tests
 
-- ☐ Feature test for every public route (status + key content).
+- ☑ Feature test for every public route (status + key content).
 - ☑ Redirect test (5).
-- ☐ Visual report: all pages × all viewports (+ states) in `tests/visual/output/report.md`, remaining differences listed in `docs/progress.md`.
+- ☑ Visual report: all pages × all viewports (+ states) in `tests/visual/output/report.md`, remaining differences listed in `docs/progress.md`. Accessibility: `node tests/visual/a11y.mjs` (axe-core).
 
 ## Build order
 
@@ -93,6 +93,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 - The Datenschutz text is hard-coded in the view and describes Google Analytics, which the site doesn't use.
 - "Werkliste" menu item not active on its sub-views (1.7).
 - The "Zur Startseite" link on the error pages has no style (browser blue).
+- Links in running text (e.g. the photographer credits in a project's info) differ from the text only by colour until hovered (axe: link-in-text-block, WCAG 1.4.1).
 - Werkliste PDFs: date and title lines positioned off the page (never visible); the address footer is on page 1 only.
 - `/werkliste` and `/werkliste/status` show the same page (handled with a canonical tag).
 - **Not kept:** the legacy Werkliste sorts same-year projects by the raw JSON of the name (`{"de": "…"}`), so escaped umlauts and JSON spacing decide the order. The rework sorts by name (see `docs/progress.md`, step 2b).

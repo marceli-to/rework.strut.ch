@@ -68,6 +68,15 @@ class Media extends Model
 	}
 
 	/**
+	 * Alt text: the one from the admin, else the caption, else the owner's
+	 * name (project: "Name, Ort"), so no image is left without one.
+	 */
+	public function altText(?string $fallback = null): string
+	{
+		return $this->alt ?: $this->caption ?: $fallback ?: ($this->mediable instanceof Project ? $this->mediable->full_title : config('app.name'));
+	}
+
+	/**
 	 * Public URL of the original file.
 	 */
 	public function url(): string

@@ -31,7 +31,7 @@
                     <source src="{{ $media->url() }}">
                   </video>
                 @else
-                  <x-site.image :$media size="lg" width="1398" height="932" :alt="$media->alt ?: $media->caption" class="block w-full h-full object-cover" />
+                  <x-site.image :$media size="lg" width="1398" height="932" alt="" class="block w-full h-full object-cover" />
                 @endif
               </figure>
             </a>

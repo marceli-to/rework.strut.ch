@@ -329,3 +329,21 @@ Client decisions: `<picture>` markup (not Accept-header negotiation); AVIF + Web
 - Legacy detail kept: the "Zur Startseite" link has no style, so it shows in the browser's default link colour; reproduced with `color: revert`, listed for the later round.
 - `compare.js` now accepts a path per site (`{ ref, act }`); new page `error-404` (legacy `/404` vs an unknown URL). **0.000 % at all 17 viewports.**
 - Tests: `tests/Feature/Site/ErrorPageTest.php` (404 and 500).
+
+## 2026-09-28 — Phase 2, step 5e: accessibility, lazy loading, full report
+
+- **Audit:** `node tests/visual/a11y.mjs [--width=375] [--best-practice]` (axe-core, WCAG 2.1 A/AA), all pages + 2 projects. Found and fixed, none of it visible:
+  - grid images without alt text (the caption fallback was empty) → `Media::altText()`: admin alt, else caption, else the project name; the lightbox links get their name from it;
+  - homepage and Werkliste without `<h1>` → visually hidden `<h1>`;
+  - heading levels skipped (book titles, next-project teaser h3 → h2; same look);
+  - homepage images repeated their caption as alt text → `alt=""` there (the caption names the link).
+  - Remaining, kept as legacy design: running-text links distinguishable only by colour (listed for the later round).
+- **Keyboard** (checked in the browser): visible focus ring everywhere; menu button, dropdowns and toggles with Enter; Escape closes the mobile menu (focus back on the button), an open dropdown (focus back on its section) and the project info panel (new); the lightbox is a modal dialog. Fixed: closing dropdowns (Escape, outside click) left `aria-expanded="true"` on their buttons.
+- **Lazy loading:** images `loading="lazy"` + `decoding="async"`; eager for the first slide, the first project grid row, and in the masonry (it lays out once all its images have loaded, and lazy images below the fold would never load). Homepage: 13 of 52 images at load, the rest while scrolling.
+- `outside-images.mjs` now scrolls first, so lazy images have their real boxes when measured.
+- **Full visual report** (`compare.js`, all pages × 17 viewports + all states, 454 comparisons, 7 minutes): no height difference anywhere. Differences:
+  - Werkliste views: the approved alphabetical order (0.6–2.5 %).
+  - Pages with photos (homepage, projects, Bücher): photo re-encoding only; 0 differing pixels outside images (homepage 375/1440/2560, projects 1/14/60, Bücher).
+  - Über uns 1199 CV open: the 1 px scroll artefact of the test click (step 3).
+  - 404 page: status 200 (legacy `/404`) vs 404 (rework), visually 0.000 %.
+- Tests: 209 passing.

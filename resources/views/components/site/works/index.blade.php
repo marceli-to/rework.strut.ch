@@ -5,6 +5,7 @@
 @endphp
 <x-layout.site title="Werkliste" :$page :canonical="route('page.works')">
   <section>
+    <h1 class="sr-only">Werkliste</h1>
     <nav class="sm:grid sm:grid-cols-[repeat(2,1fr)] sm:gap-24 md:grid-cols-[2fr_1fr]" aria-label="Werkliste">
       <div class="mb-8 sm:mb-0">
         <ul>

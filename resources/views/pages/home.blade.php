@@ -1,6 +1,7 @@
 {{-- Homepage: highlight slideshow (modules/slideshow.js) and the grid. --}}
 <x-layout.site home title="Home" :$page>
   <section>
+    <h1 class="sr-only">{{ config('app.name') }}</h1>
     @if ($slides->isNotEmpty())
       <figure class="relative mb-24" data-slideshow>
         <div class="swiper overflow-hidden aspect-[16/10]">
@@ -15,7 +16,7 @@
                       <source src="{{ $slide->media->url() }}">
                     </video>
                   @else
-                    <x-site.image :media="$slide->media" size="lg" width="1600" height="1066" :alt="$project->name . ', ' . $project->location" class="block w-full h-full object-cover" />
+                    <x-site.image :media="$slide->media" size="lg" width="1600" height="1066" alt="" :loading="$loop->first ? 'eager' : 'lazy'" class="block w-full h-full object-cover" />
                   @endif
                 </a>
               </div>

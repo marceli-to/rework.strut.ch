@@ -29,7 +29,7 @@
           </header>
           @if ($image = $member->images->first())
             <figure class="block mt-4 mb-8 max-w-[40%] md:max-w-[50%]">
-              <x-site.image :media="$image" size="sm" width="432" height="500" :alt="$image->alt ?: config('app.name') . ' - ' . $member->firstname . ' ' . $member->lastname" class="block w-full h-auto" />
+              <x-site.image :media="$image" size="sm" width="432" height="500" loading="eager" :alt="$image->alt ?: config('app.name') . ' - ' . $member->firstname . ' ' . $member->lastname" class="block w-full h-auto" />
             </figure>
           @endif
           <div>

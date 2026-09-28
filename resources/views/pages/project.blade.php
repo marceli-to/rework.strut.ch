@@ -31,7 +31,7 @@
       <h1 class="text-xl leading-none! sm:text-md md:text-4xl mb-12 md:mb-24">{{ $project->name }}, {{ $project->location }}</h1>
       <div class="mb-24 md:mb-0">
         @foreach ($rows as $row)
-          <x-site.grid.project :columns="$row['columns']" />
+          <x-site.grid.project :columns="$row['columns']" :eager="$loop->first" />
         @endforeach
       </div>
       <div
@@ -54,7 +54,7 @@
           <x-site.article :large="false" class="pt-4!">
             <a href="{{ $next->url }}" class="text-green no-underline" title="Nächstes Projekt">
               <span>Nächstes Projekt</span>
-              <h3 class="mt-4 text-black text-xl leading-[1.21] sm:text-md">{{ $next->name }}, {{ $next->location }}</h3>
+              <h2 class="mt-4 text-black text-xl leading-[1.21] sm:text-md">{{ $next->name }}, {{ $next->location }}</h2>
               @if ($image = $next->images->first())
                 <figure class="block mt-4">
                   <x-site.image :media="$image" size="sm" width="900" height="500" :alt="$next->name . ', ' . $next->location" class="block w-full h-auto max-w-[70%]" />
