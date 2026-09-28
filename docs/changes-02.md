@@ -4,3 +4,4 @@ Source: annotated screenshot of Startseite → Raster. Status per item: ☐ open
 
 ## F. Grid (Raster), projects and homepage
 - ☑ **F5** Existing grid rows are collapsed when the editor opens (both contexts, all areas). Rows added afterwards stay open so they can be filled right away; "Alle ausklappen" opens them all.
+- ☑ **F6** More breathing room in the row header: height 40 → 52 px (`h-52`).
