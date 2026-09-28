@@ -9,7 +9,7 @@
             <h3>{{ $book->title }}</h3>
             @if ($image = $book->images->first())
               <figure class="block my-8 md:my-16">
-                <img src="{{ $image->imageUrl('sm') }}" width="600" height="400" alt="{{ $image->alt ?: $book->title }}" class="block w-full h-auto">
+                <x-site.image :media="$image" size="sm" width="600" height="400" :alt="$image->alt ?: $book->title" class="block w-full h-auto" />
               </figure>
             @endif
             <div class="text-sm leading-[1.13] sm:text-xs sm:leading-[1.2] md:text-2xl">

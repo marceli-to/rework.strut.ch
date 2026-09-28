@@ -75,6 +75,12 @@ class Media extends Model
 	}
 
 	/**
+	 * Quality per modern format, matching the JPEG default (q90) by SSIM:
+	 * WebP q80 ≈ 30 % and AVIF q70 ≈ 34 % smaller at the same fidelity.
+	 */
+	public const FORMAT_QUALITY = ['webp' => 80, 'avif' => 70];
+
+	/**
 	 * Image sizes of the legacy site (MediaService), as [max width, max height].
 	 */
 	public const SIZES = [
@@ -86,22 +92,43 @@ class Media extends Model
 
 	/**
 	 * Public Glide URL for a size of SIZES (or explicit Glide params), with the
-	 * crop from the admin applied.
+	 * crop from the admin applied; `format` = avif|webp, else the original format.
 	 */
-	public function imageUrl(string|array $size = []): string
+	public function imageUrl(string|array $size = [], ?string $format = null): string
+	{
+		$params = $this->imageParams($size, $format);
+
+		return '/img/' . $this->imagePath() . ($params ? '?' . http_build_query($params) : '');
+	}
+
+	/**
+	 * Path below storage/app/public, as Glide sees it.
+	 */
+	public function imagePath(): string
+	{
+		return 'uploads/' . $this->file;
+	}
+
+	/**
+	 * Glide params behind imageUrl() (also used to pre-generate the cache).
+	 */
+	public function imageParams(string|array $size = [], ?string $format = null): array
 	{
 		$crop = $this->crop && isset($this->crop['w'], $this->crop['h'], $this->crop['x'], $this->crop['y']) ? $this->crop : null;
-		$params = $size;
-
-		if (is_string($size)) {
-			$params = $this->legacySize(self::SIZES[$size], $crop['w'] ?? $this->width, $crop['h'] ?? $this->height);
-		}
+		$params = is_string($size)
+			? $this->legacySize(self::SIZES[$size], $crop['w'] ?? $this->width, $crop['h'] ?? $this->height)
+			: $size;
 
 		if ($crop) {
 			$params['crop'] = implode(',', [$crop['w'], $crop['h'], $crop['x'], $crop['y']]);
 		}
 
-		return '/img/uploads/' . $this->file . ($params ? '?' . http_build_query($params) : '');
+		if ($format) {
+			$params['fm'] = $format;
+			$params['q'] = self::FORMAT_QUALITY[$format] ?? 90;
+		}
+
+		return $params;
 	}
 
 	/**

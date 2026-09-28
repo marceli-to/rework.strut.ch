@@ -57,7 +57,7 @@
               <h3 class="mt-4 text-black text-xl leading-[1.21] sm:text-md">{{ $next->name }}, {{ $next->location }}</h3>
               @if ($image = $next->images->first())
                 <figure class="block mt-4">
-                  <img src="{{ $image->imageUrl('sm') }}" width="900" height="500" alt="{{ $next->name }}, {{ $next->location }}" class="block w-full h-auto max-w-[70%]">
+                  <x-site.image :media="$image" size="sm" width="900" height="500" :alt="$next->name . ', ' . $next->location" class="block w-full h-auto max-w-[70%]" />
                 </figure>
               @endif
             </a>

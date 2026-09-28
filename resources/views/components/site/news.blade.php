@@ -19,7 +19,7 @@
     @endif
     @if ($image = $news->images->first())
       <figure class="my-16 md:my-24">
-        <img src="{{ $image->imageUrl('xs') }}" width="500" height="350" alt="{{ $image->alt ?: $news->title }}" class="block w-full h-auto max-w-[70%] mx-auto">
+        <x-site.image :media="$image" size="xs" width="500" height="350" :alt="$image->alt ?: $news->title" class="block w-full h-auto max-w-[70%] mx-auto" />
       </figure>
     @endif
     @if ($news->link_url && $news->link_label)

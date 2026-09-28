@@ -10,12 +10,13 @@
     <source src="{{ $media->url() }}">
   </video>
 @elseif ($media)
-  <a href="{{ $media->imageUrl('lg') }}" data-lightbox="gallery" data-caption="{{ $media->caption }}">
-    <img
-      src="{{ $media->imageUrl($direct && $size === 'lg' ? 'lg' : 'md') }}"
+  <x-site.zoom-link :$media mode="gallery" data-caption="{{ $media->caption }}">
+    <x-site.image
+      :$media
+      :size="$direct && $size === 'lg' ? 'lg' : 'md'"
       width="687"
-      height="{{ $size === 'lg' ? 940 : 458 }}"
-      alt="{{ $media->alt ?: $media->caption }}"
-      class="block w-full h-full object-cover">
-  </a>
+      :height="$size === 'lg' ? 940 : 458"
+      :alt="$media->alt ?: $media->caption"
+      class="block w-full h-full object-cover" />
+  </x-site.zoom-link>
 @endif

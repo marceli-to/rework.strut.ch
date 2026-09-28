@@ -273,3 +273,15 @@ Client decisions: alphabetical Werkliste order approved (see step 2b); custom li
 - **All projects** (`--all-projects`, 47 projects × 375/600/900/1440): layout identical except project 11 below 900 px (16 px shorter). The legacy description ends in an empty `<p></p>`, so its last real paragraph keeps a 16 px bottom margin; the import cleaned the empty paragraph out of the HTML. Content artefact, left as is.
 - **Data note:** the highlight row had 7 slides, legacy 6. The extra one (HB-Therm, grid item 1526, added in the admin on 2026-09-27 17:54) was removed on the client's request; the image itself stays with its project.
 - Tests: `tests/Feature/Site/ProjectTest.php`, `tests/Feature/Site/HomeTest.php`.
+
+## 2026-09-28 — Images as AVIF/WebP (client request, between steps 4 and 5)
+
+Client decisions: `<picture>` markup (not Accept-header negotiation); AVIF + WebP + original.
+
+- `x-site.image` renders every upload image as `<picture class="contents">` with `<source type="image/avif">`, `<source type="image/webp">` and the original-format `<img>` (unchanged attributes). `display: contents` keeps the layout exactly as before. Only formats the server's Imagick can write are offered (`ImageSupport::modernFormats()`).
+- `x-site.zoom-link` for lightbox links: the href stays the original format (works without JS); `data-avif` / `data-webp` feed the `<picture>` inside the lightbox slide, so the browser picks the format there too.
+- `Media::imageUrl($size, $format)` / `imageParams()`: `fm` plus a per-format quality. Chosen by SSIM against the uncompressed resize, to match today's JPEG q90 (SSIM 0.948): **WebP q80** (0.946, −30 % bytes) and **AVIF q70** (0.951, −34 %). Lower AVIF settings save more but visibly soften the photos (q55: SSIM 0.90).
+- `php artisan images:warm [--format=…]` pre-generates all variants the views request (per owner type: project sm/md/lg, page md/lg, entry/news xs, book/team sm) × formats: 4,125 variants for 487 images, ~7 minutes locally, 0 failures. `App\Support\Glide` is the shared server factory. Deployment guide updated.
+- **Result (Chrome, Resource Timing, whole page scrolled):** image bytes legacy → new: homepage 15.44 → 7.64 MB, project 1 2.16 → 0.92 MB, project 2 2.79 → 1.22 MB, Über uns 0.52 → 0.28 MB, Bücher 0.37 → 0.35 MB (tiny covers). Chrome loads AVIF for the page and the lightbox.
+- **Visual:** all image pages re-compared (12 pages × 4 widths): page sizes identical; diff pixels only inside photos (0 outside, checked on home, project 60, Bücher).
+- Tests: `tests/Feature/Site/ImageFormatsTest.php` (params, `<picture>` markup and lightbox data, cache warming).

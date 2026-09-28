@@ -30,7 +30,11 @@
     data-lightbox-close></button>
   <template data-lightbox-slide>
     <figure class="absolute m-0 transition-opacity duration-366 origin-top-left">
-      <img src="" alt="" class="block w-full h-full">
+      <picture class="contents">
+        <source type="image/avif" data-format="avif">
+        <source type="image/webp" data-format="webp">
+        <img alt="" class="block w-full h-full">
+      </picture>
       <figcaption class="absolute left-0 right-0 -bottom-24 pl-10 text-left pointer-events-none sm:pl-0 md:-bottom-32"></figcaption>
     </figure>
   </template>

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\Glide;
 use App\Support\ImageSupport;
 use App\Support\OgImage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use League\Glide\ServerFactory;
 use League\Glide\Server;
 
 class ImageController extends Controller
@@ -15,11 +15,7 @@ class ImageController extends Controller
 
 	public function __construct()
 	{
-		$this->server = ServerFactory::create([
-			'source' => storage_path('app/public'),
-			'cache' => storage_path('app/.glide-cache'),
-			'driver' => 'imagick',
-		]);
+		$this->server = Glide::server();
 	}
 
 	public function show(Request $request, string $path): Response

@@ -7,7 +7,7 @@ Everything the server needs besides the code. Status markers: ☐ to do on the s
 | | |
 |---|---|
 | PHP | **8.4** (composer requires ^8.3) |
-| PHP extensions | `imagick` (**required**: Glide image driver, upload normalization, AVIF/WebP), `pdo_mysql`, `mbstring`, `fileinfo`, `intl`, `exif`, `openssl`, `tokenizer`, `xml`, `ctype`, `curl`, `zip` |
+| PHP extensions | `imagick` (**required**: Glide image driver, upload normalization; its ImageMagick must be able to write **AVIF and WebP**, check with `php -r 'print_r(array_intersect(["AVIF","WEBP"], Imagick::queryFormats()));'` — a missing format is simply not offered), `pdo_mysql`, `mbstring`, `fileinfo`, `intl`, `exif`, `openssl`, `tokenizer`, `xml`, `ctype`, `curl`, `zip` |
 | Database | MySQL 5.7+ / 8 or MariaDB 10.6+, `utf8mb4` |
 | Web server | nginx or Apache; document root = `public/` |
 | Node | **not needed on the server**: built assets (`public/build`) are committed |
@@ -89,6 +89,8 @@ The content comes from the legacy strut.ch database and its media folder. There 
 2. Run `php artisan strut:import --fresh`, then `php artisan strut:verify`.
 3. Clear `LEGACY_*` afterwards.
 
+**After either option:** `php artisan images:warm` ☐ pre-generates every public image variant (legacy sizes × JPEG/PNG, WebP, AVIF; about 4,100 files, ~7 minutes locally). Without it, the first visitor of each image waits for its encode. It can run again at any time (existing variants are skipped).
+
 Notes:
 - The import is idempotent. `--dry-run` shows the report without writing anything.
 - Legacy source files are only ever copied, never changed.
@@ -103,7 +105,7 @@ php artisan migrate --force
 php artisan optimize
 ```
 
-After changing image processing (sizes, crops of existing media): `php artisan images:clear` empties the image cache, which is then rebuilt on demand.
+After changing image processing (sizes, qualities, crops of existing media): `php artisan images:clear`, then `php artisan images:warm`.
 
 ## 7. Go-live checklist
 

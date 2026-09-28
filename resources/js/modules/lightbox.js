@@ -12,14 +12,6 @@ const DURATION = 366;
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
-function load(src) {
-	return new Promise((resolve) => {
-		const img = new Image();
-		img.onload = img.onerror = () => resolve(img);
-		img.src = src;
-	});
-}
-
 // fancyBox 3 "getFitPos" for an image slide.
 function fit(natural, viewport) {
 	const padding = viewport.height <= 576 ? 6 : 44;
@@ -63,14 +55,26 @@ export function initLightbox(root = document) {
 		return pos;
 	};
 
+	// The slide's <picture> gets the AVIF/WebP versions from the link
+	// (data-avif, data-webp), so the browser picks the best format it
+	// supports; the href (original format) is the fallback. Inserted hidden
+	// into the stage so the image loads, then measured.
 	const createSlide = async (link) => {
 		const figure = template.content.firstElementChild.cloneNode(true);
 		const img = figure.querySelector('img');
-		const loaded = await load(link.href);
-		figure._natural = { width: loaded.naturalWidth || 1, height: loaded.naturalHeight || 1 };
-		img.src = link.href;
+		figure.querySelectorAll('source').forEach((source) => {
+			const src = link.dataset[source.dataset.format];
+			if (src) source.srcset = src;
+			else source.remove();
+		});
 		img.alt = thumbnail(link)?.alt ?? '';
 		figure.querySelector('figcaption').textContent = link.dataset.caption ?? '';
+		figure.style.visibility = 'hidden';
+		stage.append(figure);
+		img.src = link.href;
+		await img.decode().catch(() => {});
+		figure._natural = { width: img.naturalWidth || 1, height: img.naturalHeight || 1 };
+		figure.style.visibility = '';
 		return figure;
 	};
 
@@ -96,8 +100,8 @@ export function initLightbox(root = document) {
 		group = mode === 'gallery' ? [...document.querySelectorAll('[data-lightbox="gallery"]')] : [link];
 		index = group.indexOf(link);
 
+		stage.replaceChildren();
 		slide = await createSlide(link);
-		stage.replaceChildren(slide);
 		updateArrows();
 		dialog.showModal();
 		place(slide);
@@ -134,7 +138,6 @@ export function initLightbox(root = document) {
 		updateArrows();
 		const incoming = await createSlide(group[index]);
 		incoming.style.opacity = '0';
-		stage.append(incoming);
 		place(incoming);
 		await nextFrame();
 		incoming.style.opacity = '1';

@@ -15,7 +15,7 @@
                       <source src="{{ $slide->media->url() }}">
                     </video>
                   @else
-                    <img src="{{ $slide->media->imageUrl('lg') }}" width="1600" height="1066" alt="{{ $project->name }}, {{ $project->location }}" class="block w-full h-full object-cover">
+                    <x-site.image :media="$slide->media" size="lg" width="1600" height="1066" :alt="$project->name . ', ' . $project->location" class="block w-full h-full object-cover" />
                   @endif
                 </a>
               </div>
