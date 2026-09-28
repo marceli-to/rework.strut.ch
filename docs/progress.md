@@ -357,3 +357,7 @@ Client decisions:
 - **No focus ring** (client did not like the blue outline): `:focus { outline-hidden }` in `base.css`. The outline is transparent, so Windows high-contrast mode still shows it. Note: keyboard users no longer see where they are on the page (WCAG 2.4.7); a subtle keyboard-only indicator in the site's own style can be added later if wanted.
 - **Lightbox, next/previous image:** the current image stays until the next one has loaded, then goes at once, and the next one fades in on white (366 ms). While checking this, a bug turned up: the new image was inserted fully visible and its fade-in was cancelled right away, so all that showed was the old image fading out on top of it. That is what looked odd. Fixed; the opacity now runs 0 → 1 as intended.
 - PDFs reviewed by the client: approved ("work perfectly"). Speed: the Werkliste PDFs load fonts and logo from local files instead of fetching them over HTTP (legacy had remote loading on), and the merged category PDFs are cached after the first request.
+
+## 2026-09-28 — Checkpoint 2 approved
+
+The client approved Phase 2 ("rest looks super"). All phases of the brief are complete. Next steps are go-live (`docs/deployment.md`, section 7 and the ☐ items) and, later, the change round listed under "Legacy behaviour kept on purpose" in `docs/frontend-checklist.md`.
