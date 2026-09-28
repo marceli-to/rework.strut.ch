@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\Site\EntryController;
+use App\Http\Controllers\Site\WorksController;
 use App\Models\Project;
 
 Route::get('/img/{path}', [ImageController::class, 'show'])->where('path', '.*');
@@ -11,10 +12,14 @@ Route::get('/og-image/{file}', [ImageController::class, 'og'])->where('file', '.
 // Public site. Pages still on 'pages.shell' are not built yet (Phase 2).
 Route::view('/', 'pages.shell')->name('page.home');
 Route::get('/bauten/{project:id}/{slug?}', fn (Project $project) => view('pages.shell'))->whereNumber('project')->name('page.project');
-Route::view('/werkliste', 'pages.shell')->name('page.works');
-Route::view('/werkliste/status', 'pages.shell')->name('page.works.status');
-Route::view('/werkliste/jahr', 'pages.shell')->name('page.works.year');
-Route::view('/werkliste/typ', 'pages.shell')->name('page.works.type');
+Route::get('/werkliste', [WorksController::class, 'status'])->name('page.works');
+Route::get('/werkliste/status', [WorksController::class, 'status'])->name('page.works.status');
+Route::get('/werkliste/jahr', [WorksController::class, 'year'])->name('page.works.year');
+Route::get('/werkliste/typ', [WorksController::class, 'type'])->name('page.works.type');
+// Werkliste PDFs (legacy URLs), built in step 5.
+Route::get('/werkliste/pdf/{variant}', fn () => abort(404))
+	->whereIn('variant', ['gesamt', 'wohnen', 'gewerbe', 'oeffentlich', 'wettbewerb', 'status', 'jahr', 'typ'])
+	->name('pdf.works');
 Route::get('/presse', EntryController::class)->defaults('type', 'press')->name('page.press');
 Route::view('/buecher', 'pages.shell')->name('page.books');
 Route::view('/downloads', 'pages.shell')->name('page.downloads');

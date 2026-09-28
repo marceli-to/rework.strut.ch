@@ -1,0 +1,2 @@
+{{-- Green link with a document icon; the label is underlined while hovered itself (legacy .icon-file). --}}
+<a {{ $attributes->class('block pl-18 text-green bg-no-repeat bg-[url(/img/icons/doc-sm-green.svg)] bg-size-[10px_auto] bg-top-left md:pl-25 md:bg-[url(/img/icons/doc-lg-green.svg)] md:bg-size-[14px_auto] md:bg-position-[left_top_2px]') }}><span class="inline bg-repeat-x bg-size-[100%_1px] bg-position-[0_18px] md:bg-position-[0_24px] hover:bg-[linear-gradient(currentColor,currentColor)]">{{ $slot }}</span></a>

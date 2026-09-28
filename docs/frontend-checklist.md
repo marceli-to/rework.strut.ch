@@ -34,9 +34,9 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 |---|---|---|---|---|
 | 2.1 | `/` | Highlight slideshow + homepage grid (3fr, 2fr-1fr, 1fr-2fr in use; all 11 layouts supported) with image, video and news tiles, caption hover overlay | Slideshow is shuffled per request (masked in the diff, checked by hand) | ☐ |
 | 2.2 | `/bauten/{id}/{slug?}` | Type heading, prev/next browse with hover labels, title, "Info" toggle for description + info + PDF downloads, project grid (7 layouts) with lightbox, "Nächstes Projekt" teaser | Any slug → 301 to the canonical slug. Projects without a detail are still reachable | ☐ |
-| 2.3 | `/werkliste`, `/werkliste/status` | Tabs Status/Jahr/Typ + PDF link; columns Ausgeführt / In Planung + Studie / Wettbewerb (1. Preis, 2. Preis, Andere) | Items link only when the project has a detail; preview image = `is_preview_status` | ☐ |
-| 2.4 | `/werkliste/jahr` | Grouped by year, in columns | Preview = `is_preview_year` | ☐ |
-| 2.5 | `/werkliste/typ` | Category → types (headings only when `show_types`) | Preview = `is_preview_type` | ☐ |
+| 2.3 | `/werkliste`, `/werkliste/status` | Tabs Status/Jahr/Typ + PDF link; columns Ausgeführt / In Planung + Studie / Wettbewerb (1. Preis, 2. Preis, Andere) | Items link only when the project has a detail. No preview images (Q5) | ☑ |
+| 2.4 | `/werkliste/jahr` | Grouped by year, in columns | | ☑ |
+| 2.5 | `/werkliste/typ` | Category → types (headings only when `show_types`) | | ☑ |
 | 2.6 | `/presse` | Year groups in columns: title (link to file or URL), description + project reference, small image | Shared "entries list" component with 2.10 and 2.11 | ☑ |
 | 2.7 | `/buecher` | Masonry, 3 columns ≥ 600 px: title, image, description, "Info" toggle, order link (mailto with subject/body, or external URL) | Masonry → vanilla `modules/masonry.js` (approved) | ☐ |
 | 2.8 | `/downloads` | Projektdokumentationen per category ("Alle …" merged PDF + per project), Werkliste PDFs (8), Jobs PDFs or "Zur Zeit sind alle unsere Stellen besetzt." | | ☐ |
@@ -93,3 +93,4 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 - The Datenschutz text is hard-coded in the view and describes Google Analytics, which the site doesn't use.
 - "Werkliste" menu item not active on its sub-views (1.7).
 - `/werkliste` and `/werkliste/status` show the same page (handled with a canonical tag).
+- **Not kept:** the legacy Werkliste sorts same-year projects by the raw JSON of the name (`{"de": "…"}`), so escaped umlauts and JSON spacing decide the order. The rework sorts by name (see `docs/progress.md`, step 2b).

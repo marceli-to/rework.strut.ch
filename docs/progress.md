@@ -199,3 +199,14 @@ Result unchanged: 0.000 % on all shell comparisons (319; the 136 errors are page
 - The title links to the PDF if there is one, else to the URL (as legacy). Images: Glide `?w=500` (legacy "xsmall" = 500 px wide), admin crop applied (`Media::imageUrl()`); files: `Media::url()`.
 - **Visual result: 0.000 % at all 17 viewports on all three pages** (51 comparisons). Link hover state checked separately at 375 and 1440 px: 0 px difference.
 - Tests: `tests/Feature/Site/EntriesTest.php` (column split, published/type filter per page, PDF-before-URL link, project reference).
+
+## 2026-09-28 — Phase 2, step 2b: Werkliste (Status, Jahr, Typ)
+
+- `Site\WorksController` (status / year / type) → `GetWorks` action → `pages.works.{status,year,type}` inside `x-site.works` (tabs + PDF link). `/werkliste` and `/werkliste/status` render the same view, as in legacy.
+- Orders as legacy: all published projects by year desc, then name. Status: Ausgeführt | In Planung + Studie | Wettbewerb (1. Preis, 2. Preis, Andere; each ordered by status, then year desc). Year: three columns of whole years (`App\Support\Columns`, now also used by `GetEntries`). Type: published categories → published types → projects, empty ones left out.
+- New shared components: `x-site.article` (rule + larger text, legacy `.content article`), `x-site.file-link` (document icon link). `x-site.card` / `x-site.card.heading` got a `dense` variant for the Werkliste. No preview images (Q5).
+- PDF links point to the legacy URLs `/werkliste/pdf/{status|jahr|typ}` (route `pdf.works`, returns 404 until step 5).
+- **Visual result:** layout 0.000 % at all 17 viewports on all three views, verified by temporarily sorting with the legacy order (51 comparisons, 0 differences). Tab and PDF-link hover states: 0 px difference.
+- **Explained difference (order):** legacy sorts by the raw JSON `name` column, e.g. `{"de":"Dürrenrain"}` sorts after `{"de": "Schollenholzstrasse…"}` and `Ärgete` after `Sky-Frame`. That is a storage artefact, not an intended order, so the rework sorts alphabetically by name. It moves a few projects within the same year (2018, 2015, 2014, 2008, 2005, 1997 and the related status/type lists), so the plain comparison shows 0.1–2.5 % on the Werkliste pages.
+- Legacy details kept: the PDF link label is underlined only while the pointer is on the label itself (`.icon-file:hover span:hover`); the year headings keep the 24 px top margin from 900 px (the legacy `> div + h2` rule outranks the Werkliste override).
+- Tests: `tests/Feature/Site/WorksTest.php` (status/competition grouping and order, year columns, empty types/categories, active tab + PDF link + detail links per view).
