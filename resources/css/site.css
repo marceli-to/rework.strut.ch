@@ -12,9 +12,9 @@
 /* Values from the legacy stylesheets (strut.ch, resources/sass/web/config). */
 @theme {
 	--breakpoint-*: initial;
-	--breakpoint-sm: 600px;
-	--breakpoint-md: 900px;
-	--breakpoint-lg: 1200px;
+	--breakpoint-sm: 37.5rem; /* 600px */
+	--breakpoint-md: 56.25rem; /* 900px */
+	--breakpoint-lg: 75rem; /* 1200px */
 
 	--font-*: initial;
 	--font-regular: 'basis-grotesque-regular-pro', Arial, Helvetica, sans-serif;
@@ -22,16 +22,16 @@
 
 	/* Every font size of the legacy site. Line heights are set where used. */
 	--text-*: initial;
-	--text-xs: 15px;
-	--text-sm: 17px;
-	--text-md: 19px;
-	--text-lg: 20px;
-	--text-xl: 21px;
-	--text-2xl: 22px;
-	--text-3xl: 24px;
-	--text-4xl: 31px;
-	--text-5xl: 38px;
-	--text-6xl: 51px;
+	--text-xs: 0.9375rem; /* 15px */
+	--text-sm: 1.0625rem; /* 17px */
+	--text-md: 1.1875rem; /* 19px */
+	--text-lg: 1.25rem; /* 20px */
+	--text-xl: 1.3125rem; /* 21px */
+	--text-2xl: 1.375rem; /* 22px */
+	--text-3xl: 1.5rem; /* 24px */
+	--text-4xl: 1.9375rem; /* 31px */
+	--text-5xl: 2.375rem; /* 38px */
+	--text-6xl: 3.1875rem; /* 51px */
 
 	--color-*: initial;
 	--color-black: #000000;
@@ -43,14 +43,14 @@
 	--color-scrollbar-track: #eeeeee;
 
 	/* Header: full and scrolled ("tiny") height, mobile and from md. */
-	--spacing-header: 90px;
-	--spacing-header-md: 170px;
-	--spacing-header-tiny: 45px;
-	--spacing-header-tiny-md: 70px;
+	--spacing-header: 5.625rem; /* 90px */
+	--spacing-header-md: 10.625rem; /* 170px */
+	--spacing-header-tiny: 2.8125rem; /* 45px */
+	--spacing-header-tiny-md: 4.375rem; /* 70px */
 
 	/* Page width: 434px below sm, full width from sm, 1400px from lg. */
-	--container-page-xs: 434px;
-	--container-page-lg: 1400px;
+	--container-page-xs: 27.125rem; /* 434px */
+	--container-page-lg: 87.5rem; /* 1400px */
 }
 
 /*
