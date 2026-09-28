@@ -65,7 +65,8 @@ export const pages = [
 		path: '/kontakt',
 		mask: { ref: ['#js-maps'], act: ['[data-map]'] },
 		states: [
-			{ name: 'impressum-open', ref: click('.contact__imprint .js-btn-toggle'), act: click('[data-toggle-target="impressum"]') },
+			{ name: 'impressum-open', ref: click('.contact__imprint .js-btn-toggle'), act: click('[aria-controls="impressum"]') },
+			{ name: 'datenschutz-open', ref: click('.contact__privacy .js-btn-toggle'), act: click('[aria-controls="datenschutz"]') },
 		],
 	},
 	{

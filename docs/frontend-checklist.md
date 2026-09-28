@@ -44,7 +44,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 | 2.10 | `/auszeichnungen` | Like 2.6 without project reference | | ☑ |
 | 2.11 | `/vortraege` | Like 2.10 | | ☑ |
 | 2.12 | `/jobs` | Job list (title, lead, info, PDF link) or the page text if there are no jobs; page images with lightbox (gallery if more than one) | Page 0 %; images marked `data-lightbox`, the lightbox module follows with `/ueber-uns` (step 3) | ◐ |
-| 2.13 | `/kontakt` | Contact text, "Impressum" toggle (imprint page), "Datenschutz" toggle (static text, kept 1:1), Google Map (styled, fixed coordinates) + "Auf Google Maps anzeigen" link | No key yet (F3). The map is masked in the diff | ☐ |
+| 2.13 | `/kontakt` | Contact text, "Impressum" toggle (imprint page), "Datenschutz" toggle (static text, kept 1:1), Google Map (styled, fixed coordinates) + "Auf Google Maps anzeigen" link | No key yet (F3). The map is masked in the diff | ☑ (map: without a key only the container, see step 2e) |
 | 2.14 | 404 | Error page in the site layout | 500 follows the same pattern | ☐ |
 | 2.15 | PDFs | `/werkliste/pdf/{8 variants}`, `/download/pdf/{id}/{slug}` (merged category PDFs) | Kept 1:1 (Q7); compared by content, not screenshot | ☐ |
 
@@ -54,9 +54,9 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 - ☐ Responsive images (`srcset`/`sizes`, `loading="lazy"`) through the existing Glide pipeline (`/img/...`); alt texts from the media records.
 - ☐ Lightbox (replaces Fancybox): single image and gallery, custom close/prev/next buttons with an inactive state at the ends, caption. Vanilla module, no dependency.
 - ☐ Slideshow: Swiper fade (4.5 s, 1.5 s, loop). Swiper is already a dependency and works without jQuery. A video slide pauses autoplay until it ends.
-- ☐ Toggles: one `modules/toggle.js` for Impressum/Datenschutz, project info (closes on outside click), book info and team CV (also re-layouts the masonry).
+- ◐ Toggles: one `modules/toggle.js` (done for Impressum/Datenschutz; still to wire: project info (closes on outside click), book info and team CV (also re-layouts the masonry).
 - ☐ Masonry: `modules/masonry.js`, shortest column first (ties go left), re-run on image load, resize and toggle. Stacked below 600 px.
-- ☐ Map: `modules/map.js`, Google Maps JS API, styles and coordinates from the legacy code, key from `GOOGLE_MAPS_KEY`; renders nothing without a key.
+- ◐ Map: `modules/map.js`, Google Maps JS API, styles and coordinates from the legacy code, key from `GOOGLE_MAPS_KEY`; renders nothing without a key.
 
 ## 4. SEO
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\Site\ContactController;
 use App\Http\Controllers\Site\DownloadsController;
 use App\Http\Controllers\Site\EntryController;
 use App\Http\Controllers\Site\JobsController;
@@ -27,7 +28,7 @@ Route::get('/download/pdf/{category:id}/{slug?}', fn () => abort(404))->whereNum
 Route::get('/presse', EntryController::class)->defaults('type', 'press')->name('page.press');
 Route::view('/buecher', 'pages.shell')->name('page.books');
 Route::get('/downloads', DownloadsController::class)->name('page.downloads');
-Route::view('/kontakt', 'pages.shell')->name('page.contact');
+Route::get('/kontakt', ContactController::class)->name('page.contact');
 Route::view('/ueber-uns', 'pages.shell')->name('page.about');
 Route::get('/jobs', JobsController::class)->name('page.jobs');
 Route::get('/auszeichnungen', EntryController::class)->defaults('type', 'award')->name('page.awards');

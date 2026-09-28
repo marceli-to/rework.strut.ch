@@ -230,3 +230,12 @@ Result unchanged: 0.000 % on all shell comparisons (319; the 136 errors are page
 - The lightbox itself (Fancybox replacement) is not built yet; without JS the image link opens the large image. It follows with `/ueber-uns` in step 3.
 - Legacy job 1's PDF is missing in the legacy storage, so the import has no file for it; the rework shows no download link for that job (legacy would link to a missing file).
 - Tests: `tests/Feature/Site/JobsTest.php`.
+
+## 2026-09-28 — Phase 2, step 2e: Kontakt
+
+- `Site\ContactController` → `pages.contact`: contact page text, "Impressum" toggle (imprint page, only when published), "Datenschutz" toggle (the legacy hard-coded text, verbatim in `pages/partials/privacy.blade.php`), map and "Auf Google Maps anzeigen".
+- `modules/toggle.js`: a `[data-toggle]` button shows/hides the element in its `aria-controls` (`hidden` attribute) and sets `aria-expanded`. Component `x-site.toggle` (green, chevron down/up). The chevron sits on an inner inline span: on the `<button>` itself it was 2 px lower than on the legacy inline `<a>`, whose box is the font's content area, not the line box.
+- `modules/map.js`: legacy styles, centre, zoom and marker. Loads the Maps API only when `GOOGLE_MAPS_KEY` is set (`data-map-key`); without a key the container stays empty (F3). **Not seen with a real key yet** — check once the key exists.
+- Legacy detail: the legacy CSS does not reset `ul`, so the Datenschutz list has the browser defaults (1em margins, 40 px indent); reproduced on that list.
+- **Visual result: 0.000 % at all 17 viewports**, also with Impressum open and with Datenschutz open (new state `datenschutz-open` in `tests/visual/pages.js`; map masked). Toggle hover, contact link hover and open → close: 0 px difference at 375 and 1440.
+- Tests: `tests/Feature/Site/ContactTest.php`.
