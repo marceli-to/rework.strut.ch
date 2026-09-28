@@ -5,7 +5,7 @@ import ResourceIndex from '@/components/resource/ResourceIndex.vue'
 // SEO of the listing pages (the content pages have theirs in "Seiten")
 const columns = [
 	{ key: 'title', label: 'Seite', primary: true },
-	{ key: 'meta_description', label: 'Meta Description', class: 'max-w-[32rem] truncate' },
+	{ key: 'meta_description', label: 'Meta Description', limit: 60 },
 	{ key: 'og', label: 'OG-Bild', class: 'w-100' },
 ]
 

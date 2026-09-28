@@ -4,7 +4,7 @@ import ResourceIndex from '@/components/resource/ResourceIndex.vue'
 
 const columns = [
 	{ key: 'title', label: 'Titel', primary: true },
-	{ key: 'meta_description', label: 'Meta Description', class: 'max-w-[32rem] truncate' },
+	{ key: 'meta_description', label: 'Meta Description', limit: 60 },
 ]
 </script>
 
