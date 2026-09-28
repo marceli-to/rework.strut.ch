@@ -4,7 +4,6 @@ import api from '@/api/axios'
 import { useToast } from '@/composables/useToast'
 import { useUnsavedChanges } from '@/composables/useUnsavedChanges'
 import PageHeader from '@/components/layout/PageHeader.vue'
-import SettingsTabs from '@/components/layout/SettingsTabs.vue'
 import FormActions from '@/components/ui/form/FormActions.vue'
 import FormField from '@/components/ui/form/FormField.vue'
 
@@ -38,8 +37,7 @@ async function save() {
 
 <template>
 	<form @submit.prevent="save">
-		<PageHeader title="Einstellungen" />
-		<SettingsTabs />
+		<PageHeader title="SEO" />
 		<FormActions submitLabel="Speichern" />
 		<div class="flex flex-col gap-24 max-w-[48rem]">
 			<FormField

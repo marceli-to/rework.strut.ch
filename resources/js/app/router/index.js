@@ -49,11 +49,11 @@ const routes = [
 	...entry('press', 'press', 'Presse'),
 	...entry('award', 'awards', 'Auszeichnungen'),
 	...entry('lecture', 'lectures', 'Vorträge'),
-	...resource('categories', 'categories', CategoryIndex, CategoryForm, ['Einstellungen', 'Neue Kategorie', 'Kategorie bearbeiten']),
+	...resource('categories', 'categories', CategoryIndex, CategoryForm, ['Kategorien', 'Neue Kategorie', 'Kategorie bearbeiten']),
 	{ path: '/dashboard/types/create', name: 'types.create', component: TypeForm, meta: { title: 'Neuer Typ' } },
 	{ path: '/dashboard/types/:id/edit', name: 'types.edit', component: TypeForm, meta: { title: 'Typ bearbeiten' } },
 	{ path: '/dashboard/seo', name: 'seo', component: SeoForm, meta: { title: 'SEO' } },
-	...resource('users', 'users', UserIndex, UserForm, ['Einstellungen', 'Neuer Benutzer', 'Benutzer bearbeiten']),
+	...resource('users', 'users', UserIndex, UserForm, ['Benutzer', 'Neuer Benutzer', 'Benutzer bearbeiten']),
 ]
 
 const router = createRouter({

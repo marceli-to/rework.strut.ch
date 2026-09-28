@@ -7,7 +7,6 @@ import { useConfirm } from '@/composables/useConfirm'
 import { PhPencil, PhTrash } from '@phosphor-icons/vue'
 import FormActions from '@/components/ui/form/FormActions.vue'
 import PageHeader from '@/components/layout/PageHeader.vue'
-import SettingsTabs from '@/components/layout/SettingsTabs.vue'
 import DataTable from '@/components/ui/table/DataTable.vue'
 
 const router = useRouter()
@@ -40,8 +39,7 @@ async function handleDelete(user) {
 
 <template>
 	<div>
-		<PageHeader title="Einstellungen" />
-		<SettingsTabs />
+		<PageHeader title="Benutzer" />
 		<FormActions>
 			<button type="button" class="text-sm px-16 py-8 rounded-md bg-gray-900 dark:bg-warm-100 text-white dark:text-warm-900 hover:bg-gray-800 dark:hover:bg-warm-200 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 dark:focus-visible:ring-warm-700" @click="router.push({ name: 'users.create' })">Neuer Benutzer</button>
 		</FormActions>

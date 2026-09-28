@@ -5,13 +5,15 @@ import {
 	PhBriefcase,
 	PhBuildings,
 	PhFiles,
-	PhGear,
 	PhHouse,
+	PhMagnifyingGlass,
 	PhMicrophoneStage,
 	PhNewspaper,
 	PhNewspaperClipping,
 	PhSignOut,
+	PhTag,
 	PhTrophy,
+	PhUserCircle,
 	PhUsers,
 } from '@phosphor-icons/vue'
 import StrutLogo from '@/components/layout/StrutLogo.vue'
@@ -45,8 +47,15 @@ const navigation = [
 	{
 		items: [
 			{ name: 'Seiten', to: '/dashboard/pages', icon: PhFiles },
-			// settings screens share one entry (tabs: Kategorien, SEO, Benutzer)
-			{ name: 'Einstellungen', to: '/dashboard/categories', icon: PhGear, match: ['/dashboard/categories', '/dashboard/types', '/dashboard/seo', '/dashboard/users'] },
+		],
+	},
+	{
+		title: 'Einstellungen',
+		items: [
+			// types are edited from within their category
+			{ name: 'Kategorien', to: '/dashboard/categories', icon: PhTag, match: ['/dashboard/categories', '/dashboard/types'] },
+			{ name: 'SEO', to: '/dashboard/seo', icon: PhMagnifyingGlass },
+			{ name: 'Benutzer', to: '/dashboard/users', icon: PhUserCircle },
 		],
 	},
 ]
