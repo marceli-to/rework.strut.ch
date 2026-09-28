@@ -11,22 +11,22 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 ## 0. Setup
 
 - ☑ Playwright + pixelmatch as dev dependencies, `tests/visual/compare.js`, output git-ignored.
-- ☐ Tokens from computed styles into the Tailwind theme: font sizes, line heights, letter spacing, colours (green `#275d5b`), spaces, gutter 24 px, breakpoints 600/900/1200.
-- ☐ Fonts: Basis Grotesque Pro Regular + Medium, woff2/woff copied from the legacy project (F2).
-- ☐ Separate public entry points (`resources/css/site.css`, `resources/js/site.js`); the admin bundle is not loaded on the public site.
+- ◐ Tokens in the Tailwind theme (`resources/css/site.css`, `partials/site/*`): breakpoints 600/900/1200, colours, type scale `type-nav|subnav|sm|md|lg`, page block, link underlines. Page-specific values follow with each page.
+- ☑ Fonts: Basis Grotesque Pro Regular + Medium, woff2/woff copied from the legacy project (F2).
+- ☑ Separate public entry points (`resources/css/site.css`, `resources/js/site.js`); the admin bundle is not loaded on the public site.
 
 ## 1. Shell
 
 | # | Feature | Legacy | New | Status |
 |---|---|---|---|---|
-| 1.1 | Layout: `<head>`, SEO/OG tags, favicons, main wrapper (home gets `site-content--home`) | `web/layout/app.blade.php` | `x-layout.site` | ☐ |
-| 1.2 | Header: menu button, logo linking to `/` | same | `x-site.header` | ☐ |
-| 1.3 | Header on scroll: < 901 px `is-tiny` when scrolling down, reset at top. ≥ 901 px hidden when scrolling down past 170 px, shown tiny when scrolling up | `header.js` | `modules/header.js` | ☐ |
-| 1.4 | Navigation, desktop (≥ 901 px): nested dropdowns (Bauten → category → type → projects; Publikationen; Büro). Menu height follows the open list (+30 px). Click outside closes it | `menu.js` | `modules/menu.js` | ☐ |
-| 1.5 | Navigation, mobile (≤ 900 px): full menu toggled by the button (`has-menu` on `<html>`), same nested accordions | `menu.js` | `modules/menu.js` | ☐ |
-| 1.6 | Menu data: published categories → active types → published projects **with detail**; active states for the current project/category/type and the current page | `NavigationService` | `GetNavigation` action + view composer | ☐ |
-| 1.7 | "Werkliste" is only marked active on `/werkliste`, not on `/werkliste/status|jahr|typ` (legacy quirk, kept 1:1) | same | same | ☐ |
-| 1.8 | No footer | — | — | ☐ |
+| 1.1 | Layout: `<head>`, SEO/OG tags, favicons, main wrapper (home gets `site-content--home`) | `web/layout/app.blade.php` | `x-layout.site` | ◐ (SEO tags in step 5) |
+| 1.2 | Header: menu button, logo linking to `/` | same | `x-site.header` | ☑ |
+| 1.3 | Header on scroll: < 901 px `is-tiny` when scrolling down, reset at top. ≥ 901 px hidden when scrolling down past 170 px, shown tiny when scrolling up | `header.js` | `modules/header.js` | ☑ |
+| 1.4 | Navigation, desktop (≥ 901 px): nested dropdowns (Bauten → category → type → projects; Publikationen; Büro). Menu height follows the open list (+30 px). Click outside closes it | `menu.js` | `modules/menu.js` | ☑ |
+| 1.5 | Navigation, mobile (≤ 900 px): full menu toggled by the button (`has-menu` on `<html>`), same nested accordions | `menu.js` | `modules/menu.js` | ☑ |
+| 1.6 | Menu data: published categories → active types → published projects **with detail**; active states for the current project/category/type and the current page | `NavigationService` | `GetNavigation` action + view composer | ☑ |
+| 1.7 | "Werkliste" is only marked active on `/werkliste`, not on `/werkliste/status|jahr|typ` (legacy quirk, kept 1:1) | same | same | ☑ |
+| 1.8 | No footer | — | — | ☑ |
 
 ## 2. Page types
 

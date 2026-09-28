@@ -2,6 +2,7 @@
 //
 //   node tests/visual/compare.js [--page=home,presse] [--vp=375,1440]
 //                                [--all-projects] [--no-states] [--concurrency=4]
+//                                [--shell]   (viewport only, page content masked: checks header/nav)
 //
 // Full-page screenshots with fonts loaded, animations off and lazy images
 // forced, diffed with pixelmatch. Output: tests/visual/output/{page}/{vp}[-state]-{ref,act,diff}.png
@@ -33,6 +34,8 @@ let targets = [...pages, ...projectIds.map(projectPage)];
 if (list(args.page)) targets = targets.filter((p) => list(args.page).includes(p.key));
 const vps = list(args.vp)?.map(Number) ?? viewports;
 const withStates = !args['no-states'];
+const shell = Boolean(args.shell);
+const CONTENT = { ref: 'main.site-content > div > *', act: 'main > div > *' };
 
 const STABILIZE_CSS = `
 	*, *::before, *::after { transition: none !important; animation: none !important; caret-color: transparent !important; }
@@ -50,6 +53,11 @@ async function prepare(page) {
 			window.scrollTo(0, y);
 			await new Promise((r) => setTimeout(r, 50));
 		}
+		// Back up step by step, like a user, so scroll-driven header states reset.
+		for (let y = window.scrollY; y > 0; y -= step) {
+			window.scrollTo(0, y);
+			await new Promise((r) => setTimeout(r, 50));
+		}
 		window.scrollTo(0, 0);
 		await document.fonts.ready;
 		await Promise.all([...document.images].map((img) => (img.complete ? null : new Promise((r) => { img.onload = img.onerror = r; }))));
@@ -62,13 +70,14 @@ async function shoot(context, site, target, vp, state) {
 	const page = await context.newPage();
 	await page.setViewportSize({ width: vp, height: 900 });
 	const response = await page.goto(sites[site] + target.path, { waitUntil: 'networkidle' });
+	if (shell) await page.addStyleTag({ content: `${CONTENT[site]} { visibility: hidden !important; } body { min-height: 5000px; }` });
 	await prepare(page);
 	if (state) {
 		await state[site](page);
 		await page.waitForTimeout(300);
 	}
-	const mask = (target.mask?.[site] ?? []).map((s) => page.locator(s));
-	const buffer = await page.screenshot({ fullPage: true, mask, maskColor: '#ff00ff', animations: 'disabled' });
+	const mask = shell ? [] : (target.mask?.[site] ?? []).map((s) => page.locator(s));
+	const buffer = await page.screenshot({ fullPage: !shell && !state?.viewportOnly, mask, maskColor: '#ff00ff', animations: 'disabled' });
 	await page.close();
 	return { buffer, status: response?.status() };
 }
@@ -105,7 +114,7 @@ async function run() {
 		const states = [null];
 		if (withStates) {
 			states.push(...(target.states ?? []));
-			if (target.key === 'home') states.push(...globalStates);
+			if (target.navStates) states.push(...globalStates);
 		}
 		for (const vp of vps) {
 			for (const state of states) {

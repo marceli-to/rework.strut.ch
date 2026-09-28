@@ -161,3 +161,22 @@ Decisions (by client):
 - F1: Strict 1:1 reproduction for now; changes come in a later round.
 - F2: The Basis Grotesque Pro web fonts are copied from the legacy project.
 - F3: No Google Maps key yet. The map is built, and the key stays empty locally until go-live.
+- Masonry (Packery on `/ueber-uns`, `/buecher`) becomes a vanilla module (approved).
+
+## 2026-09-28 — Phase 2, step 1: Shell (tokens, fonts, layout, header, navigation)
+
+- Separate public bundle: `resources/css/site.css` (Tailwind with `source(none)`, only public views scanned) and `resources/js/site.js` with modules `header.js`, `menu.js` and `debounce.js`.
+- Tokens from the legacy SCSS config: breakpoints 600/900/1200, colours, and the type scale as utilities (`type-sm` etc., because size and line height change per breakpoint). Also the page block (434 px below 600, 1400 px from 1200) and the link underlines (background line at a fixed offset, as in legacy).
+- `GetNavigation` action + view composer on `components.site.header`. Public routes are registered; pages that are not built yet render the empty shell (`pages.shell`). Project routes bind by id (`{project:id}`), because the model's route key is the uuid used by the admin API.
+- **Visual result: 0.000 % at all 17 viewports on all 17 pages** (header/nav only, content hidden with `compare.js --shell`), including the states: mobile menu open, nested mobile menu (Büro → Bauten → Wohnen → Wohnhäuser), desktop dropdowns (single, nested, switching sections), header after scrolling down and up (375/900/1280).
+- Tests: `tests/Feature/Site/NavigationTest.php` (8).
+
+Decisions and details:
+- Toggles are `<button>` elements (keyboard accessible) with the underline on an inner inline `<span>`. A button is inline-block, so an underline on the button itself sat 2 px lower than on the legacy inline `<a>`.
+- The logo is the legacy SVG file as `<img>`. The inline SVG component rasterised with slightly different anti-aliasing.
+- Legacy quirks kept for parity:
+  - The JS switches at 901 px, the CSS at 900 px.
+  - The lists of the current project stay open even when their toggle is clicked (legacy `display: block !important`).
+  - A category without type headings opens only the first type's list (legacy `next('ul')`). This has no effect today: Gewerbe and Öffentlich have one type each.
+  - The desktop header stays hidden if the page jumps straight to the top (legacy only clears `is-hidden` while scrolling up past 170 px).
+- `compare.js` changes: `--shell` mode (viewport only, content hidden, tall body so scroll states work), gradual scroll back to the top before screenshots, and states with `viewportOnly`. Nav states run on the pages flagged `navStates` (home, first sample project).

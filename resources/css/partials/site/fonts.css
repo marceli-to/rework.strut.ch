@@ -1,0 +1,16 @@
+/* Two families with one weight each, as in the legacy site (no synthetic bold). */
+@font-face {
+	font-family: 'basis-grotesque-regular-pro';
+	src: url('/fonts/basis-grotesque-regular-pro.woff2') format('woff2'), url('/fonts/basis-grotesque-regular-pro.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+	font-display: auto;
+}
+
+@font-face {
+	font-family: 'basis-grotesque-medium-pro';
+	src: url('/fonts/basis-grotesque-medium-pro.woff2') format('woff2'), url('/fonts/basis-grotesque-medium-pro.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+	font-display: auto;
+}

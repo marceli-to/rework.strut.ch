@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Actions\Site\GetNavigation;
+use App\Models\Project;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,5 +38,13 @@ class AppServiceProvider extends ServiceProvider
 	public function boot(): void
 	{
 		Relation::enforceMorphMap(self::MORPH_MAP);
+
+		View::composer('components.site.header', function ($view) {
+			$project = Route::current()?->parameter('project');
+			$view->with('nav', app(GetNavigation::class)->execute(
+				Route::currentRouteName(),
+				$project instanceof Project ? $project : null,
+			));
+		});
 	}
 }

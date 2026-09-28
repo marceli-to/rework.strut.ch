@@ -18,7 +18,23 @@ export const sites = {
 };
 
 const click = (selector) => async (page) => {
-	await page.locator(selector).first().click();
+	await page.locator(selector).first().click({ timeout: 5000 });
+};
+
+// Clicks nav entries by their text, in order (legacy uses links, the rework buttons).
+const clickNav = (...labels) => async (page) => {
+	for (const label of labels) {
+		await page.locator('nav a, nav button', { hasText: label }).first().click({ timeout: 5000 });
+		await page.waitForTimeout(100);
+	}
+};
+
+// Scrolls like a user (the header reacts to direction), then stays there.
+const scrollBy = (...deltas) => async (page) => {
+	for (const dy of deltas) {
+		await page.mouse.wheel(0, dy);
+		await page.waitForTimeout(250);
+	}
 };
 
 // Projects covering every project grid layout, plus one without a detail text.
@@ -29,6 +45,7 @@ export const pages = [
 	{
 		key: 'home',
 		path: '/',
+		navStates: true,
 		mask: { ref: ['.is-highlight'], act: ['[data-slideshow]'] },
 	},
 	{ key: 'werkliste-status', path: '/werkliste/status' },
@@ -66,23 +83,25 @@ export const pages = [
 export const projectPage = (id) => ({
 	key: `projekt-${id}`,
 	path: `/bauten/${id}`,
+	navStates: id === sampleProjects[0],
 	states: [
 		{ name: 'info-open', ref: click('.btn-project-toggle'), act: click('[data-project-toggle]') },
 	],
 });
 
-// Navigation states, captured on the homepage only, at the given viewports.
+// Navigation states, captured on pages with `navStates`, at the given viewports.
 export const globalStates = [
+	{ name: 'menu-open', viewports: [375, 768, 899], ref: click('.js-btn-menu'), act: click('[data-menu-button]') },
 	{
-		name: 'menu-open',
-		viewports: [375, 768, 899],
-		ref: click('.js-btn-menu'),
-		act: click('[data-menu-button]'),
+		name: 'menu-nested',
+		viewports: [375, 899],
+		ref: async (page) => { await click('.js-btn-menu')(page); await clickNav('Büro', 'Bauten', 'Wohnen', 'Wohnhäuser')(page); },
+		act: async (page) => { await click('[data-menu-button]')(page); await clickNav('Büro', 'Bauten', 'Wohnen', 'Wohnhäuser')(page); },
 	},
-	{
-		name: 'submenu-open',
-		viewports: [1280],
-		ref: click('.site-nav .is-parent'),
-		act: click('[data-submenu-button]'),
-	},
+	{ name: 'submenu-open', viewports: [1280], ref: click('.site-nav .is-parent'), act: click('[data-submenu-button]') },
+	{ name: 'submenu-nested', viewports: [901, 1280], ref: clickNav('Bauten', 'Wohnen', 'Wohnhäuser'), act: clickNav('Bauten', 'Wohnen', 'Wohnhäuser') },
+	{ name: 'submenu-other', viewports: [1280], ref: clickNav('Bauten', 'Büro'), act: clickNav('Bauten', 'Büro') },
+	// Header states; screenshots of the viewport only.
+	{ name: 'scrolled-down', viewports: [375, 900, 1280], viewportOnly: true, ref: scrollBy(600), act: scrollBy(600) },
+	{ name: 'scrolled-up', viewports: [375, 900, 1280], viewportOnly: true, ref: scrollBy(600, -200), act: scrollBy(600, -200) },
 ];

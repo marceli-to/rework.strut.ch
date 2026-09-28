@@ -1,0 +1,35 @@
+@import 'tailwindcss' source(none);
+@source '../views/pages';
+@source '../views/components/site';
+@source '../views/components/layout/site.blade.php';
+@source '../js/site.js';
+@source '../js/modules';
+
+@import './partials/spacing.css';
+@import './partials/site/fonts.css';
+@import './partials/site/type.css';
+@import './partials/site/base.css';
+@import './partials/site/links.css';
+
+/* Values from the legacy stylesheets (strut.ch, resources/sass/web/config). */
+@theme {
+	--breakpoint-*: initial;
+	--breakpoint-sm: 600px;
+	--breakpoint-md: 900px;
+	--breakpoint-lg: 1200px;
+
+	--font-*: initial;
+	--font-regular: 'basis-grotesque-regular-pro', Arial, Helvetica, sans-serif;
+	--font-medium: 'basis-grotesque-medium-pro', monospace;
+
+	--color-*: initial;
+	--color-black: #000000;
+	--color-white: #ffffff;
+	--color-green: #275d5b;
+	--color-grey: #808080;
+	--color-selection: #dac9d9;
+
+	/* Page width: 434px below sm, full width from sm, 1400px from lg. */
+	--container-page-xs: 434px;
+	--container-page-lg: 1400px;
+}
