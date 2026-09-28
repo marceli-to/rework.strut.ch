@@ -4,7 +4,7 @@
   below sm a teaser for the next project.
 --}}
 @php $body = 'text-sm leading-[1.13] sm:text-xs sm:leading-[1.2] md:text-2xl'; @endphp
-<x-layout.site :title="$project->name . ', ' . $project->location . ' - ' . $project->categoryType->name_singular" :description="$project->meta_description">
+<x-layout.site :title="$project->name . ', ' . $project->location . ' - ' . $project->categoryType->name_singular" :description="$project->meta_description" :og-image="$project->ogImage()" :canonical="url($project->url)">
   <section>
     <header class="relative">
       <div>

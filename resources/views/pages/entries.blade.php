@@ -1,5 +1,5 @@
 {{-- Presse, Auszeichnungen, Vorträge: years in three columns (GetEntries). --}}
-<x-layout.site :title="$type->label()" :description="$page->meta_description">
+<x-layout.site :title="$type->label()" :$page>
   <section>
     <x-site.heading>{{ $type->label() }}</x-site.heading>
     <div class="grid gap-24 sm:grid-cols-[repeat(2,1fr)] md:grid-cols-[repeat(3,1fr)]">

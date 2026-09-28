@@ -3,7 +3,7 @@
 @php
   $views = ['status' => ['Status', 'page.works.status', 'status'], 'year' => ['Jahr', 'page.works.year', 'jahr'], 'type' => ['Typ', 'page.works.type', 'typ']];
 @endphp
-<x-layout.site title="Werkliste" :description="$page->meta_description">
+<x-layout.site title="Werkliste" :$page :canonical="route('page.works')">
   <section>
     <nav class="sm:grid sm:grid-cols-[repeat(2,1fr)] sm:gap-24 md:grid-cols-[2fr_1fr]" aria-label="Werkliste">
       <div class="mb-8 sm:mb-0">

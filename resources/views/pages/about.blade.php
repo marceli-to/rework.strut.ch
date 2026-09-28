@@ -1,5 +1,5 @@
 {{-- Über uns: text | images, then the team (masonry) with a CV toggle each. --}}
-<x-layout.site title="Über uns" :description="$meta->meta_description">
+<x-layout.site title="Über uns" :page="$meta">
   <section>
     @if ($page)
       <div class="mb-42 sm:flex sm:items-start md:mb-84">

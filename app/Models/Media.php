@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\OgImage;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -99,6 +100,14 @@ class Media extends Model
 		$params = $this->imageParams($size, $format);
 
 		return '/img/' . $this->imagePath() . ($params ? '?' . http_build_query($params) : '');
+	}
+
+	/**
+	 * Absolute Open Graph image URL: 1200 × 630 JPEG, admin crop applied.
+	 */
+	public function ogUrl(): string
+	{
+		return url($this->imageUrl(['w' => OgImage::WIDTH, 'h' => OgImage::HEIGHT, 'fit' => 'crop', 'fm' => 'jpg', 'q' => 85]));
 	}
 
 	/**

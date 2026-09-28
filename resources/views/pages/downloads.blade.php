@@ -3,7 +3,7 @@
   $worksPdfs = ['gesamt' => 'Gesamt', 'wohnen' => 'Wohnen', 'gewerbe' => 'Gewerbe', 'oeffentlich' => 'Öffentlich', 'wettbewerb' => 'Wettbewerb', 'status' => 'Nach Status', 'jahr' => 'Nach Jahr', 'typ' => 'Nach Typ'];
   $heading = 'text-xl leading-[1.21] sm:text-md md:text-4xl md:leading-[1.129] mb-8 md:mb-24';
 @endphp
-<x-layout.site title="Downloads" :description="$page->meta_description">
+<x-layout.site title="Downloads" :$page>
   <section>
     <x-site.heading>Downloads</x-site.heading>
     <div class="grid gap-24 sm:grid-cols-[repeat(2,1fr)] md:grid-cols-[repeat(3,1fr)]">

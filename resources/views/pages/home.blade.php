@@ -1,5 +1,5 @@
 {{-- Homepage: highlight slideshow (modules/slideshow.js) and the grid. --}}
-<x-layout.site home :description="$page->meta_description">
+<x-layout.site home title="Home" :$page>
   <section>
     @if ($slides->isNotEmpty())
       <figure class="relative mb-24" data-slideshow>

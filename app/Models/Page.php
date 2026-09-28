@@ -69,6 +69,14 @@ class Page extends Model
 		return static::where('key', $key)->firstOrFail();
 	}
 
+	/**
+	 * Open Graph image of the page (admin field "Opengraph Image").
+	 */
+	public function ogImage(): ?Media
+	{
+		return $this->mediaIn('og')->first();
+	}
+
 	public function gridContext(): string
 	{
 		return $this->key;

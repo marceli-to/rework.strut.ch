@@ -1,12 +1,22 @@
+{{--
+  Public page layout. SEO: `title` (" - Strut Architekten" is appended),
+  `page` (its meta description and Opengraph image), or `description` and
+  `ogImage` (Media) directly; `canonical` defaults to the current URL.
+--}}
 @props([
   'title' => null,
   'description' => null,
+  'page' => null,
+  'ogImage' => null,
+  'canonical' => null,
   'home' => false,
 ])
 @php
   $siteName = config('app.name');
   $fullTitle = $title ? "{$title} - {$siteName}" : $siteName;
-  $description ??= 'Strut Architekten Winterthur';
+  $description = $description ?: $page?->meta_description ?: 'Strut Architekten Winterthur';
+  $ogImage ??= $page?->ogImage();
+  $canonical ??= url()->current();
 @endphp
 <!DOCTYPE html>
 <html lang="de" class="min-h-full overflow-y-scroll">
@@ -17,7 +27,9 @@
 <meta name="description" content="{{ $description }}">
 <meta property="og:title" content="{{ $fullTitle }}">
 <meta property="og:description" content="{{ $description }}">
-<meta property="og:url" content="{{ url()->current() }}">
+<meta property="og:url" content="{{ $canonical }}">
+<meta property="og:image" content="{{ $ogImage?->ogUrl() ?? \App\Support\OgImage::url() }}">
+<link rel="canonical" href="{{ $canonical }}">
 <meta property="og:site_name" content="{{ $siteName }}">
 <x-layout.partials.favicons />
 <meta name="theme-color" content="#ffffff">

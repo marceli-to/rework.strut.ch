@@ -89,6 +89,14 @@ class Project extends Model
 		return $query->where('has_detail', true);
 	}
 
+	/**
+	 * Open Graph image: the image flagged in the admin, else the first image (legacy).
+	 */
+	public function ogImage(): ?Media
+	{
+		return $this->images->firstWhere('is_og', true) ?? $this->images->first();
+	}
+
 	protected function fullTitle(): Attribute
 	{
 		return Attribute::get(fn () => collect([$this->name, $this->location])->filter()->implode(', '));

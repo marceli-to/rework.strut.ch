@@ -1,5 +1,5 @@
 {{-- Jobs: listings (or the page text) | page images. --}}
-<x-layout.site title="Jobs" :description="$page->meta_description">
+<x-layout.site title="Jobs" :$page>
   <section>
     <div class="grid gap-24 sm:grid-cols-[1fr_2fr]">
       <div>

@@ -301,3 +301,13 @@ Client decisions: `<picture>` markup (not Accept-header negotiation); AVIF + Web
   - Page counter: legacy prints "1/1" on page 1 only (its inline PHP script); the rework prints "1/3, 2/3, 3/3" on every page (dompdf canvas `page_text`, same position and font). **To be confirmed by the client.**
   - Kept as legacy: the date and title lines ("28. September 2026", "Werkliste Gesamt") are positioned outside the page by the legacy CSS and never appear; the address footer is on page 1 only.
 - Tests: `tests/Feature/Site/PdfTest.php` (lines per variant, headers, merge + 404).
+
+## 2026-09-28 — Phase 2, step 5b: SEO
+
+- Layout props: `title` (" - Strut Architekten" appended, as legacy; the homepage is "Home - Strut Architekten" as legacy), `page` (meta description and Opengraph image from the admin page), or `description` / `ogImage` directly, and `canonical` (default: current URL). New tags compared to legacy: `<link rel="canonical">`; `og:image` is now always set.
+- Opengraph image: pages use their admin "Opengraph Image" (collection `og`, crop applied); projects the image flagged in the admin, else the first image (legacy: first published image); otherwise `img/strut-og.png` (same file as legacy `strut.ch-og.png`). `Media::ogUrl()` = 1200 × 630 JPEG via Glide.
+- Canonical: all Werkliste views → `/werkliste`; projects → their slug URL (a wrong slug redirects anyway).
+- Descriptions come from the admin fields imported from the legacy texts; projects fall back to the first 160 characters of the description (legacy: 255).
+- `sitemap.xml` (new, legacy has none): 12 pages + 35 published projects with a detail page, `lastmod` from `updated_at`; valid XML. `robots.txt` as a route per environment (deployment guide updated).
+- Pitfall noted: `?>` ends PHP mode even inside a `//` comment; the XML declaration is added in the controller.
+- Tests: `tests/Feature/Site/SeoTest.php`.

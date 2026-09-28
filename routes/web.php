@@ -11,12 +11,15 @@ use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\JobsController;
 use App\Http\Controllers\Site\PdfController;
 use App\Http\Controllers\Site\ProjectController;
+use App\Http\Controllers\Site\SeoController;
 use App\Http\Controllers\Site\WorksController;
 
 Route::get('/img/{path}', [ImageController::class, 'show'])->where('path', '.*');
 Route::get('/og-image/{file}', [ImageController::class, 'og'])->where('file', '.*')->name('og-image');
 
 // Public site.
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 Route::get('/', HomeController::class)->name('page.home');
 Route::get('/bauten/{project:id}/{slug?}', ProjectController::class)->whereNumber('project')->name('page.project');
 Route::get('/werkliste', [WorksController::class, 'status'])->name('page.works');

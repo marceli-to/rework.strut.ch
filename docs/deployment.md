@@ -115,7 +115,7 @@ After changing image processing (sizes, qualities, crops of existing media): `ph
 - ☐ Content imported and `strut:verify` clean (§5)
 - ☐ Passwords of imported users rotated
 - ⏳ 301 redirects for changed URLs (`/bauten` → `/werkliste`, old `/storage/media/…` and `/media/…` image/PDF URLs). These are handled inside the app; there are no server rules to add.
-- ⏳ `robots.txt` / `sitemap.xml`. `public/robots.txt` is git-ignored per environment in the Template; Phase 2 decides whether it becomes a route.
+- ☐ `robots.txt` and `sitemap.xml` are routes (`SeoController`). Production (`APP_ENV=production`) allows indexing and names the sitemap; any other environment answers `Disallow: /`. **No `public/robots.txt` may exist on the server**, it would shadow the route. Submit `https://strut.ch/sitemap.xml` in the Google Search Console after go-live.
 - ⏳ Google Maps API key (`GOOGLE_MAPS_KEY`), restricted to the production domain
 - ☐ Backups: database, and `storage/app/public/uploads` (the originals). `.glide-cache` does not need backing up; it regenerates.
 - ☐ The legacy `/artisan/*` routes must not exist on the new site (they don't). If the old code base stays online anywhere, remove them there.

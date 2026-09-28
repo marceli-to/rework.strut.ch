@@ -1,5 +1,5 @@
 {{-- Kontakt: text, Impressum and Datenschutz toggles | map. --}}
-<x-layout.site title="Kontakt" :description="$contact?->meta_description">
+<x-layout.site title="Kontakt" :page="$contact">
   <section>
     @if ($contact)
       <div class="relative grid gap-24 sm:grid-cols-[1fr_2fr]">

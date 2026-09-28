@@ -1,5 +1,5 @@
 {{-- Bücher: masonry of books with description, info toggle and order link. --}}
-<x-layout.site title="Bücher" :description="$page->meta_description">
+<x-layout.site title="Bücher" :$page>
   <section>
     <x-site.heading>Bücher</x-site.heading>
     <x-site.masonry>

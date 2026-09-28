@@ -60,9 +60,9 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 
 ## 4. SEO
 
-- ☐ Titles and descriptions per page (legacy texts; listing pages from `pages.meta_description`), OG tags, OG image (project: first image; default `strut.ch-og.png`).
-- ☐ Canonical URLs: `/werkliste/status` → canonical `/werkliste`; projects → canonical slug.
-- ☐ `sitemap.xml` (route), `robots.txt` (per environment, see `docs/deployment.md`).
+- ☑ Titles and descriptions per page (legacy texts; listing pages from `pages.meta_description`), OG tags, OG image (project: first image; default `strut.ch-og.png`).
+- ☑ Canonical URLs: `/werkliste/status` → canonical `/werkliste`; projects → canonical slug.
+- ☑ `sitemap.xml` (route: 12 pages + published projects with a detail page), `robots.txt` (route: production allows all and names the sitemap, every other environment `Disallow: /`).
 
 ## 5. URL continuity
 
