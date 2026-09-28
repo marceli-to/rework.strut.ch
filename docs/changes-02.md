@@ -17,6 +17,7 @@ Source: annotated screenshots and chat feedback. Status per item: ☐ open · �
 ## E. Sidebar navigation
 - ☑ **E2** "Einstellungen" is now a sidebar group title (like Büro, Publikationen) with its own entries: Kategorien, SEO, Benutzer (SEO moved into Seiten with A7). Each is its own page with its own title; the tab bar (`SettingsTabs`) is gone. Replaces the tab layout from round 1 (Q4).
 - ☑ **E3** "Seiten" moves up, directly below Projekte.
+- ☑ **E4** First sidebar group order: Startseite, Projekte, News, Seiten.
 
 ## F. Grid (Raster), projects and homepage
 - ☑ **F5** Existing grid rows are collapsed when the editor opens (both contexts, all areas). Rows added afterwards stay open so they can be filled right away; "Alle ausklappen" opens them all.

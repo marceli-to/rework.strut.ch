@@ -23,8 +23,8 @@ const navigation = [
 	{
 		items: [
 			{ name: 'Startseite', to: '/dashboard/home', icon: PhHouse },
-			{ name: 'News', to: '/dashboard/news', icon: PhNewspaper },
 			{ name: 'Projekte', to: '/dashboard/projects', icon: PhBuildings },
+			{ name: 'News', to: '/dashboard/news', icon: PhNewspaper },
 			{ name: 'Seiten', to: '/dashboard/pages', icon: PhFiles },
 		],
 	},
