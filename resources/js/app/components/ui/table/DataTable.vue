@@ -61,7 +61,8 @@ const groups = computed(() => toGroups(sortedRows.value))
 	<div class="-mx-4 -my-2 overflow-x-auto whitespace-nowrap sm:-mx-6 lg:-mx-8">
 		<div class="inline-block min-w-full px-4 py-2 align-middle sm:px-6 lg:px-8">
 			<table class="w-full text-sm">
-				<thead>
+				<!-- grouped: the group headers replace the column headings (kept for screen readers) -->
+				<thead :class="groupBy ? 'sr-only' : ''">
 					<tr class="text-left border-b border-gray-900/10 dark:border-warm-700/50">
 						<th
 							v-for="col in columns"
@@ -96,7 +97,7 @@ const groups = computed(() => toGroups(sortedRows.value))
 					>
 						<template v-if="group.label" #header>
 							<tr>
-								<td :colspan="columns.length" class="pt-32 pb-8 text-sm font-medium text-gray-900 dark:text-warm-100 border-b border-gray-900/10 dark:border-warm-700/50">{{ group.label }}</td>
+								<td :colspan="columns.length" :class="groupIndex === 0 ? 'pt-8' : 'pt-32'" class="pb-8 text-sm font-medium text-gray-900 dark:text-warm-100 border-b border-gray-900/10 dark:border-warm-700/50">{{ group.label }}</td>
 							</tr>
 						</template>
 						<template #item="{ element: row }">
@@ -121,9 +122,9 @@ const groups = computed(() => toGroups(sortedRows.value))
 					</draggable>
 				</template>
 				<template v-else>
-					<tbody v-for="group in groups" :key="group.key">
+					<tbody v-for="(group, groupIndex) in groups" :key="group.key">
 						<tr v-if="group.label">
-							<td :colspan="columns.length" class="pt-32 pb-8 text-sm font-medium text-gray-900 dark:text-warm-100 border-b border-gray-900/10 dark:border-warm-700/50">{{ group.label }}</td>
+							<td :colspan="columns.length" :class="groupIndex === 0 ? 'pt-8' : 'pt-32'" class="pb-8 text-sm font-medium text-gray-900 dark:text-warm-100 border-b border-gray-900/10 dark:border-warm-700/50">{{ group.label }}</td>
 						</tr>
 						<tr
 							v-for="(row, index) in group.rows"
