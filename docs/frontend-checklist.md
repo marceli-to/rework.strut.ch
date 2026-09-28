@@ -54,7 +54,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 - ☐ Responsive images (`srcset`/`sizes`, `loading="lazy"`) through the existing Glide pipeline (`/img/...`); alt texts from the media records.
 - ☐ Lightbox (replaces Fancybox): single image and gallery, custom close/prev/next buttons with an inactive state at the ends, caption. Vanilla module, no dependency.
 - ☐ Slideshow: Swiper fade (4.5 s, 1.5 s, loop). Swiper is already a dependency and works without jQuery. A video slide pauses autoplay until it ends.
-- ◐ Toggles: one `modules/toggle.js` (done for Impressum/Datenschutz; still to wire: project info (closes on outside click), book info and team CV (also re-layouts the masonry).
+- ◐ Toggles: one `modules/toggle.js`. Done for Impressum/Datenschutz; still to wire: project info (closes on outside click), book info and team CV (also re-layouts the masonry).
 - ☐ Masonry: `modules/masonry.js`, shortest column first (ties go left), re-run on image load, resize and toggle. Stacked below 600 px.
 - ◐ Map: `modules/map.js`, Google Maps JS API, styles and coordinates from the legacy code, key from `GOOGLE_MAPS_KEY`; renders nothing without a key.
 
