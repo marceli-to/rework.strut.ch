@@ -8,6 +8,14 @@
 		@apply mb-16 last:mb-0 last-of-type:mb-0;
 	}
 
+	/*
+	 * No focus ring (client decision, as legacy). outline-hidden keeps a
+	 * transparent outline, which forced-colors / high-contrast modes still show.
+	 */
+	:focus {
+		@apply outline-hidden;
+	}
+
 	::selection {
 		@apply bg-selection [text-shadow:none];
 	}

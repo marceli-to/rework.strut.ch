@@ -3,8 +3,8 @@
 // form one group per page. Geometry and timing follow fancyBox 3:
 // - the image fits the viewport minus 44px above and below (6px when the
 //   viewport is at most 576px high), never enlarged, centred (rounded down);
-// - it zooms from its thumbnail on open and back on close, slides fade,
-//   all in 366ms; the white background fades in with it.
+// - it zooms from its thumbnail on open and back on close, the next image
+//   fades in on white, all in 366ms; the white background fades in with it.
 // Keyboard: Escape closes (native <dialog>), arrow keys browse. Touch: swipe.
 
 const DURATION = 366;
@@ -136,15 +136,21 @@ export function initLightbox(root = document) {
 		busy = true;
 		index = to;
 		updateArrows();
+		// The current image stays until the next one has loaded, then goes at
+		// once; the next one fades in on white (no cross-fade: two images of
+		// different sizes half-transparent on top of each other look muddy).
 		const incoming = await createSlide(group[index]);
+		// Start invisible without a transition (else it would animate 1 → 0 first).
+		incoming.style.transition = 'none';
 		incoming.style.opacity = '0';
+		incoming.getBoundingClientRect();
+		incoming.style.transition = '';
 		place(incoming);
-		await nextFrame();
-		incoming.style.opacity = '1';
-		slide.style.opacity = '0';
-		await wait(DURATION);
 		slide.remove();
 		slide = incoming;
+		await nextFrame();
+		incoming.style.opacity = '1';
+		await wait(DURATION);
 		busy = false;
 	};
 

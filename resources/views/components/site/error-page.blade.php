@@ -7,7 +7,7 @@
         <x-site.heading>{{ $code }}</x-site.heading>
         <x-site.article>
           {{ $slot }}
-          <p><a href="/" title="Zur Startseite" class="[color:revert]">Zur Start­seite.</a></p>
+          <p><a href="/" title="Zur Startseite" class="text-black underline">Zur Start­seite.</a></p>
         </x-site.article>
       </div>
       <div></div>

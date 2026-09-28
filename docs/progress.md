@@ -347,3 +347,12 @@ Client decisions: `<picture>` markup (not Accept-header negotiation); AVIF + Web
   - Über uns 1199 CV open: the 1 px scroll artefact of the test click (step 3).
   - 404 page: status 200 (legacy `/404`) vs 404 (rework), visually 0.000 %.
 - Tests: 209 passing.
+
+## 2026-09-28 — Checkpoint 2 feedback (first round)
+
+Client decisions:
+- PDF page counter "n/N" on every page: keep (legacy "1/1" was a bug).
+- Map: tested once live with the real key.
+- Error pages: the "Zur Startseite" link is black and underlined (was browser blue as legacy).
+- **No focus ring** (client did not like the blue outline): `:focus { outline-hidden }` in `base.css`. The outline is transparent, so Windows high-contrast mode still shows it. Note: keyboard users no longer see where they are on the page (WCAG 2.4.7); a subtle keyboard-only indicator in the site's own style can be added later if wanted.
+- **Lightbox, next/previous image:** the current image stays until the next one has loaded, then goes at once, and the next one fades in on white (366 ms). While checking this, a bug turned up: the new image was inserted fully visible and its fade-in was cancelled right away, so all that showed was the old image fading out on top of it. That is what looked odd. Fixed; the opacity now runs 0 → 1 as intended.

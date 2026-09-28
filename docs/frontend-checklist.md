@@ -92,7 +92,6 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 
 - The Datenschutz text is hard-coded in the view and describes Google Analytics, which the site doesn't use.
 - "Werkliste" menu item not active on its sub-views (1.7).
-- The "Zur Startseite" link on the error pages has no style (browser blue).
 - Links in running text (e.g. the photographer credits in a project's info) differ from the text only by colour until hovered (axe: link-in-text-block, WCAG 1.4.1).
 - Werkliste PDFs: date and title lines positioned off the page (never visible); the address footer is on page 1 only.
 - `/werkliste` and `/werkliste/status` show the same page (handled with a canonical tag).
