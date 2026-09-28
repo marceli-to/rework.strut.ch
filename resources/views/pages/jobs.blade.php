@@ -21,7 +21,7 @@
         @endforelse
       </div>
       <div class="sm:mt-18 md:mt-27">
-        <x-site.page-images :images="$page->images" :alt="config('app.name') . ' - Jobs'" />
+        <x-site.page-images :images="$page->images" :alt="config('app.name') . ' - Jobs'" :gallery="$page->images->count() > 1" />
       </div>
     </div>
   </section>

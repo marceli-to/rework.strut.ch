@@ -38,12 +38,12 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 | 2.4 | `/werkliste/jahr` | Grouped by year, in columns | | ☑ |
 | 2.5 | `/werkliste/typ` | Category → types (headings only when `show_types`) | | ☑ |
 | 2.6 | `/presse` | Year groups in columns: title (link to file or URL), description + project reference, small image | Shared "entries list" component with 2.10 and 2.11 | ☑ |
-| 2.7 | `/buecher` | Masonry, 3 columns ≥ 600 px: title, image, description, "Info" toggle, order link (mailto with subject/body, or external URL) | Masonry → vanilla `modules/masonry.js` (approved) | ☐ |
+| 2.7 | `/buecher` | Masonry, 3 columns ≥ 600 px: title, image, description, "Info" toggle, order link (mailto with subject/body, or external URL) | Masonry → vanilla `modules/masonry.js` (approved) | ☑ |
 | 2.8 | `/downloads` | Projektdokumentationen per category ("Alle …" merged PDF + per project), Werkliste PDFs (8), Jobs PDFs or "Zur Zeit sind alle unsere Stellen besetzt." | | ☑ |
-| 2.9 | `/ueber-uns` | Intro text + page images (lightbox), team masonry: name (mailto), role, position, portrait, phone, email, "Lebenslauf" toggle | Masonry as 2.7 | ☐ |
+| 2.9 | `/ueber-uns` | Intro text + page images (lightbox), team masonry: name (mailto), role, position, portrait, phone, email, "Lebenslauf" toggle | Masonry as 2.7 | ☑ |
 | 2.10 | `/auszeichnungen` | Like 2.6 without project reference | | ☑ |
 | 2.11 | `/vortraege` | Like 2.10 | | ☑ |
-| 2.12 | `/jobs` | Job list (title, lead, info, PDF link) or the page text if there are no jobs; page images with lightbox (gallery if more than one) | Page 0 %; images marked `data-lightbox`, the lightbox module follows with `/ueber-uns` (step 3) | ◐ |
+| 2.12 | `/jobs` | Job list (title, lead, info, PDF link) or the page text if there are no jobs; page images with lightbox (gallery if more than one) | Lightbox: step 3 | ☑ |
 | 2.13 | `/kontakt` | Contact text, "Impressum" toggle (imprint page), "Datenschutz" toggle (static text, kept 1:1), Google Map (styled, fixed coordinates) + "Auf Google Maps anzeigen" link | No key yet (F3). The map is masked in the diff | ☑ (map: without a key only the container, see step 2e) |
 | 2.14 | 404 | Error page in the site layout | 500 follows the same pattern | ☐ |
 | 2.15 | PDFs | `/werkliste/pdf/{8 variants}`, `/download/pdf/{id}/{slug}` (merged category PDFs) | Kept 1:1 (Q7); compared by content, not screenshot | ☐ |
@@ -52,10 +52,10 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 
 - ☐ **One Blade grid component** for both contexts (`x-grid`, driven by `config/grids.php`), with item sub-components `x-grid.media` (image, video), `x-grid.news` and `x-grid.caption`, and ratio boxes from `sizes`.
 - ☐ Responsive images (`srcset`/`sizes`, `loading="lazy"`) through the existing Glide pipeline (`/img/...`); alt texts from the media records.
-- ☐ Lightbox (replaces Fancybox): single image and gallery, custom close/prev/next buttons with an inactive state at the ends, caption. Vanilla module, no dependency.
+- ☑ Lightbox (replaces Fancybox): single image and gallery, custom close/prev/next buttons with an inactive state at the ends, caption. Vanilla module, no dependency.
 - ☐ Slideshow: Swiper fade (4.5 s, 1.5 s, loop). Swiper is already a dependency and works without jQuery. A video slide pauses autoplay until it ends.
-- ◐ Toggles: one `modules/toggle.js`. Done for Impressum/Datenschutz; still to wire: project info (closes on outside click), book info and team CV (also re-layouts the masonry).
-- ☐ Masonry: `modules/masonry.js`, shortest column first (ties go left), re-run on image load, resize and toggle. Stacked below 600 px.
+- ◐ Toggles: one `modules/toggle.js`. Done for Impressum/Datenschutz, book info and team CV (the masonry re-layouts on `toggle:change`); still to wire: project info (closes on outside click).
+- ☑ Masonry: `modules/masonry.js`, shortest column first (ties go left), re-run on image load, resize and toggle. Stacked below 600 px.
 - ◐ Map: `modules/map.js`, Google Maps JS API, styles and coordinates from the legacy code, key from `GOOGLE_MAPS_KEY`; renders nothing without a key.
 
 ## 4. SEO

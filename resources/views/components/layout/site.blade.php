@@ -32,5 +32,6 @@
     $home ? 'md:pb-0' : 'md:pb-20',
   ])>{{ $slot }}</div>
 </main>
+<x-site.lightbox />
 </body>
 </html>

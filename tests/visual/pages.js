@@ -56,7 +56,7 @@ export const pages = [
 		key: 'buecher',
 		path: '/buecher',
 		states: [
-			{ name: 'info-open', ref: click('.js-msnry-btn'), act: click('[data-masonry-toggle]') },
+			{ name: 'info-open', ref: click('.js-msnry-btn'), act: click('[data-masonry] [data-toggle]') },
 		],
 	},
 	{ key: 'downloads', path: '/downloads' },
@@ -73,7 +73,7 @@ export const pages = [
 		key: 'ueber-uns',
 		path: '/ueber-uns',
 		states: [
-			{ name: 'cv-open', ref: click('.js-msnry-btn'), act: click('[data-masonry-toggle]') },
+			{ name: 'cv-open', ref: click('.js-msnry-btn'), act: click('[data-masonry] [data-toggle]') },
 		],
 	},
 	{ key: 'jobs', path: '/jobs' },

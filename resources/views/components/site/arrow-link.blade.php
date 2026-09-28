@@ -1,0 +1,2 @@
+{{-- Green link with an arrow; the label is underlined while hovered itself (legacy .icon-arrow). --}}
+<a {{ $attributes->class('block pl-24 text-green bg-no-repeat bg-[url(/img/icons/arrow-link.svg)] bg-size-[16px_auto] bg-position-[left_top_3px] md:pl-32 md:bg-size-[22px_auto] md:bg-position-[left_top_4px]') }}><span class="inline bg-repeat-x bg-size-[100%_1px] bg-position-[0_18px] md:bg-position-[0_24px] hover:bg-[linear-gradient(currentColor,currentColor)]">{{ $slot }}</span></a>

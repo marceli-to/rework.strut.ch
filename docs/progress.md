@@ -239,3 +239,19 @@ Result unchanged: 0.000 % on all shell comparisons (319; the 136 errors are page
 - Legacy detail: the legacy CSS does not reset `ul`, so the Datenschutz list has the browser defaults (1em margins, 40 px indent); reproduced on that list.
 - **Visual result: 0.000 % at all 17 viewports**, also with Impressum open and with Datenschutz open (new state `datenschutz-open` in `tests/visual/pages.js`; map masked). Toggle hover, contact link hover and open → close: 0 px difference at 375 and 1440.
 - Tests: `tests/Feature/Site/ContactTest.php`.
+
+## 2026-09-28 — Phase 2, step 3: Über uns, Bücher, masonry, lightbox
+
+Client decisions: alphabetical Werkliste order approved (see step 2b); custom lightbox instead of fancyBox (approved).
+
+- `Site\AboutController` → `pages.about` (page text + images, team with CV toggle), `Site\BooksController` → `pages.books` (cover, description, "Info" toggle, order link by mail or URL).
+- **`modules/masonry.js`** is a port of the legacy Packery 2.1.2 placement, not an approximation: free spaces sorted top-to-bottom then left-to-right, first fit with 1 px tolerance, gutter added to each item, x as a percentage of the grid width, grid height = lowest edge − gutter. Layout after all images **and web fonts** have loaded (with images cached, the first layout ran before the font and measured one team card shorter), again when the width changes, and a column-keeping re-pack after a toggle (Packery `shiftLayout`, as legacy). `modules/toggle.js` now fires `toggle:change`.
+- **`modules/lightbox.js`** + `x-site.lightbox` (in the site layout) replace fancyBox 3.5.7 (jQuery). Native `<dialog>` (focus trap, Escape, inert page). fancyBox 3 geometry: image fitted to the viewport minus 44 px top/bottom (6 px when the viewport is ≤ 576 px high), not enlarged, centred and rounded down; zoom from the thumbnail on open and close, fade between slides, white background fading in, all 366 ms. Gallery: left/right half of the screen browse, with the legacy arrow cursors (grey at the ends; PNGs copied from legacy); arrow keys and swipe. Single view: click outside the image closes.
+  - Not reproduced: fancyBox's click-to-zoom to the image's natural size in the single view.
+- New components: `x-site.masonry` / `x-site.masonry.item`, `x-site.arrow-link` (legacy `.icon-arrow`); `x-site.toggle` got `reverse` (chevron left, legacy `.is-reverse`); `x-site.page-images` takes `gallery` explicitly (Über uns always opens single images, as legacy; Jobs a gallery when there are several).
+- **Visual result:**
+  - Über uns: 0.000 % at all 17 viewports and with a CV open, except: one pixel inside the photo at 901 px (resampling), and the `cv-open` state at 1199 px, where the fixed header is drawn 1 px apart. That comes from the test click: Playwright scrolls the clicked toggle into view, and the legacy inline `<a>` and our `<button>` boxes differ by 1 px, so the page ends at scrollY 1441 vs 1442. The page itself is identical.
+  - Bücher: 2–39 scattered pixels per viewport, all inside the book covers (JPEG re-encoding: Glide vs the legacy GD files). Layout identical, also with "Info" open.
+  - Lightbox open vs legacy fancyBox: 0 px at 1440×900, 375×700 and 900×500. Gallery behaviour checked in the browser (arrows, grey end cursors, keys, click areas, caption, close; no JS errors). The real galleries (project pages) follow in step 4.
+- All earlier pages re-checked: unchanged.
+- Tests: `tests/Feature/Site/MasonryPagesTest.php`.

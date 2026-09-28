@@ -3,8 +3,12 @@ import { initHeader } from './modules/header';
 import { initMenu } from './modules/menu';
 import { initToggles } from './modules/toggle';
 import { initMap } from './modules/map';
+import { initMasonry } from './modules/masonry';
+import { initLightbox } from './modules/lightbox';
 
 initHeader();
 initMenu();
 initToggles();
 initMap();
+initMasonry();
+initLightbox();

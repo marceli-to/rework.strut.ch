@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\Site\AboutController;
+use App\Http\Controllers\Site\BooksController;
 use App\Http\Controllers\Site\ContactController;
 use App\Http\Controllers\Site\DownloadsController;
 use App\Http\Controllers\Site\EntryController;
@@ -26,10 +28,10 @@ Route::get('/werkliste/pdf/{variant}', fn () => abort(404))
 // Merged project documentation per category, built in step 5.
 Route::get('/download/pdf/{category:id}/{slug?}', fn () => abort(404))->whereNumber('category')->name('pdf.category');
 Route::get('/presse', EntryController::class)->defaults('type', 'press')->name('page.press');
-Route::view('/buecher', 'pages.shell')->name('page.books');
+Route::get('/buecher', BooksController::class)->name('page.books');
 Route::get('/downloads', DownloadsController::class)->name('page.downloads');
 Route::get('/kontakt', ContactController::class)->name('page.contact');
-Route::view('/ueber-uns', 'pages.shell')->name('page.about');
+Route::get('/ueber-uns', AboutController::class)->name('page.about');
 Route::get('/jobs', JobsController::class)->name('page.jobs');
 Route::get('/auszeichnungen', EntryController::class)->defaults('type', 'award')->name('page.awards');
 Route::get('/vortraege', EntryController::class)->defaults('type', 'lecture')->name('page.lectures');
