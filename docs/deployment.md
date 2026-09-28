@@ -117,5 +117,7 @@ After changing image processing (sizes, qualities, crops of existing media): `ph
 - ⏳ 301 redirects for changed URLs (`/bauten` → `/werkliste`, old `/storage/media/…` and `/media/…` image/PDF URLs). These are handled inside the app; there are no server rules to add.
 - ☐ `robots.txt` and `sitemap.xml` are routes (`SeoController`). Production (`APP_ENV=production`) allows indexing and names the sitemap; any other environment answers `Disallow: /`. **No `public/robots.txt` may exist on the server**, it would shadow the route. Submit `https://strut.ch/sitemap.xml` in the Google Search Console after go-live.
 - ⏳ Google Maps API key (`GOOGLE_MAPS_KEY`), restricted to the production domain
+- ☐ `GOOGLE_MAPS_KEY` set; check the map on `/kontakt` (styles, marker; never tested with a real key)
+- ☐ Legacy URLs: `php artisan strut:check-urls` (87/0), then `php artisan images:warm` (§5)
 - ☐ Backups: database, and `storage/app/public/uploads` (the originals). `.glide-cache` does not need backing up; it regenerates.
 - ☐ The legacy `/artisan/*` routes must not exist on the new site (they don't). If the old code base stays online anywhere, remove them there.
