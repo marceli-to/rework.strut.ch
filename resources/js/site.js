@@ -5,6 +5,7 @@ import { initToggles } from './modules/toggle';
 import { initMap } from './modules/map';
 import { initMasonry } from './modules/masonry';
 import { initLightbox } from './modules/lightbox';
+import { initSlideshow } from './modules/slideshow';
 
 initHeader();
 initMenu();
@@ -12,3 +13,4 @@ initToggles();
 initMap();
 initMasonry();
 initLightbox();
+initSlideshow();

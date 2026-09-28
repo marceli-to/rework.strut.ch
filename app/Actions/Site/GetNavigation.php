@@ -44,6 +44,19 @@ class GetNavigation
 		];
 	}
 
+	/**
+	 * Ids of the projects in the menu, in menu order (project browsing).
+	 *
+	 * @return array<int, int>
+	 */
+	public function projectIds(): array
+	{
+		return collect($this->categories(null))
+			->flatMap(fn ($category) => $category['types'])
+			->flatMap(fn ($type) => array_column($type['projects'], 'id'))
+			->all();
+	}
+
 	private function categories(?Project $current): array
 	{
 		$typeId = $current?->category_type_id;
@@ -63,6 +76,7 @@ class GetNavigation
 						'label' => $type->name_plural,
 						'active' => $type->id === $typeId,
 						'projects' => $type->projects->map(fn (Project $project) => [
+							'id' => $project->id,
 							'label' => $project->full_title,
 							'url' => $project->url,
 							'active' => $project->id === $current?->id,

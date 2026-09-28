@@ -7,6 +7,7 @@ use App\Models\Page;
 use App\Models\Project;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 /**
@@ -89,6 +90,41 @@ class GridContext
 		}
 
 		return $cells;
+	}
+
+	/**
+	 * The layout's columns filled with a row's items, for the Blade grid.
+	 * Legacy behaviour: items are sorted by position and re-indexed, so an
+	 * empty slot leaves no gap (later items move up). Spacers get no item;
+	 * `filled` = the column holds at least one item.
+	 *
+	 * @return array<int, array{fr: int, filled: bool, cells: array}>
+	 */
+	public function fill(string $layout, Collection $items): array
+	{
+		$spec = $this->layouts[$layout] ?? throw new InvalidArgumentException("Unknown layout [$layout].");
+		$sizes = config('grids.sizes');
+		$items = $items->sortBy('position')->values();
+		$next = 0;
+		$columns = [];
+
+		foreach ($spec['columns'] as $column) {
+			$cells = [];
+			foreach ($column['cells'] as $cell) {
+				$cells[] = $cell + [
+					'ratio' => $sizes[$cell['size']] ?? null,
+					'item' => $cell['size'] === 'spacer' ? null : $items[$next++] ?? null,
+				];
+			}
+
+			$columns[] = [
+				'fr' => $column['fr'],
+				'filled' => collect($cells)->contains(fn ($cell) => $cell['item'] !== null),
+				'cells' => $cells,
+			];
+		}
+
+		return $columns;
 	}
 
 	public function hasPosition(string $layout, int $position): bool

@@ -255,3 +255,20 @@ Client decisions: alphabetical Werkliste order approved (see step 2b); custom li
   - Lightbox open vs legacy fancyBox: 0 px at 1440×900, 375×700 and 900×500. Gallery behaviour checked in the browser (arrows, grey end cursors, keys, click areas, caption, close; no JS errors). The real galleries (project pages) follow in step 4.
 - All earlier pages re-checked: unchanged.
 - Tests: `tests/Feature/Site/MasonryPagesTest.php`.
+
+## 2026-09-28 — Phase 2, step 4: grid, project detail, homepage
+
+- **Grid:** `GridContext::fill($layout, $items)` turns a row into its layout's columns and cells. Legacy behaviour: items sorted by position and **re-indexed**, so an empty slot leaves no gap (one live row, project 8, has a single item at position 1; it shows on the left, as in legacy). Rendering per context: `x-site.grid.project` (legacy grid-2x1fr + grid-stack: a single-cell column shows the media directly, stacked cells keep 687×458 / 687×940, spacers fill; empty columns left out) and `x-site.grid.home` (legacy ratio boxes, every box rendered even when empty).
+- **Project detail:** `Site\ProjectController` + `GetProject`. 301 to the canonical slug for a missing or wrong slug; unpublished → 404; projects without a detail page stay reachable. Prev/next in menu order, wrapping (`GetNavigation::projectIds()`); legacy quirk kept: a project not in the menu counts as the first one. Hover labels "Vorheriges/Nächstes Projekt" in CSS (`group-has-[…]`), no JS. "Info" panel: `modules/toggle.js` got `data-toggle="open"` (sets `data-open`, the text stays in the layout below 900 px) and `data-toggle-dismiss` (outside click closes, as legacy). Next-project teaser below 600 px. Images open in the lightbox gallery.
+- **Homepage:** `Site\HomeController` + `GetHome`. Highlight slideshow `modules/slideshow.js` (Swiper 12 with the legacy options: fade, 4.5 s, 1.5 s, loop; a video slide stops autoplay until it has played), shuffled per request. Grid tiles link to their project with the hover caption; news tiles (`x-site.news`) with the legacy per-breakpoint type sizes and date offsets; unpublished news are not shown (none is in the grid today).
+- **Image sizes, exact:** Glide's `fit=max` rounds the height first and then recomputes the width, so a 2500×1667 image became 499×333 instead of legacy's 500×333, which moved two news tiles by 0.1 px. `Media::imageUrl()` now computes the legacy target size itself (landscape ≥ max width → width, else height ≥ max height → height, other side rounded; smaller images unscaled) and passes exact `w`/`h` with `fit=stretch`.
+- Bug found and fixed during the comparison: the first `fill()` captured its counter in an arrow function (by value), so every cell got the column's first item.
+- `pages/shell.blade.php` removed: every public route has its page now.
+- **Visual result:**
+  - 5 sample projects × 17 viewports, plus "Info" open (900 px and up) and the navigation states: layout identical. What remains is scattered pixels inside photos (at most 253 px per page).
+  - Homepage × 17 viewports plus the navigation states (slideshow masked): layout identical; up to ~3,800 scattered pixels per page, all inside photos.
+  - Checked with a script that maps every diff pixel against the image boxes of the page: 0 diff pixels outside images on the homepage (5 widths), project 60 and Bücher.
+  - Interactions: browse hover labels, Info open → cross / outside click / inside click, news link hover: 0 px. Lightbox on a real project gallery vs fancyBox: 0–1 px; after browsing only the close button differs, because our dialog shows a `:focus-visible` ring after keyboard use (legacy hides all focus outlines). Kept on purpose for keyboard users (checklist §6).
+  - Slideshow vs legacy: same box (16:10, same position), autoplay advances, cross-fade, hover caption identical (40 % white, 51 px), no JS errors.
+- **Data note:** the highlight row has 7 slides, legacy 6. The extra one (HB-Therm, grid item 1526) was added in the admin on 2026-09-27 17:54, not by the import. Left as is; to be confirmed by the client.
+- Tests: `tests/Feature/Site/ProjectTest.php`, `tests/Feature/Site/HomeTest.php`.

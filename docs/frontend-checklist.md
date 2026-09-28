@@ -32,8 +32,8 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 
 | # | URL | Content | Notes | Status |
 |---|---|---|---|---|
-| 2.1 | `/` | Highlight slideshow + homepage grid (3fr, 2fr-1fr, 1fr-2fr in use; all 11 layouts supported) with image, video and news tiles, caption hover overlay | Slideshow is shuffled per request (masked in the diff, checked by hand) | ☐ |
-| 2.2 | `/bauten/{id}/{slug?}` | Type heading, prev/next browse with hover labels, title, "Info" toggle for description + info + PDF downloads, project grid (7 layouts) with lightbox, "Nächstes Projekt" teaser | Any slug → 301 to the canonical slug. Projects without a detail are still reachable | ☐ |
+| 2.1 | `/` | Highlight slideshow + homepage grid (3fr, 2fr-1fr, 1fr-2fr in use; all 11 layouts supported) with image, video and news tiles, caption hover overlay | Slideshow is shuffled per request (masked in the diff, checked by hand) | ☑ |
+| 2.2 | `/bauten/{id}/{slug?}` | Type heading, prev/next browse with hover labels, title, "Info" toggle for description + info + PDF downloads, project grid (7 layouts) with lightbox, "Nächstes Projekt" teaser | Any slug → 301 to the canonical slug. Projects without a detail are still reachable | ☑ |
 | 2.3 | `/werkliste`, `/werkliste/status` | Tabs Status/Jahr/Typ + PDF link; columns Ausgeführt / In Planung + Studie / Wettbewerb (1. Preis, 2. Preis, Andere) | Items link only when the project has a detail. No preview images (Q5) | ☑ |
 | 2.4 | `/werkliste/jahr` | Grouped by year, in columns | | ☑ |
 | 2.5 | `/werkliste/typ` | Category → types (headings only when `show_types`) | | ☑ |
@@ -50,10 +50,10 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 
 ## 3. Shared pieces
 
-- ☐ **One Blade grid component** for both contexts (`x-grid`, driven by `config/grids.php`), with item sub-components `x-grid.media` (image, video), `x-grid.news` and `x-grid.caption`, and ratio boxes from `sizes`.
-- ☐ Responsive images (`srcset`/`sizes`, `loading="lazy"`) through the existing Glide pipeline (`/img/...`); alt texts from the media records.
+- ☑ **One grid for both contexts**, driven by `config/grids.php` (`GridContext::fill()`): `x-site.grid.project` (flex stacks, layout ratios) and `x-site.grid.home` (ratio boxes), with `x-site.grid.media`, `x-site.news` and `x-site.caption`.
+- ◐ Images through the Glide pipeline (`/img/...`) at the exact legacy sizes (`Media::imageUrl()`); alt texts from the media records. `srcset`/`sizes` and `loading="lazy"` are not in legacy and would change nothing visible: step 5 (performance), after parity.
 - ☑ Lightbox (replaces Fancybox): single image and gallery, custom close/prev/next buttons with an inactive state at the ends, caption. Vanilla module, no dependency.
-- ☐ Slideshow: Swiper fade (4.5 s, 1.5 s, loop). Swiper is already a dependency and works without jQuery. A video slide pauses autoplay until it ends.
+- ☑ Slideshow: Swiper fade (4.5 s, 1.5 s, loop). Swiper is already a dependency and works without jQuery. A video slide pauses autoplay until it ends.
 - ◐ Toggles: one `modules/toggle.js`. Done for Impressum/Datenschutz, book info and team CV (the masonry re-layouts on `toggle:change`); still to wire: project info (closes on outside click).
 - ☑ Masonry: `modules/masonry.js`, port of the legacy Packery placement; runs after images and fonts load, on width change, and re-packs after a toggle. One column below 600 px.
 - ◐ Map: `modules/map.js`, Google Maps JS API, styles and coordinates from the legacy code, key from `GOOGLE_MAPS_KEY`; renders nothing without a key.

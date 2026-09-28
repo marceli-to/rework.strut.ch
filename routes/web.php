@@ -7,16 +7,17 @@ use App\Http\Controllers\Site\BooksController;
 use App\Http\Controllers\Site\ContactController;
 use App\Http\Controllers\Site\DownloadsController;
 use App\Http\Controllers\Site\EntryController;
+use App\Http\Controllers\Site\HomeController;
 use App\Http\Controllers\Site\JobsController;
+use App\Http\Controllers\Site\ProjectController;
 use App\Http\Controllers\Site\WorksController;
-use App\Models\Project;
 
 Route::get('/img/{path}', [ImageController::class, 'show'])->where('path', '.*');
 Route::get('/og-image/{file}', [ImageController::class, 'og'])->where('file', '.*')->name('og-image');
 
-// Public site. Pages still on 'pages.shell' are not built yet (Phase 2).
-Route::view('/', 'pages.shell')->name('page.home');
-Route::get('/bauten/{project:id}/{slug?}', fn (Project $project) => view('pages.shell'))->whereNumber('project')->name('page.project');
+// Public site.
+Route::get('/', HomeController::class)->name('page.home');
+Route::get('/bauten/{project:id}/{slug?}', ProjectController::class)->whereNumber('project')->name('page.project');
 Route::get('/werkliste', [WorksController::class, 'status'])->name('page.works');
 Route::get('/werkliste/status', [WorksController::class, 'status'])->name('page.works.status');
 Route::get('/werkliste/jahr', [WorksController::class, 'year'])->name('page.works.year');

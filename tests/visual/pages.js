@@ -86,7 +86,8 @@ export const projectPage = (id) => ({
 	path: `/bauten/${id}`,
 	navStates: id === sampleProjects[0],
 	states: [
-		{ name: 'info-open', ref: click('.btn-project-toggle'), act: click('[data-project-toggle]') },
+		// The Info button exists from 900px (below, the text sits under the images).
+		{ name: 'info-open', viewports: [900, 901, 1024, 1199, 1200, 1201, 1280, 1440, 1920, 2560], ref: click('.btn-project-toggle'), act: click('[aria-controls="project-info"]') },
 	],
 });
 

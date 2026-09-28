@@ -32,7 +32,7 @@ it('shows the page images, as a lightbox gallery when there are several', functi
 	$response = $this->get('/jobs');
 
 	expect(substr_count($response->getContent(), "data-lightbox=\"{$mode}\""))->toBe($count)
-		->and($response->getContent())->toContain('?h=800&amp;fit=max');
+		->and($response->getContent())->toContain('?w=791&amp;h=800&amp;fit=stretch');
 })->with([
 	[1, 'single'],
 	[2, 'gallery'],

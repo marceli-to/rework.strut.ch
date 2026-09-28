@@ -75,8 +75,7 @@ class Media extends Model
 	}
 
 	/**
-	 * Image sizes of the legacy site (MediaService), as [max width, max height]:
-	 * landscape images are scaled to the width, all others to the height.
+	 * Image sizes of the legacy site (MediaService), as [max width, max height].
 	 */
 	public const SIZES = [
 		'xs' => [500, 350],
@@ -95,9 +94,7 @@ class Media extends Model
 		$params = $size;
 
 		if (is_string($size)) {
-			[$maxWidth, $maxHeight] = self::SIZES[$size];
-			$landscape = ($crop['w'] ?? $this->width) > ($crop['h'] ?? $this->height);
-			$params = ($landscape ? ['w' => $maxWidth] : ['h' => $maxHeight]) + ['fit' => 'max'];
+			$params = $this->legacySize(self::SIZES[$size], $crop['w'] ?? $this->width, $crop['h'] ?? $this->height);
 		}
 
 		if ($crop) {
@@ -105,6 +102,31 @@ class Media extends Model
 		}
 
 		return '/img/uploads/' . $this->file . ($params ? '?' . http_build_query($params) : '');
+	}
+
+	/**
+	 * Target size as the legacy MediaService: landscape images at least the max
+	 * width are scaled to it, other images at least the max height to that,
+	 * the other side rounded. Exact width and height go to Glide, whose own
+	 * fitting rounds the height first and can end up 1px narrower.
+	 */
+	private function legacySize(array $max, ?int $width, ?int $height): array
+	{
+		[$maxWidth, $maxHeight] = $max;
+
+		if (!$width || !$height) {
+			return ['w' => $maxWidth, 'h' => $maxHeight, 'fit' => 'max'];
+		}
+
+		if ($width > $height && $width >= $maxWidth) {
+			return ['w' => $maxWidth, 'h' => (int) round($height * $maxWidth / $width), 'fit' => 'stretch'];
+		}
+
+		if ($height >= $maxHeight) {
+			return ['w' => (int) round($width * $maxHeight / $height), 'h' => $maxHeight, 'fit' => 'stretch'];
+		}
+
+		return ['w' => $width, 'h' => $height, 'fit' => 'stretch'];
 	}
 
 	public function getOrientationAttribute(): string

@@ -1,10 +1,10 @@
 {{--
-  Rich text from the admin: links get the green hover underline of x-site.link.
+  Rich text from the admin: its links (no class, unlike component links) get the green hover underline of x-site.link.
   `large`: underline offset for the larger text size (legacy %anchor-underline-lg).
 --}}
 @props(['as' => 'div', 'large' => false])
 <{{ $as }} {{ $attributes->class([
-  '[&_a]:inline [&_a]:text-green [&_a]:no-underline [&_a]:bg-repeat-x [&_a]:bg-size-[100%_1px] [&_a:hover]:bg-[linear-gradient(currentColor,currentColor)]',
-  '[&_a]:bg-position-[0_18px] md:[&_a]:bg-position-[0_24px]' => ! $large,
-  '[&_a]:bg-position-[0_20px] md:[&_a]:bg-position-[0_34px]' => $large,
+  '[&_a:not([class])]:inline [&_a:not([class])]:text-green [&_a:not([class])]:no-underline [&_a:not([class])]:bg-repeat-x [&_a:not([class])]:bg-size-[100%_1px] [&_a:not([class]):hover]:bg-[linear-gradient(currentColor,currentColor)]',
+  '[&_a:not([class])]:bg-position-[0_18px] md:[&_a:not([class])]:bg-position-[0_24px]' => ! $large,
+  '[&_a:not([class])]:bg-position-[0_20px] md:[&_a:not([class])]:bg-position-[0_34px]' => $large,
 ]) }}>{{ $slot }}</{{ $as }}>
