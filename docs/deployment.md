@@ -77,23 +77,58 @@ No queue worker, no Horizon, no websockets.
 
 ## 5. Content import (one-time, at go-live) ☐
 
-The content comes from the legacy strut.ch database and its media folder. There are two options:
+The content comes from the **live** strut.ch database and its media folder, imported with `strut:import`. The import builds all content from scratch (`--fresh`), so it can run again at any time until go-live.
 
-**A. Import locally, then transfer (recommended: no legacy access on the server needed)**
-1. Locally: `php artisan strut:import --fresh`, then `php artisan strut:verify` must report "Keine Probleme gefunden".
-2. Dump the local `rework_strut` database and import it on the server.
-3. Copy `storage/app/public/uploads/` (about 380 MB, 531 files) to the same path on the server.
+**Nothing entered in the new admin is lost by `--fresh`**, as long as no editorial content is added there before go-live. As of 2026-09-28 the new database holds only imported content, the system pages (recreated by the import) and a few admin tests. If content is entered in the new admin before go-live, stop and plan the migration again.
 
-**B. Import on the server**
-1. Set `LEGACY_DB_*` (read-only access to the legacy database) and `LEGACY_MEDIA_PATH` (absolute path to the legacy `storage/app/public/media`).
-2. Run `php artisan strut:import --fresh`, then `php artisan strut:verify`.
-3. Clear `LEGACY_*` afterwards.
+### 5.1 Content freeze ☐
 
-**After either option:** `php artisan strut:check-urls` ☐ must report "87 URLs, 0 fehlerhaft" (every legacy URL answers 200 or redirects to a page that does). Then `php artisan images:warm` ☐ pre-generates every public image variant (legacy sizes × JPEG/PNG, WebP, AVIF; about 4,100 files, ~7 minutes locally). Without it, the first visitor of each image waits for its encode. It can run again at any time (existing variants are skipped).
+Agree a date from which nobody edits the old CMS. Anything entered on the old site after the export is missing on the new one. Keep the gap between export (5.2) and domain switch (5.5) short: the steps take well under an hour.
+
+### 5.2 Export from the live server ☐
+
+- Database dump: `mysqldump --single-transaction --default-character-set=utf8mb4 <live-db> > strut-live.sql`
+- Media folder: copy `storage/app/public/media` from the live server, e.g. `rsync -av <live>:<path>/storage/app/public/media/ ./strut-live-media/`. It must include the `downloads/` subfolder (project, press and job PDFs).
+
+### 5.3 Import locally (recommended) ☐
+
+1. Load the dump into a **separate** local database, so the existing legacy copy (`strut.ch`) stays untouched as the comparison reference for the visual tests:
+   ```
+   mysql -h127.0.0.1 -uroot -e "CREATE DATABASE strut_prod CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+   mysql -h127.0.0.1 -uroot strut_prod < strut-live.sql
+   ```
+2. Point the import at the fresh copy in `.env`: `LEGACY_DB_DATABASE=strut_prod`, `LEGACY_MEDIA_PATH=/absolute/path/to/strut-live-media`.
+3. Run:
+   ```
+   php artisan strut:import --dry-run    # report only, writes nothing: check counts and missing files
+   php artisan strut:import --fresh      # deletes imported content and files, imports again
+   php artisan strut:verify              # must report "Keine Probleme gefunden"
+   php artisan strut:check-urls          # all legacy URLs must answer 200 or 301 → 200
+   ```
+   `--fresh` also rebuilds `legacy_map`, including the legacy file names that old image and PDF URLs redirect with.
+4. If projects were added on the live site since 2026-09-27, extend `docs/legacy-urls.txt` with their URLs (format `kind<TAB>path`, see the file) before `strut:check-urls`.
+5. Set `.env` back to `LEGACY_DB_DATABASE=strut.ch` and the old `LEGACY_MEDIA_PATH` afterwards (the visual comparison uses the local legacy copy).
+
+### 5.4 Transfer to the server ☐
+
+1. Dump the local `rework_strut` database and import it on the server:
+   ```
+   mysqldump -h127.0.0.1 -uroot --single-transaction rework_strut > rework-strut.sql
+   ```
+2. Copy `storage/app/public/uploads/` (about 380 MB, 531 files as of 2026-09-28) to the same path on the server.
+3. On the server: `php artisan optimize`, then `php artisan images:warm` ☐ (every public image variant: legacy sizes × JPEG/PNG, WebP, AVIF; about 4,100 files, ~7 minutes locally; existing variants are skipped, so it can run again at any time). Without it, the first visitor of each image waits for its encode.
+4. On the server: `php artisan strut:check-urls` ☐ must report "0 fehlerhaft".
+
+**Alternative: import directly on the server.** If the server can reach the live database (read-only user) and the media folder: set `LEGACY_DB_*` and `LEGACY_MEDIA_PATH` there, run the commands of 5.3 step 3, then `images:warm`, and clear all `LEGACY_*` values afterwards. This saves the transfer, but needs access to both systems at the same time.
+
+### 5.5 Switch ☐
+
+Point the domain to the new server (see §7), then check a few pages, a PDF and an old image URL (e.g. `/storage/media/large/…` from a search engine result) on the live domain.
 
 Notes:
-- The import is idempotent. `--dry-run` shows the report without writing anything.
+- The import is idempotent; `--dry-run` shows the report without writing anything.
 - Legacy source files are only ever copied, never changed.
+- New categories on the live site: the Werkliste PDFs "Wohnen", "Gewerbe", "Öffentlich" are tied to the legacy category ids 1–3 and keep working; a new category appears in the "Gesamt" and "Typ" PDFs and on the Downloads page.
 - **Users** are imported with their old passwords. **Rotate all passwords after go-live** ☐ (the admin's "Passwort vergessen" flow works once mail is configured).
 
 ## 6. Every further deployment
@@ -118,6 +153,6 @@ After changing image processing (sizes, qualities, crops of existing media): `ph
 - ☐ `robots.txt` and `sitemap.xml` are routes (`SeoController`). Production (`APP_ENV=production`) allows indexing and names the sitemap; any other environment answers `Disallow: /`. **No `public/robots.txt` may exist on the server**, it would shadow the route. Submit `https://strut.ch/sitemap.xml` in the Google Search Console after go-live.
 - ⏳ Google Maps API key (`GOOGLE_MAPS_KEY`), restricted to the production domain
 - ☐ `GOOGLE_MAPS_KEY` set; check the map on `/kontakt` (styles, marker; never tested with a real key)
-- ☐ Legacy URLs: `php artisan strut:check-urls` (87/0), then `php artisan images:warm` (§5)
+- ☐ Legacy URLs: `php artisan strut:check-urls` (0 fehlerhaft), then `php artisan images:warm` (§5.4)
 - ☐ Backups: database, and `storage/app/public/uploads` (the originals). `.glide-cache` does not need backing up; it regenerates.
 - ☐ The legacy `/artisan/*` routes must not exist on the new site (they don't). If the old code base stays online anywhere, remove them there.
