@@ -90,9 +90,23 @@ abstract class ResourceController extends Controller
 		return response()->json(['message' => 'ok']);
 	}
 
+	/**
+	 * Reason why the record can't be deleted (shown in the admin), or null.
+	 */
+	protected function preventDelete(Model $model): ?string
+	{
+		return null;
+	}
+
 	public function destroy(string $uuid)
 	{
-		(new DeleteAction)->execute($this->find($uuid));
+		$model = $this->find($uuid);
+
+		if ($reason = $this->preventDelete($model)) {
+			return response()->json(['message' => $reason], 422);
+		}
+
+		(new DeleteAction)->execute($model);
 
 		return response()->json(null, 204);
 	}

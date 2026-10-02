@@ -5,6 +5,7 @@ import { PhPlus, PhUploadSimple } from '@phosphor-icons/vue'
 import Uppy from '@uppy/core'
 import XHRUpload from '@uppy/xhr-upload'
 import German from '@uppy/locales/lib/de_DE'
+import { useToast } from '@/composables/useToast'
 
 const props = defineProps({
 	compact: { type: Boolean, default: false },
@@ -14,6 +15,7 @@ const props = defineProps({
 })
 
 const options = useOptionsStore()
+const toast = useToast()
 const profile = computed(() => options.media_profiles[props.profile] ?? { extensions: [], hint: '' })
 const extensions = computed(() => profile.value.extensions)
 const hint = computed(() => profile.value.hint)
@@ -65,6 +67,18 @@ onMounted(async () => {
 		uppy.removeFile(file.id)
 	})
 
+	// wrong type / too large: Uppy rejects the file before upload
+	uppy.on('restriction-failed', (file, error) => {
+		toast.error(restrictionMessage(file, error))
+	})
+
+	// server validation (422) or network errors
+	uppy.on('upload-error', (file, error, response) => {
+		const errors = response?.body?.errors
+		toast.error(errors ? Object.values(errors).flat()[0] : (response?.body?.message ?? `${file.name}: Upload fehlgeschlagen`))
+		uppy.removeFile(file.id)
+	})
+
 	uppy.on('complete', () => {
 		uploading.value = false
 		progress.value = 0
@@ -74,6 +88,15 @@ onMounted(async () => {
 onBeforeUnmount(() => {
 	if (uppy) uppy.destroy()
 })
+
+// wrong type: same wording as the server rule (UploadMediaRequest); otherwise Uppy's own message (e.g. too large)
+function restrictionMessage(file, error) {
+	const extension = '.' + (file?.name?.split('.').pop() ?? '').toLowerCase()
+	if (extensions.value.length && !extensions.value.includes(extension)) {
+		return `Hier sind nur diese Dateitypen erlaubt: ${extensions.value.map(e => e.replace(/^\./, '').toUpperCase()).join(', ')}`
+	}
+	return error?.message ?? 'Datei nicht erlaubt'
+}
 
 function onDrop(e) {
 	isDragging.value = false

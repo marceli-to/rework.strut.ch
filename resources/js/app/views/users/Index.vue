@@ -32,8 +32,12 @@ async function handleDelete(user) {
 		destructive: true,
 	})
 	if (!ok) return
-	await store.deleteUser(user.uuid)
-	toast.success('Benutzer gelöscht')
+	try {
+		await store.deleteUser(user.uuid)
+		toast.success('Benutzer gelöscht')
+	} catch (error) {
+		toast.error(error.response?.data?.message ?? 'Löschen fehlgeschlagen')
+	}
 }
 </script>
 
@@ -68,7 +72,9 @@ async function handleDelete(user) {
 						>
 							<PhPencil :size="16" weight="light" />
 						</button>
+						<!-- the own account can't be deleted (API: 403) -->
 						<button
+							v-if="!row.is_self"
 							class="rounded text-gray-400 dark:text-warm-500 hover:text-red-600 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 dark:focus-visible:ring-warm-700"
 							@click="handleDelete(row)"
 						>

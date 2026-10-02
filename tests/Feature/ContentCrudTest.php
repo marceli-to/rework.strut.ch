@@ -144,3 +144,19 @@ it('appends new sortable records at the end of their group', function () {
 
 	expect([$first->sort_order, $second->sort_order, $elsewhere->sort_order])->toBe([0, 1, 0]);
 });
+
+it('refuses to delete a category or type that still has projects', function (string $endpoint, Closure $owner, string $message) {
+	$type = CategoryType::factory()->create();
+	Project::factory()->count(2)->for($type)->create();
+	$uuid = $owner($type);
+
+	$this->actingAs($this->user)
+		->deleteJson("/api/dashboard/$endpoint/$uuid")
+		->assertUnprocessable()
+		->assertJsonPath('message', $message);
+
+	expect(CategoryType::count())->toBe(1)->and(Project::count())->toBe(2);
+})->with([
+	'category' => ['categories', fn (CategoryType $type) => $type->category->uuid, 'Die Kategorie enthält noch 2 Projekte. Bitte zuerst die Projekte verschieben oder löschen.'],
+	'type' => ['category-types', fn (CategoryType $type) => $type->uuid, 'Der Typ enthält noch 2 Projekte. Bitte zuerst die Projekte verschieben oder löschen.'],
+]);

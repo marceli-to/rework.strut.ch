@@ -27,6 +27,14 @@ it('shows the about text, its images and the published team in order', function 
 		->assertDontSee('Entwurf');
 });
 
+it('shows the Lebenslauf toggle only for members with a CV', function (?string $cv) {
+	$member = TeamMember::factory()->create(['firstname' => 'Felix', 'lastname' => 'Rutishauser', 'cv' => $cv, 'publish' => true]);
+
+	$this->get('/ueber-uns')
+		->assertSee('Felix Rutishauser')
+		->assertDontSee('aria-controls="cv-' . $member->id . '"', false);
+})->with(['none' => [null], 'emptied editor' => ['<p></p>']]);
+
 it('lists published books with an order link by mail or URL', function () {
 	Book::factory()->create(['title' => 'Leimenegg', 'description' => "Zeile 1\nZeile 2", 'url' => 'mail@strut.ch', 'publish' => true, 'sort_order' => 0]);
 	Book::factory()->create(['title' => 'Peter Kunz', 'url' => 'https://www.quart.ch/produkt/peter-kunz/', 'publish' => true, 'sort_order' => 1]);

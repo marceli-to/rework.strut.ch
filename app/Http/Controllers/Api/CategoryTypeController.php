@@ -6,6 +6,7 @@ use App\Http\Requests\Content\CategoryTypeRequest;
 use App\Http\Resources\CategoryTypeResource;
 use App\Models\CategoryType;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class CategoryTypeController extends ResourceController
@@ -21,5 +22,12 @@ class CategoryTypeController extends ResourceController
 	{
 		return parent::query($request)
 			->when($request->query('category'), fn (Builder $q, string $uuid) => $q->whereHas('category', fn (Builder $c) => $c->where('uuid', $uuid)));
+	}
+
+	protected function preventDelete(Model $model): ?string
+	{
+		$count = $model->projects()->count();
+
+		return $count ? "Der Typ enthält noch {$count} " . ($count === 1 ? 'Projekt' : 'Projekte') . '. Bitte zuerst die Projekte verschieben oder löschen.' : null;
 	}
 }

@@ -42,6 +42,12 @@ it('gives projects their own title, description and the flagged Opengraph image'
 		->assertSee('<link rel="canonical" href="' . url($project->url) . '">', false);
 });
 
+it('keeps paragraphs apart in the fallback description', function () {
+	$project = Project::factory()->create(['description' => '<p>Erster Absatz.</p><p>Zweiter<br>Teil</p>', 'meta_description' => null, 'publish' => true]);
+
+	expect($project->meta_description)->toBe('Erster Absatz. Zweiter Teil');
+});
+
 it('lists the pages and detailed projects in the sitemap', function () {
 	$project = Project::factory()->create(['publish' => true, 'has_detail' => true]);
 	$hidden = Project::factory()->create(['publish' => true, 'has_detail' => false]);

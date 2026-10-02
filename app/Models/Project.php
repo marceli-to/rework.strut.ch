@@ -116,7 +116,9 @@ class Project extends Model
 			if ($value) {
 				return $value;
 			}
-			$text = trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags($this->description ?? ''))));
+			// a space at line breaks and block ends, so paragraphs don't run together
+			$html = preg_replace('#<br\s*/?>|</(p|li|h\d|div)>#i', ' ', $this->description ?? '');
+			$text = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags($html))));
 			return Str::limit($text, 160);
 		});
 	}

@@ -39,6 +39,11 @@ class UserController extends Controller
 
 	public function destroy(User $user)
 	{
+		// also keeps at least one account: the last one is always your own
+		if ($user->is(auth()->user())) {
+			return response()->json(['message' => 'Das eigene Konto kann nicht gelöscht werden.'], 403);
+		}
+
 		(new DeleteAction)->execute($user);
 		return response()->json(null, 204);
 	}

@@ -15,6 +15,7 @@ class UserResource extends JsonResource
 			'name' => $this->name,
 			'email' => $this->email,
 			'role' => $this->role,
+			'is_self' => $this->resource->is($request->user()),
 		];
 	}
 }

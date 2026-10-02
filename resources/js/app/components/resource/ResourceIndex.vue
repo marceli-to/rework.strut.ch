@@ -54,8 +54,13 @@ async function remove(row) {
 		destructive: true,
 	})
 	if (!ok) return
-	await props.store.destroy(row.uuid)
-	toast.success('Gelöscht')
+	try {
+		await props.store.destroy(row.uuid)
+		toast.success('Gelöscht')
+	} catch (error) {
+		// e.g. 422: a category that still has projects
+		toast.error(error.response?.data?.message ?? 'Löschen fehlgeschlagen')
+	}
 }
 </script>
 

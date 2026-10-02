@@ -36,8 +36,11 @@
             @if ($member->phone) <a href="tel:{{ $member->phone }}">{{ $member->phone }}</a><br> @endif
             @if ($member->email) <a href="mailto:{{ $member->email }}">{{ $member->email }}</a> @endif
           </div>
-          <x-site.toggle controls="cv-{{ $member->id }}">Lebenslauf</x-site.toggle>
-          <div id="cv-{{ $member->id }}" class="mt-8" hidden>{!! $member->cv !!}</div>
+          {{-- an emptied editor saves "<p></p>" --}}
+          @if (filled(trim(strip_tags($member->cv ?? ''))))
+            <x-site.toggle controls="cv-{{ $member->id }}">Lebenslauf</x-site.toggle>
+            <div id="cv-{{ $member->id }}" class="mt-8" hidden>{!! $member->cv !!}</div>
+          @endif
         </x-site.masonry.item>
       @endforeach
     </x-site.masonry>
