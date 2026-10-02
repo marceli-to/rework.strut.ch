@@ -25,7 +25,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 | 1.4 | Navigation, desktop (≥ 901 px): nested dropdowns (Bauten → category → type → projects; Publikationen; Büro). Menu height follows the open list (+30 px). Click outside closes it | `menu.js` | `modules/menu.js` | ☑ |
 | 1.5 | Navigation, mobile (≤ 900 px): full menu toggled by the button (`has-menu` on `<html>`), same nested accordions | `menu.js` | `modules/menu.js` | ☑ |
 | 1.6 | Menu data: published categories → active types → published projects **with detail**; active states for the current project/category/type and the current page | `NavigationService` | `GetNavigation` action + view composer | ☑ |
-| 1.7 | "Werkliste" is only marked active on `/werkliste`, not on `/werkliste/status|jahr|typ` (legacy quirk, kept 1:1) | same | same | ☑ |
+| 1.7 | "Werkliste" is marked active on `/werkliste` and `/werkliste/status|jahr|typ` (legacy quirk dropped in round 3, see `changes-03.md`) | same | same | ☑ |
 | 1.8 | No footer | — | — | ☑ |
 
 ## 2. Page types
@@ -91,7 +91,7 @@ Status: ☐ open · ◐ built, diff not clean yet · ☑ done.
 ## Legacy behaviour kept on purpose (worth a later round)
 
 - The Datenschutz text is hard-coded in the view and describes Google Analytics, which the site doesn't use.
-- "Werkliste" menu item not active on its sub-views (1.7).
+- ~~"Werkliste" menu item not active on its sub-views (1.7).~~ Done in round 3.
 - Links in running text (e.g. the photographer credits in a project's info) differ from the text only by colour until hovered (axe: link-in-text-block, WCAG 1.4.1).
 - Werkliste PDFs: date and title lines positioned off the page (never visible); the address footer is on page 1 only.
 - `/werkliste` and `/werkliste/status` show the same page (handled with a canonical tag).
