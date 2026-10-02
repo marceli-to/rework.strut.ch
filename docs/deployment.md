@@ -144,6 +144,8 @@ After changing image processing (sizes, qualities, crops of existing media): `ph
 
 ## 7. Go-live checklist
 
+The same items are in the Go-live section of the acceptance checklist ([Strut Rework Test Run](https://claude.ai/artifact/CsE2CtPCRRbENGX5LqgthW), `live-1` … `live-12`); record the results there too.
+
 - ☐ Cron entry for the scheduler (§4)
 - ☐ Mail configured and "Passwort vergessen" tested
 - ☐ `APP_DEBUG=false`, `APP_ENV=production`, HTTPS

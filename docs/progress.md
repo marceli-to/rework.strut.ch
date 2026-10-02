@@ -361,3 +361,11 @@ Client decisions:
 ## 2026-09-28 — Checkpoint 2 approved
 
 The client approved Phase 2 ("rest looks super"). All phases of the brief are complete. Next steps are go-live (`docs/deployment.md`, section 7 and the ☐ items) and, later, the change round listed under "Legacy behaviour kept on purpose" in `docs/frontend-checklist.md`.
+
+## 2026-10-02 — Acceptance test
+
+Checklist and results: [Strut Rework Test Run](https://claude.ai/artifact/CsE2CtPCRRbENGX5LqgthW) (186 checks in Admin, Public site and Go-live, one result column each for Marcel and Claude Code, notes per check, shared results). The page also builds the Claude Code prompt and imports its result lines.
+
+- Claude Code run: 140 pass, 19 fail, 27 skip (skips: real browsers/devices, production server, mail delivery, legacy passwords). The site needs PHP 8.4 in Herd (the global default had become 8.3).
+- Marcel triaged the failures; the fixes are round 3 in `docs/changes-03.md`, re-tested end to end. entries-5 (Presse project link) is an open client question.
+- The Go-live section (`live-1` … `live-12`) mirrors §7 of `docs/deployment.md`; tick it there on the production server.

@@ -1,6 +1,6 @@
 # Changes — round 3 (acceptance test 2026-10-02)
 
-Source: acceptance test run (186 checks), failures triaged by Marcel. Status per item: ☐ open · ☑ done · ❓ client decision.
+Source: acceptance test run (186 checks, [Strut Rework Test Run](https://claude.ai/artifact/CsE2CtPCRRbENGX5LqgthW)), failures triaged by Marcel. Status per item: ☐ open · ☑ done · ❓ client decision.
 
 ## Fixed
 - ☑ **media-2** Wrong file type: the uploader now shows "Hier sind nur diese Dateitypen erlaubt: …" as an error toast (same wording as the server rule). Before, Uppy rejected the file silently. Server errors on upload (422, network) are shown too.
