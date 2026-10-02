@@ -41,12 +41,14 @@ it('marks the current project, its type and category as active', function () {
 		->and($category['types'][0]['projects'][0]['active'])->toBeTrue();
 });
 
-it('marks only /werkliste itself as active, like the legacy site', function (string $route, bool $active) {
+it('marks "Werkliste" as active on all its views', function (string $route, bool $active) {
 	expect(app(GetNavigation::class)->execute($route)['works']['active'])->toBe($active);
 })->with([
 	['page.works', true],
-	['page.works.status', false],
-	['page.works.year', false],
+	['page.works.status', true],
+	['page.works.year', true],
+	['page.works.type', true],
+	['page.press', false],
 ]);
 
 it('marks the section of the current page as active', function () {

@@ -9,8 +9,8 @@ use App\Models\Project;
  * Main navigation: "Bauten" (published categories → published types → published
  * projects with a detail page) plus the fixed page links.
  *
- * Active states follow the legacy site, including its quirk that "Werkliste" is
- * only active on /werkliste itself, not on its sub-views.
+ * "Werkliste" is active on all its views (/werkliste, /status, /jahr, /typ);
+ * legacy only marked /werkliste itself (fixed in round 3).
  */
 class GetNavigation
 {
@@ -28,7 +28,7 @@ class GetNavigation
 				'active' => $route === 'page.project',
 				'categories' => $this->categories($project),
 			],
-			'works' => ['label' => 'Werkliste', 'route' => 'page.works', 'active' => $route === 'page.works'],
+			'works' => ['label' => 'Werkliste', 'route' => 'page.works', 'active' => str_starts_with($route ?? '', 'page.works')],
 			'publications' => $section('Publikationen', [
 				['label' => 'Presse', 'route' => 'page.press'],
 				['label' => 'Bücher', 'route' => 'page.books'],
