@@ -295,7 +295,7 @@ it('exposes media profiles with crop ratios to the admin', function () {
     $this->actingAs($this->user)
         ->getJson('/api/dashboard/options')
         ->assertOk()
-        ->assertJsonPath('media_profiles.portrait.crops.0.label', 'Portrait')
-        ->assertJsonPath('media_profiles.portrait.crops.0.value', 0.864)
+        ->assertJsonPath('media_profiles.portrait.crops.0.label', 'Portrait 2:3')
+        ->assertJsonPath('media_profiles.portrait.crops.0.value', 0.666667)
         ->assertJsonPath('media_profiles.document.extensions', ['.pdf']);
 });

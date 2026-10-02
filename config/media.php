@@ -23,8 +23,9 @@ return [
 	'profiles' => [
 		// project images/videos: grids, highlight slideshow, lightbox
 		'project' => ['types' => ['image', 'video'], 'crops' => ['Frei' => null, 'Raster 3:2' => [687, 458], 'Raster hoch' => [687, 940], 'Highlight 16:10' => [16, 10]]],
-		// team portrait (432 × 500)
-		'portrait' => ['types' => ['image'], 'crops' => ['Portrait' => [432, 500]]],
+		// team portrait: legacy delivers 2:3 (originals 667 × 1000, shown at 334 × 500;
+		// the legacy width/height attributes 432 × 500 don't match the images)
+		'portrait' => ['types' => ['image'], 'crops' => ['Portrait 2:3' => [2, 3]]],
 		// press, awards, lectures (600 × 400)
 		'entry' => ['types' => ['image'], 'crops' => ['3:2' => [3, 2]]],
 		// content page images: Über uns, Jobs (960 × 650)
