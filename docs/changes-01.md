@@ -56,7 +56,7 @@ Recorded below once answered.
 - **B1/B2 media profiles** are defined in `config/media.php` (`project`, `portrait`, `entry`, `page`, `cover`, `news`, `og`, `document`).
   - The upload endpoint validates the file type per profile.
   - The admin gets extensions, hint and crop ratios via `/api/dashboard/options`; each `MediaField` declares its profile.
-  - A single ratio locks the crop (portrait 432×500, entry 3:2, OG 1200×630).
+  - A single ratio locks the crop (portrait 432×500, entry 3:2, OG 1200×630). *(Portrait changed to 2:3 in round 3, see `changes-03.md`.)*
 - **Einstellungen** tabs are Kategorien · SEO · Benutzer; the sidebar entry stays active on all three.
 - **Verified** in headless Chromium:
   - project list badges and header filter;

@@ -1,12 +1,12 @@
 # Deployment — rework.strut.ch
 
-Everything the server needs besides the code. Status markers: ☐ to do on the server · ⏳ comes with Phase 2 (frontend).
+Everything the server needs besides the code. Status markers: ☐ to do on the server · ☑ nothing to do on the server (handled by the app).
 
 ## 1. Server requirements
 
 | | |
 |---|---|
-| PHP | **8.4** (composer requires ^8.3) |
+| PHP | **8.4.1+** (`composer.json` says ^8.3, but the locked dependencies need 8.4.1; with 8.3 every request fails in Composer's platform check) |
 | PHP extensions | `imagick` (**required**: Glide image driver, upload normalization; its ImageMagick must be able to write **AVIF and WebP**, check with `php -r 'print_r(array_intersect(["AVIF","WEBP"], Imagick::queryFormats()));'` — a missing format is simply not offered), `pdo_mysql`, `mbstring`, `fileinfo`, `intl`, `exif`, `openssl`, `tokenizer`, `xml`, `ctype`, `curl`, `zip` |
 | Database | MySQL 5.7+ / 8 or MariaDB 10.6+, `utf8mb4` |
 | Web server | nginx or Apache; document root = `public/` |
@@ -42,7 +42,7 @@ MAIL_MAILER=smtp               # required for "Passwort vergessen"
 MAIL_HOST= / MAIL_PORT= / MAIL_USERNAME= / MAIL_PASSWORD= / MAIL_SCHEME=
 MAIL_FROM_ADDRESS="mail@strut.ch"
 
-GOOGLE_MAPS_KEY=               # ⏳ contact page map (Phase 2); restrict the key to the domain
+GOOGLE_MAPS_KEY=               # contact page map; restrict the key to the domain
 ```
 
 `LEGACY_DB_*` and `LEGACY_MEDIA_PATH` are **only** needed if the import runs on the server (see §5). Leave them empty otherwise.
@@ -151,10 +151,9 @@ The same items are in the Go-live section of the acceptance checklist ([Strut Re
 - ☐ `APP_DEBUG=false`, `APP_ENV=production`, HTTPS
 - ☐ Content imported and `strut:verify` clean (§5)
 - ☐ Passwords of imported users rotated
-- ⏳ 301 redirects for changed URLs (`/bauten` → `/werkliste`, old `/storage/media/…` and `/media/…` image/PDF URLs). These are handled inside the app; there are no server rules to add.
+- ☑ 301 redirects for changed URLs (`/bauten` → `/werkliste`, old `/storage/media/…` and `/media/…` image/PDF URLs). These are handled inside the app; there are no server rules to add.
 - ☐ `robots.txt` and `sitemap.xml` are routes (`SeoController`). Production (`APP_ENV=production`) allows indexing and names the sitemap; any other environment answers `Disallow: /`. **No `public/robots.txt` may exist on the server**, it would shadow the route. Submit `https://strut.ch/sitemap.xml` in the Google Search Console after go-live.
-- ⏳ Google Maps API key (`GOOGLE_MAPS_KEY`), restricted to the production domain
-- ☐ `GOOGLE_MAPS_KEY` set; check the map on `/kontakt` (styles, marker; never tested with a real key)
+- ☐ `GOOGLE_MAPS_KEY` set and restricted to the production domain; check the map on `/kontakt` (styles, marker; never tested with a real key)
 - ☐ Legacy URLs: `php artisan strut:check-urls` (0 fehlerhaft), then `php artisan images:warm` (§5.4)
 - ☐ Backups: database, and `storage/app/public/uploads` (the originals). `.glide-cache` does not need backing up; it regenerates.
 - ☐ The legacy `/artisan/*` routes must not exist on the new site (they don't). If the old code base stays online anywhere, remove them there.
