@@ -27,7 +27,6 @@ export const useMediaStore = defineStore('media', {
 			caption: item.caption || null,
 			crop: item.crop || null,
 			variant: item.variant || 'desktop',
-			is_teaser: !!item.is_teaser,
 			is_og: !!item.is_og,
 		})),
 
@@ -89,25 +88,6 @@ export const useMediaStore = defineStore('media', {
 					}))
 				await mediaApi.reorder(reorderData)
 			}
-		},
-
-		async setTeaser(uuid) {
-			const item = this.items.find(i => i.uuid === uuid)
-			const wasTeaser = item?.is_teaser
-
-			if (item?._temp) {
-				this.items = this.items.map(i => ({
-					...i,
-					is_teaser: i.collection === item.collection ? (wasTeaser ? false : i.uuid === uuid) : i.is_teaser,
-				}))
-				return
-			}
-
-			await mediaApi.teaser(uuid)
-			this.items = this.items.map(i => ({
-				...i,
-				is_teaser: i.collection === item.collection ? (wasTeaser ? false : i.uuid === uuid) : i.is_teaser,
-			}))
 		},
 
 		async setOg(uuid) {

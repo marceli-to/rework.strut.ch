@@ -25,7 +25,6 @@ class MediaResource extends JsonResource
 			'crop' => $this->crop,
 			'variant' => $this->variant,
 			'orientation' => $this->orientation,
-			'is_teaser' => $this->is_teaser,
 			'is_og' => $this->is_og,
 			'sort_order' => $this->sort_order,
 			...MediaUrls::for($this->file, $this->mime_type, $this->crop),

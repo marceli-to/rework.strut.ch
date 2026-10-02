@@ -68,7 +68,6 @@ Route::prefix('dashboard')
 				Route::patch('/reorder', 'reorder');
 				Route::put('/{media}', 'update');
 				Route::delete('/{media}', 'destroy');
-				Route::patch('/{media}/teaser', 'teaser');
 				Route::patch('/{media}/og', 'og');
 				Route::patch('/{media}/crop', 'crop');
 			});

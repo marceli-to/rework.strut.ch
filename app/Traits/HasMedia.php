@@ -36,8 +36,4 @@ trait HasMedia
 		return $this->mediaIn('files');
 	}
 
-	public function teaser(): ?Media
-	{
-		return $this->images->firstWhere('is_teaser', true) ?? $this->images->first();
-	}
 }

@@ -34,7 +34,6 @@ class AttachAction
 				'caption' => $item['caption'] ?? null,
 				'crop' => $item['crop'] ?? null,
 				'variant' => $item['variant'] ?? 'desktop',
-				'is_teaser' => $item['is_teaser'] ?? false,
 				'is_og' => $item['is_og'] ?? false,
 				'sort_order' => $maxSort,
 			]);

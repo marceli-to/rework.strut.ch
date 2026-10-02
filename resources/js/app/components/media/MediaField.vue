@@ -17,7 +17,6 @@ const props = defineProps({
 	collection: { type: String, default: 'images' }, // 'images' | 'files' | 'og'
 	profile: { type: String, required: true }, // config/media.php: file types + crop ratios
 	maxFiles: { type: Number, default: null },
-	hasTeaser: { type: Boolean, default: false },
 	hasOg: { type: Boolean, default: false },
 })
 
@@ -65,13 +64,11 @@ async function onDelete(media) {
 				v-if="items.length"
 				:items="items"
 				sidebar
-				:hasTeaser="hasTeaser"
 				:hasOg="hasOg"
 				:crops="crops"
 				@edit="editing = $event"
 				@delete="onDelete"
 				@reorder="store.reorder($event)"
-				@teaser="store.setTeaser($event.uuid)"
 				@og="store.setOg($event.uuid)"
 			/>
 		</div>

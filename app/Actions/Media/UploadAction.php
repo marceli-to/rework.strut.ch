@@ -34,7 +34,6 @@ class UploadAction
 			'height' => $height,
 			'alt' => null,
 			'caption' => null,
-			'is_teaser' => false,
 			'is_og' => false,
 			'variant' => 'desktop',
 			'sort_order' => 0,

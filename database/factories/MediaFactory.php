@@ -26,7 +26,6 @@ class MediaFactory extends Factory
             'caption' => fake()->sentence(5),
             'width' => fake()->randomElement([800, 1200, 1920, 2560]),
             'height' => fake()->randomElement([600, 800, 1080, 1440]),
-            'is_teaser' => false,
             'is_og' => false,
             'sort_order' => 0,
         ];

@@ -48,7 +48,7 @@ const tabs = computed(() => [
 				</div>
 			</Tab>
 			<Tab name="images">
-				<MediaField label="Bilder & Videos" profile="project" hasTeaser hasOg />
+				<MediaField label="Bilder & Videos" profile="project" hasOg />
 			</Tab>
 			<Tab name="files">
 				<MediaField label="Projektdokumentation (PDF)" collection="files" profile="document" />

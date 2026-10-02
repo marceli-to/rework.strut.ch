@@ -46,13 +46,6 @@ class MediaController extends Controller
 		return response()->json(['message' => 'ok']);
 	}
 
-	public function teaser(Media $media)
-	{
-		$media = (new SetFlagAction)->execute($media, 'is_teaser');
-
-		return new MediaResource($media);
-	}
-
 	public function og(Media $media)
 	{
 		$media = (new SetFlagAction)->execute($media, 'is_og');

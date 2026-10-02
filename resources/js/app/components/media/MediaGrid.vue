@@ -8,14 +8,13 @@ import { useMediaStore } from '@/stores/media'
 const props = defineProps({
 	items: { type: Array, default: () => [] },
 	hasOg: { type: Boolean, default: false },
-	hasTeaser: { type: Boolean, default: false },
 	hasVariant: { type: Boolean, default: false },
 	crops: { type: Array, default: () => [] }, // [{ label, value }] from the media profile
 	hasEdit: { type: Boolean, default: true },
 	sidebar: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['edit', 'delete', 'reorder', 'teaser', 'og'])
+const emit = defineEmits(['edit', 'delete', 'reorder', 'og'])
 
 const store = useMediaStore()
 const cropMedia = ref(null)
@@ -52,16 +51,12 @@ const dragItems = computed({
 				<MediaCard
 					:media="element"
 					:showInfo="true"
-					:badge="element.is_teaser ? 'Teaser' : null"
-					:hasTeaser="hasTeaser"
-					:isTeaser="element.is_teaser"
 					:hasOg="hasOg"
 					:isOg="element.is_og"
 					:hasCrop="crops.length > 0 && element.mime_type?.startsWith('image/')"
 					:hasEdit="hasEdit"
 					:hasVariant="hasVariant"
 					@edit="emit('edit', $event)"
-					@teaser="emit('teaser', $event)"
 					@og="emit('og', $event)"
 					@delete="emit('delete', $event)"
 					@variant="handleVariantToggle"

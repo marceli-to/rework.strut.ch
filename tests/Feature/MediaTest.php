@@ -92,55 +92,6 @@ it('rejects reorder with unknown uuid', function () {
         ->assertUnprocessable();
 });
 
-it('toggles teaser on', function () {
-    $project = Project::factory()->create();
-    $media = Media::factory()->create([
-        'mediable_type' => Project::class,
-        'mediable_id' => $project->id,
-        'is_teaser' => false,
-    ]);
-
-    $this->actingAs($this->user)
-        ->patchJson("/api/dashboard/media/{$media->uuid}/teaser")
-        ->assertOk()
-        ->assertJsonPath('data.is_teaser', true);
-});
-
-it('toggles teaser off when already set', function () {
-    $project = Project::factory()->create();
-    $media = Media::factory()->create([
-        'mediable_type' => Project::class,
-        'mediable_id' => $project->id,
-        'is_teaser' => true,
-    ]);
-
-    $this->actingAs($this->user)
-        ->patchJson("/api/dashboard/media/{$media->uuid}/teaser")
-        ->assertOk()
-        ->assertJsonPath('data.is_teaser', false);
-});
-
-it('only allows one teaser per entity', function () {
-    $project = Project::factory()->create();
-    $first = Media::factory()->create([
-        'mediable_type' => Project::class,
-        'mediable_id' => $project->id,
-        'is_teaser' => true,
-    ]);
-    $second = Media::factory()->create([
-        'mediable_type' => Project::class,
-        'mediable_id' => $project->id,
-        'is_teaser' => false,
-    ]);
-
-    $this->actingAs($this->user)
-        ->patchJson("/api/dashboard/media/{$second->uuid}/teaser")
-        ->assertOk()
-        ->assertJsonPath('data.is_teaser', true);
-
-    expect($first->fresh()->is_teaser)->toBeFalse();
-});
-
 it('toggles og image on', function () {
     $project = Project::factory()->create();
     $media = Media::factory()->create([
@@ -153,6 +104,20 @@ it('toggles og image on', function () {
         ->patchJson("/api/dashboard/media/{$media->uuid}/og")
         ->assertOk()
         ->assertJsonPath('data.is_og', true);
+});
+
+it('toggles og image off when already set', function () {
+    $project = Project::factory()->create();
+    $media = Media::factory()->create([
+        'mediable_type' => Project::class,
+        'mediable_id' => $project->id,
+        'is_og' => true,
+    ]);
+
+    $this->actingAs($this->user)
+        ->patchJson("/api/dashboard/media/{$media->uuid}/og")
+        ->assertOk()
+        ->assertJsonPath('data.is_og', false);
 });
 
 it('only allows one og image per entity', function () {

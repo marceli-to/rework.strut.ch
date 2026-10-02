@@ -20,7 +20,6 @@ trait HasMediaRules
 			'media.*.caption' => 'nullable|string|max:1000',
 			'media.*.crop' => 'nullable|array',
 			'media.*.variant' => 'sometimes|in:desktop,mobile',
-			'media.*.is_teaser' => 'sometimes|boolean',
 			'media.*.is_og' => 'sometimes|boolean',
 		];
 	}

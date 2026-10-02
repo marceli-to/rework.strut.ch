@@ -5,11 +5,11 @@ namespace App\Actions\Media;
 use App\Models\Media;
 
 /**
- * Toggle a "one per collection" flag (is_teaser, is_og) on a media item.
+ * Toggle a "one per collection" flag (is_og) on a media item.
  */
 class SetFlagAction
 {
-	public const FLAGS = ['is_teaser', 'is_og'];
+	public const FLAGS = ['is_og'];
 
 	public function execute(Media $media, string $flag): Media
 	{
