@@ -369,3 +369,9 @@ Checklist and results: [Strut Rework Test Run](https://claude.ai/artifact/CsE2Ct
 - Claude Code run: 140 pass, 19 fail, 27 skip (skips: real browsers/devices, production server, mail delivery, legacy passwords). The site needs PHP 8.4 in Herd (the global default had become 8.3).
 - Marcel triaged the failures; the fixes are round 3 in `docs/changes-03.md`, re-tested end to end. entries-5 (Presse project link) is an open client question.
 - The Go-live section (`live-1` … `live-12`) mirrors §7 of `docs/deployment.md`; tick it there on the production server.
+
+## 2026-10-06 — Admin fixes and list search
+
+- **Grid editor (homepage, projects):** adding or deleting a row now shows a toast ("Zeile hinzugefügt" / "Zeile gelöscht"). New rows go to the top of their area (`StoreRowAction` moves the other rows down one place).
+- **Floating search bar** (`components/ui/search/SearchBar.vue`), as on the legacy project list: `ResourceIndex` takes `searchable` (row => texts) and filters in the browser, and every search word must match. Drag & drop is off while searching. The search text is kept per list in `sessionStorage`, so it survives editing and reloads. Used on Projekte, News, Jobs, Team, Bücher, Presse, Auszeichnungen and Vorträge. Rich-text fields are not searched (their HTML tags would cause false hits).
+- Tests: 217 passing.
