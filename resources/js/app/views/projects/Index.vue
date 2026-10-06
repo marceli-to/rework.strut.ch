@@ -11,6 +11,16 @@ const columns = [
 // grouped by type like the Werkliste (the API orders by category, type, project);
 // the sort order is kept per type, so dragging stays within a group
 const byType = (row) => ({ key: row.category_type?.uuid ?? 'none', label: row.category_type?.name_plural ?? 'Ohne Typ' })
+
+// like the legacy filter: name, category, type, status (plus year)
+const searchable = (row) => [
+	row.full_title,
+	row.year,
+	row.status_label,
+	row.category_type?.name_singular,
+	row.category_type?.name_plural,
+	row.category_type?.category?.name,
+]
 </script>
 
 <template>
@@ -23,5 +33,7 @@ const byType = (row) => ({ key: row.category_type?.uuid ?? 'none', label: row.ca
 		sortable
 		:groupBy="byType"
 		:rowLabel="row => row.full_title"
+		:searchable="searchable"
+		searchPlaceholder="Projekt, Jahr, Kategorie, Typ oder Status"
 	/>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { PhPencil, PhTrash, PhEye, PhEyeSlash } from '@phosphor-icons/vue'
 import { useToast } from '@/composables/useToast'
@@ -7,11 +7,14 @@ import { useConfirm } from '@/composables/useConfirm'
 import PageHeader from '@/components/layout/PageHeader.vue'
 import FormActions from '@/components/ui/form/FormActions.vue'
 import DataTable from '@/components/ui/table/DataTable.vue'
+import SearchBar from '@/components/ui/search/SearchBar.vue'
 
 /**
  * List view for a resource store: table, publish toggle, edit, delete and
  * (optionally) drag & drop ordering. Cell slots are passed to the table.
  * Column options (besides DataTable's): limit (max. characters, full text on hover).
+ * searchable (row => [texts]) adds the floating search bar; every search word must
+ * match one of the texts. Ordering is off while searching (only a subset is shown).
  */
 const props = defineProps({
 	title: { type: String, required: true },
@@ -25,12 +28,25 @@ const props = defineProps({
 	params: { type: Object, default: () => ({}) },
 	rowLabel: { type: Function, default: row => row.title ?? row.name },
 	groupBy: { type: Function, default: null }, // see DataTable
+	searchable: { type: Function, default: null },
+	searchPlaceholder: { type: String, default: 'Suchen' },
 })
 
 const router = useRouter()
 const toast = useToast()
 const { confirm } = useConfirm()
 const rows = ref([])
+
+const search = ref('')
+
+const terms = computed(() => search.value.toLowerCase().split(/\s+/).filter(Boolean))
+const visibleRows = computed(() => {
+	if (!props.searchable || !terms.value.length) return rows.value
+	return rows.value.filter(row => {
+		const text = props.searchable(row).filter(Boolean).join(' ').toLowerCase()
+		return terms.value.every(term => text.includes(term))
+	})
+})
 
 const columns = [...props.columns, { key: 'actions', label: '', class: 'w-100', align: 'right' }]
 
@@ -65,7 +81,7 @@ async function remove(row) {
 </script>
 
 <template>
-	<div>
+	<div :class="searchable ? 'pb-64' : ''">
 		<PageHeader :title="title" />
 		<FormActions v-if="createLabel || $slots.actions">
 			<slot name="actions" />
@@ -78,12 +94,13 @@ async function remove(row) {
 
 		<div v-if="store.loading && !rows.length" class="text-sm text-gray-400 dark:text-warm-500">Laden...</div>
 		<div v-else-if="!rows.length" class="text-sm text-gray-400 dark:text-warm-500">Keine Einträge vorhanden.</div>
+		<div v-else-if="!visibleRows.length" class="text-sm text-gray-400 dark:text-warm-500">Keine Treffer für «{{ search.trim() }}».</div>
 		<DataTable
 			v-else
 			v-model="rows"
 			:columns="columns"
-			:rows="rows"
-			:draggable-rows="sortable"
+			:rows="visibleRows"
+			:draggable-rows="sortable && !terms.length"
 			:group-by="groupBy"
 			@update:model-value="store.reorder($event)"
 		>
@@ -116,5 +133,7 @@ async function remove(row) {
 				</div>
 			</template>
 		</DataTable>
+
+		<SearchBar v-if="searchable" v-model="search" :placeholder="searchPlaceholder" />
 	</div>
 </template>
