@@ -13,6 +13,9 @@ const columns = computed(() => [
 	...(type.value === 'press' ? [{ key: 'project', label: 'Projekt', limit: 40 }] : []),
 	{ key: 'year', label: 'Jahr' },
 ])
+
+const searchable = (row) => [row.title, row.description, row.project, row.year]
+const searchPlaceholder = computed(() => (type.value === 'press' ? 'Titel, Beschreibung, Projekt oder Jahr' : 'Titel, Beschreibung oder Jahr'))
 </script>
 
 <template>
@@ -24,5 +27,7 @@ const columns = computed(() => [
 		:params="{ type }"
 		:routes="{ create: `${type}.create`, edit: `${type}.edit` }"
 		createLabel="Neuer Eintrag"
+		:searchable="searchable"
+		:searchPlaceholder="searchPlaceholder"
 	/>
 </template>

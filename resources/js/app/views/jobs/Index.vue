@@ -6,8 +6,10 @@ const columns = [
 	{ key: 'title', label: 'Titel', primary: true },
 	{ key: 'lead', label: 'Lead' },
 ]
+
+const searchable = (row) => [row.title, row.lead]
 </script>
 
 <template>
-	<ResourceIndex title="Jobs" :store="useJobStore()" :columns="columns" :routes="{ create: 'jobs.create', edit: 'jobs.edit' }" createLabel="Neues Inserat" sortable />
+	<ResourceIndex title="Jobs" :store="useJobStore()" :columns="columns" :routes="{ create: 'jobs.create', edit: 'jobs.edit' }" createLabel="Neues Inserat" sortable :searchable="searchable" searchPlaceholder="Titel oder Lead" />
 </template>

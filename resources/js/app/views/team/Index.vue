@@ -7,8 +7,10 @@ const columns = [
 	{ key: 'role', label: 'Funktion' },
 	{ key: 'email', label: 'E-Mail' },
 ]
+
+const searchable = (row) => [row.full_name, row.role, row.position, row.email]
 </script>
 
 <template>
-	<ResourceIndex title="Team" :store="useTeamStore()" :columns="columns" :routes="{ create: 'team.create', edit: 'team.edit' }" createLabel="Neues Mitglied" sortable :rowLabel="row => row.full_name" />
+	<ResourceIndex title="Team" :store="useTeamStore()" :columns="columns" :routes="{ create: 'team.create', edit: 'team.edit' }" createLabel="Neues Mitglied" sortable :rowLabel="row => row.full_name" :searchable="searchable" searchPlaceholder="Name, Funktion oder E-Mail" />
 </template>
