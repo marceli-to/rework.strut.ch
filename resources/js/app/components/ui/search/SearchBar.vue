@@ -21,7 +21,7 @@ const model = defineModel({ type: String, default: '' })
 				type="search"
 				:placeholder="placeholder"
 				:aria-label="placeholder"
-				class="block w-full pl-40 pr-40 py-12 rounded-full border border-gray-200 dark:border-warm-700 bg-white dark:bg-warm-800 text-sm dark:text-warm-100 placeholder:text-gray-400 dark:placeholder:text-warm-600 shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-warm-700 [&::-webkit-search-cancel-button]:hidden"
+				class="block w-full pl-40 pr-40 py-12 rounded-full border border-gray-200 dark:border-warm-700 bg-white dark:bg-warm-800 text-sm dark:text-warm-100 placeholder:text-gray-400 dark:placeholder:text-warm-600 shadow-lg transition-all focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-gray-300 dark:focus:ring-warm-600 dark:focus:border-warm-600 [&::-webkit-search-cancel-button]:hidden"
 				@keydown.esc="model = ''"
 			/>
 			<button
