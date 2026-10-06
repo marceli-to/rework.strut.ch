@@ -61,11 +61,12 @@ it('requires authentication', function () {
  * Rows
  */
 
-it('appends rows with layouts allowed in the context', function () {
-	$this->actingAs($this->user)->postJson(projectGrid($this->project, '/rows'), ['area' => 'main', 'layout' => '2fr'])->assertCreated();
+it('prepends rows with layouts allowed in the context', function () {
+	$first = $this->actingAs($this->user)->postJson(projectGrid($this->project, '/rows'), ['area' => 'main', 'layout' => '2fr'])->assertCreated();
 	$this->actingAs($this->user)->postJson(projectGrid($this->project, '/rows'), ['area' => 'main', 'layout' => '1fr-1fr_stacked'])
 		->assertCreated()
-		->assertJsonPath('data.sort_order', 1);
+		->assertJsonPath('data.sort_order', 0);
+	expect(GridRow::where('uuid', $first->json('data.uuid'))->value('sort_order'))->toBe(1);
 
 	// home-only layout in the project grid
 	$this->actingAs($this->user)->postJson(projectGrid($this->project, '/rows'), ['area' => 'main', 'layout' => '3fr'])

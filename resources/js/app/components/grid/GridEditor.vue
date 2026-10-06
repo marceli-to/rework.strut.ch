@@ -91,8 +91,8 @@ function selectLayout(layout) {
 }
 
 async function addRow(area, layout) {
-	const response = await run(() => api.storeRow({ area: area.key, layout }))
-	if (response) rows.value.push(response.data.data)
+	const response = await run(() => api.storeRow({ area: area.key, layout }), 'Zeile hinzugefügt')
+	if (response) rows.value.unshift(response.data.data)
 }
 
 // items the new layout can't hold (same rule as UpdateRowAction)
@@ -130,7 +130,7 @@ async function toggleRow(row) {
 async function deleteRow(row) {
 	const ok = await confirm({ title: 'Zeile löschen', message: 'Zeile mit allen platzierten Inhalten löschen?', confirmLabel: 'Löschen', destructive: true })
 	if (!ok) return
-	if (await run(() => api.destroyRow(row.uuid))) rows.value = rows.value.filter(r => r.uuid !== row.uuid)
+	if (await run(() => api.destroyRow(row.uuid), 'Zeile gelöscht')) rows.value = rows.value.filter(r => r.uuid !== row.uuid)
 }
 
 async function reorder(area, list) {
