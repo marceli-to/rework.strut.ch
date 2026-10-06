@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { PhPencil, PhTrash, PhEye, PhEyeSlash } from '@phosphor-icons/vue'
 import { useToast } from '@/composables/useToast'
 import { useConfirm } from '@/composables/useConfirm'
@@ -32,12 +32,16 @@ const props = defineProps({
 	searchPlaceholder: { type: String, default: 'Suchen' },
 })
 
+const route = useRoute()
 const router = useRouter()
 const toast = useToast()
 const { confirm } = useConfirm()
 const rows = ref([])
 
-const search = ref('')
+// kept per list for the browser tab, so returning from the form shows the same results
+const searchKey = `search:${String(route.name)}`
+const search = ref(sessionStorage.getItem(searchKey) ?? '')
+watch(search, value => (value.trim() ? sessionStorage.setItem(searchKey, value) : sessionStorage.removeItem(searchKey)))
 
 const terms = computed(() => search.value.toLowerCase().split(/\s+/).filter(Boolean))
 const visibleRows = computed(() => {
