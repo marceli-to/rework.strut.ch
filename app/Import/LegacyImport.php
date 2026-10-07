@@ -37,15 +37,15 @@ class LegacyImport
 	/** Meta descriptions hardcoded in the legacy views. */
 	public const PAGE_META = [
 		'home' => 'Strut Architekten AG aus Winterthur, Schweiz. Gegründet im Jahre 2015 durch Roger Studerus, Felix Rutishauser und Peter Kunz.',
-		'contact' => 'Strut Architekten AG aus Winterthur, Schweiz. Gegründet im Jahre 2015 durch Roger Studerus, Felix Rutishauser und Peter Kunz.',
 		'works' => 'Strut Architekten AG entwickelt und plant anspruchsvolle Wohn- und Gewerbebauten. Das Büro kann auf erfolgreiche Projekte und mehr als 20-jährige Erfahrungen zurückgreifen.',
-		'press' => 'Strut Architekten AG zeigt in verschieden Publikationen eine breite Palette an ausgeführten Gebäuden: Schulgebäude, Private Wohnbauten und Siedlungen, Produktions- und Verwaltungsgebäude.',
-		'books' => 'Strut Architekten AG zeigt in verschieden Publikationen eine breite Palette an ausgeführten Gebäuden: Schulgebäude, Private Wohnbauten und Siedlungen, Produktions- und Verwaltungsgebäude.',
-		'downloads' => 'Strut Architekten AG zeigt in verschieden Publikationen eine breite Palette an ausgeführten Gebäuden: Schulgebäude, Private Wohnbauten und Siedlungen, Produktions- und Verwaltungsgebäude.',
+		'press' => 'Presseberichte über Strut Architekten AG: Artikel in Fachzeitschriften wie TEC21, archi und Modulor sowie in Tageszeitungen zu Wohnbauten, Schulen und Gewerbebauten.',
+		'books' => 'Bücher von Strut Architekten AG: Dokumentationen ausgewählter Bauten wie Leimenegg im Park in Winterthur, Sky-Frame in Frauenfeld und Casa da pégn in Flims.',
+		'downloads' => 'Downloads von Strut Architekten AG: Projektdokumentationen zu Wohnbauten, Gewerbebauten und öffentlichen Bauten sowie die Werkliste als PDF.',
 		'about' => 'Roger Studerus und Felix Rutishauser tragen gemeinsam die Verantwortung für die Strut Architekten AG. Im Team mit Peter Kunz werden eigenständige Projekte entwickelt, welche den Menschen ins Zentrum rücken.',
-		'jobs' => 'Roger Studerus und Felix Rutishauser tragen gemeinsam die Verantwortung für die Strut Architekten AG. Im Team mit Peter Kunz werden eigenständige Projekte entwickelt, welche den Menschen ins Zentrum rücken.',
-		'awards' => 'Roger Studerus und Felix Rutishauser tragen gemeinsam die Verantwortung für die Strut Architekten AG. Im Team mit Peter Kunz werden eigenständige Projekte entwickelt, welche den Menschen ins Zentrum rücken.',
-		'lectures' => 'Roger Studerus und Felix Rutishauser tragen gemeinsam die Verantwortung für die Strut Architekten AG. Im Team mit Peter Kunz werden eigenständige Projekte entwickelt, welche den Menschen ins Zentrum rücken.',
+		'jobs' => 'Stellenangebote der Strut Architekten AG in Winterthur: Mitarbeit im Team an Wohnbauten, Industrie- und Gewerbebauten sowie öffentlichen Bauten.',
+		'awards' => 'Auszeichnungen für Strut Architekten AG, darunter mehrere best architects awards, der Prix Acier 2016 und der arc Award 2014, etwa für Sky-Frame, Casa da pégn und Landenberg.',
+		'lectures' => 'Vorträge von Strut Architekten AG an Hochschulen und Kongressen, unter anderem an der ETH Zürich, der Bauhaus-Universität Weimar sowie in Valencia, Teheran und Isfahan.',
+		'contact' => 'Kontakt zu Strut Architekten AG: Neuwiesenstrasse 69, 8400 Winterthur, Telefon +41 52 213 33 60, mail@strut.ch.',
 	];
 
 	protected Connection $legacy;
