@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "marceli-to/rework.strut.ch",
+    "name": "marceli-to/strut.ch",
     "type": "project",
     "description": "strut architekten website and CMS",
     "keywords": ["laravel", "framework"],

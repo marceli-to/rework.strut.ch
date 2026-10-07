@@ -1,4 +1,4 @@
-# Deployment — rework.strut.ch
+# Deployment — strut.ch
 
 Everything the server needs besides the code. Status markers: ☐ to do on the server · ☑ nothing to do on the server (handled by the app).
 

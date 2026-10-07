@@ -1,6 +1,6 @@
 # Frontend parity checklist (Phase 2)
 
-Every page type and feature of the Current site (`strut.ch.test`), with the new implementation.
+Every page type and feature of the Current site (`legacy.strut.ch.test`), with the new implementation.
 
 - **Scope:** strict 1:1 (F1).
 - **Done means:** the visual diff is 0 %, or every remaining difference is explained in `docs/progress.md`, at all 17 viewports.

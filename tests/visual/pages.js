@@ -13,8 +13,8 @@ export const viewports = [
 ];
 
 export const sites = {
-	ref: 'https://strut.ch.test',
-	act: 'https://rework.strut.ch.test',
+	ref: 'https://legacy.strut.ch.test',
+	act: 'https://strut.ch.test',
 };
 
 const click = (selector) => async (page) => {

@@ -1,6 +1,6 @@
-# rework.strut.ch
+# strut.ch
 
-[![Tests](https://github.com/marceli-to/rework.strut.ch/actions/workflows/tests.yml/badge.svg)](https://github.com/marceli-to/rework.strut.ch/actions/workflows/tests.yml)
+[![Tests](https://github.com/marceli-to/strut.ch/actions/workflows/tests.yml/badge.svg)](https://github.com/marceli-to/strut.ch/actions/workflows/tests.yml)
 
 Rebuild of [strut.ch](https://strut.ch) (Strut Architekten, Winterthur): a Laravel site with a Vue admin, replacing the legacy strut.ch code base. The public site matches the legacy site 1:1; content and media are imported from the legacy database.
 
@@ -36,7 +36,7 @@ php artisan app:create-user
 npm run build
 ```
 
-Locally the site runs on Herd at https://rework.strut.ch.test (PHP 8.4). `public/build` is committed: after `npm run build`, commit the changed assets.
+Locally the site runs on Herd at https://strut.ch.test (PHP 8.4); the legacy site for the visual comparison runs at https://legacy.strut.ch.test (PHP 8.2, isolated). `public/build` is committed: after `npm run build`, commit the changed assets.
 
 ## Commands
 

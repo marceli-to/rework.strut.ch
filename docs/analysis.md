@@ -1,4 +1,4 @@
-# rework.strut.ch — Phase 0 analysis
+# strut.ch — Phase 0 analysis
 
 Date: 2026-09-27 · Status: **awaiting approval (Checkpoint 0)**
 
