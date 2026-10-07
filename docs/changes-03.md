@@ -12,5 +12,6 @@ Source: acceptance test run (186 checks, [Strut Rework Test Run](https://claude.
 - ☑ **Teaser flag removed** The star "Als Teaser setzen" on project images came from the Template and had no effect on the site (no view used it, no image had it). Legacy had no such flag. Removed from the image card, media store, API (`PATCH media/{uuid}/teaser`), model and DB (`is_teaser` dropped by migration). The Opengraph flag stays: legacy used the first published image as the OG image (`Frontend\ProjectsController`); the rework does the same unless an image is flagged.
 - ☑ **fsh-8** Menu: "Werkliste" is now active on all its views (/werkliste, /werkliste/status, /werkliste/jahr, /werkliste/typ). Legacy only marked /werkliste itself; that quirk was kept for parity and is now dropped on request (intended difference to legacy in the header on the three sub-views).
 
-## Open
-- ❓ **entries-5** Presse: the project reference ("…, Leimenegg im Park Winterthur (2023)") is plain text, exactly as on the legacy site. The checklist expected a link. Question for the client: should it link to the project? Proposal: link only when the project has a detail page (projects without one have no page to show).
+
+## Decided
+- ☑ **entries-5** Presse: the project reference ("…, Leimenegg im Park Winterthur (2023)") stays plain text, as on the legacy site (decided 2026-10-07). The checklist expected a link; no change.
