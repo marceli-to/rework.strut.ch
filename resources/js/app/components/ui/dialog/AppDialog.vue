@@ -6,6 +6,7 @@ const props = defineProps({
 	open: { type: Boolean, default: false },
 	title: { type: String, default: null },
 	size: { type: String, default: 'sm' }, // sm, md, lg
+	dismissible: { type: Boolean, default: true }, // close on backdrop click
 })
 
 const emit = defineEmits(['close'])
@@ -38,7 +39,7 @@ function onClose() {
 		class="p-0 m-auto bg-white dark:bg-warm-900 rounded-2xl backdrop:bg-black/30 w-full"
 		:class="sizes[size]"
 		@close="onClose"
-		@click.self="onClose"
+		@click.self="dismissible && onClose()"
 	>
 		<div class="p-24">
 			<!-- Header -->

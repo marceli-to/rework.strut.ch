@@ -235,7 +235,7 @@ function closeDialog() {
 			</button>
 		</div>
 
-		<AppDialog :open="showDialog" title="Link" size="md" @close="closeDialog">
+		<AppDialog :open="showDialog" title="Link" size="md" :dismissible="false" @close="closeDialog">
 
 			<div class="flex flex-col gap-16">
 

@@ -47,6 +47,7 @@ function handleSave() {
 	<Drawer
 		:open="isOpen"
 		title="Bild bearbeiten"
+		:dismissible="false"
 		@close="close"
 	>
 		<!-- Preview -->

@@ -83,7 +83,6 @@ const defaultSize = computed(() => {
     <div
       v-if="isOpen"
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
-      @click.self="close"
     >
       <div class="bg-white dark:bg-warm-900 rounded-2xl shadow-xl w-full max-w-3xl mx-16 flex flex-col max-h-[90vh]">
         <!-- Header -->

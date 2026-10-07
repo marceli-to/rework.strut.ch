@@ -6,6 +6,7 @@ const props = defineProps({
 	open: { type: Boolean, default: false },
 	title: { type: String, default: null },
 	size: { type: String, default: 'sm' }, // sm, md, lg
+	dismissible: { type: Boolean, default: true }, // close on backdrop click
 })
 
 const emit = defineEmits(['close'])
@@ -75,7 +76,7 @@ onUnmounted(() => {
 				<div
 					v-if="visible"
 					class="absolute inset-0 bg-black/30"
-					@click="close"
+					@click="dismissible && close()"
 				/>
 			</Transition>
 
